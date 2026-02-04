@@ -1,0 +1,245 @@
+@extends('layouts.app')
+
+@section('title', $product->name)
+
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Fil d'Ariane -->
+    <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-2">
+            <li>
+                <a href="{{ route('home') }}" class="text-gray-500 hover:text-primary-600">Accueil</a>
+            </li>
+            <li>
+                <span class="text-gray-400">/</span>
+            </li>
+            <li>
+                <a href="{{ route('shop') }}" class="text-gray-500 hover:text-primary-600">Boutique</a>
+            </li>
+            <li>
+                <span class="text-gray-400">/</span>
+            </li>
+            <li>
+                <a href="{{ route('shop', ['category' => $product->category->slug]) }}" class="text-gray-500 hover:text-primary-600">
+                    {{ $product->category->name }}
+                </a>
+            </li>
+            <li>
+                <span class="text-gray-400">/</span>
+            </li>
+            <li class="text-gray-900 font-semibold">{{ $product->name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        
+        <!-- Galerie d'images -->
+        <div x-data="{ activeImage: '{{ $product->main_image ? asset('storage/' . $product->main_image) : '' }}' }">
+            <!-- Image principale -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-4">
+                <div class="relative h-96 bg-gray-100 flex items-center justify-center">
+                    <template x-if="activeImage">
+                        <img :src="activeImage" 
+                             alt="{{ $product->name }}" 
+                             class="w-full h-full object-contain">
+                    </template>
+                    <template x-if="!activeImage">
+                        <div class="text-gray-300">
+                            <svg class="w-32 h-32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </template>
+
+                    @if($product->discount_percentage > 0)
+                    <div class="absolute top-4 right-4 bg-secondary-600 text-white px-4 py-2 rounded-full text-lg font-bold">
+                        -{{ $product->discount_percentage }}%
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Miniatures (si plusieurs images) -->
+            @if($product->images->count() > 0)
+            <div class="grid grid-cols-4 gap-2">
+                @if($product->main_image)
+                <button @click="activeImage = '{{ asset('storage/' . $product->main_image) }}'"
+                        class="relative h-20 bg-gray-100 rounded-lg overflow-hidden border-2 hover:border-primary-600 transition">
+                    <img src="{{ asset('storage/' . $product->main_image) }}" 
+                         alt="Image 1" 
+                         class="w-full h-full object-cover">
+                </button>
+                @endif
+                
+                @foreach($product->images as $image)
+                <button @click="activeImage = '{{ asset('storage/' . $image->image_path) }}'"
+                        class="relative h-20 bg-gray-100 rounded-lg overflow-hidden border-2 hover:border-primary-600 transition">
+                    <img src="{{ asset('storage/' . $image->image_path) }}" 
+                         alt="Image {{ $loop->iteration + 1 }}" 
+                         class="w-full h-full object-cover">
+                </button>
+                @endforeach
+            </div>
+            @endif
+        </div>
+
+        <!-- Informations produit -->
+        <div>
+            <!-- Catégorie -->
+            <p class="text-sm text-primary-600 font-semibold mb-2 uppercase">
+                {{ $product->category->name }}
+            </p>
+
+            <!-- Nom -->
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                {{ $product->name }}
+            </h1>
+
+            <!-- Description courte -->
+            <p class="text-lg text-gray-600 mb-6">
+                {{ $product->short_description }}
+            </p>
+
+            <!-- Prix -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                <div class="flex items-baseline gap-4">
+                    <p class="text-4xl font-bold text-gray-900">
+                        {{ $product->formatted_price }}
+                    </p>
+                    @if($product->old_price)
+                    <p class="text-xl text-gray-500 line-through">
+                        {{ $product->formatted_old_price }}
+                    </p>
+                    <span class="bg-secondary-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        Économisez {{ number_format($product->old_price - $product->price, 0, ',', ' ') }} FCFA
+                    </span>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Stock et SKU -->
+            <div class="flex items-center gap-6 mb-6 text-sm">
+                <div class="flex items-center">
+                    <span class="text-gray-600 mr-2">Disponibilité :</span>
+                    @if($product->stock > 10)
+                        <span class="text-green-600 font-semibold flex items-center">
+                            <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            En stock ({{ $product->stock }})
+                        </span>
+                    @elseif($product->stock > 0)
+                        <span class="text-yellow-600 font-semibold">Plus que {{ $product->stock }} disponible(s) !</span>
+                    @else
+                        <span class="text-red-600 font-semibold">Rupture de stock</span>
+                    @endif
+                </div>
+
+                @if($product->sku)
+                <div class="flex items-center text-gray-600">
+                    <span class="mr-2">SKU :</span>
+                    <span class="font-mono font-semibold">{{ $product->sku }}</span>
+                </div>
+                @endif
+            </div>
+
+            <!-- Quantité et Ajouter au panier -->
+            @livewire('add-to-cart', ['product' => $product])
+
+            <!-- Informations supplémentaires -->
+            <div class="border-t border-gray-200 pt-6">
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Garantie constructeur
+                    </div>
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Livraison rapide
+                    </div>
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Paiement sécurisé
+                    </div>
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Support client
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description détaillée -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-16">
+        <h2 class="text-2xl font-bold mb-6">Description du produit</h2>
+        <div class="prose max-w-none text-gray-700">
+            {!! nl2br(e($product->description)) !!}
+        </div>
+    </div>
+
+    <!-- Produits similaires -->
+    @if($relatedProducts->count() > 0)
+    <div class="mb-16">
+        <h2 class="text-2xl font-bold mb-8">Produits similaires</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($relatedProducts as $relatedProduct)
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-200 overflow-hidden group">
+                <a href="{{ route('product.show', $relatedProduct) }}" class="block relative h-48 bg-gray-200 overflow-hidden">
+                    @if($relatedProduct->main_image)
+                        <img src="{{ asset('storage/' . $relatedProduct->main_image) }}" 
+                             alt="{{ $relatedProduct->name }}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    @endif
+                </a>
+                <div class="p-4">
+                    <a href="{{ route('product.show', $relatedProduct) }}">
+                        <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 hover:text-primary-600">
+                            {{ $relatedProduct->name }}
+                        </h3>
+                    </a>
+                    <p class="text-lg font-bold text-gray-900">
+                        {{ $relatedProduct->formatted_price }}
+                    </p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+</div>
+
+<script>
+function incrementQuantity(max) {
+    const input = document.getElementById('quantity');
+    const current = parseInt(input.value);
+    if (current < max) {
+        input.value = current + 1;
+    }
+}
+
+function decrementQuantity() {
+    const input = document.getElementById('quantity');
+    const current = parseInt(input.value);
+    if (current > 1) {
+        input.value = current - 1;
+    }
+}
+</script>
+@endsection
