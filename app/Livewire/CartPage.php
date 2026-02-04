@@ -9,20 +9,16 @@ use Illuminate\Support\Collection;
 
 class CartPage extends Component
 {
-    /**
-     * @var Collection<int, CartItem>
-     */
     public Collection $cartItems;
-    
     public float $subtotal = 0;
-    public float $shippingCost = 2000; // 2000 FCFA
+    public float $shippingCost = 2000;
     public float $total = 0;
 
     protected $listeners = ['cartUpdated' => 'loadCart'];
 
     public function mount()
     {
-        $this->cartItems = collect(); // Initialiser comme Collection
+        $this->cartItems = collect();
         $this->loadCart();
     }
 
@@ -33,15 +29,10 @@ class CartPage extends Component
         if (Auth::check()) {
             $query->where('user_id', Auth::id());
         } else {
-            $sessionId = session()->getId();
-            \Log::info('Loading cart for session: ' . $sessionId); // Debug
-            $query->where('session_id', $sessionId);
+            $query->where('session_id', session()->getId());
         }
 
         $this->cartItems = $query->get();
-        
-        \Log::info('Cart items loaded: ' . $this->cartItems->count()); // Debug
-        
         $this->calculateTotals();
     }
 

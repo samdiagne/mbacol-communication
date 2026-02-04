@@ -1,24 +1,19 @@
-@extends('layouts.app')
-
-@section('title', 'Mon panier')
-
-@section('content')
 <div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
         <!-- En-tête -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Mon panier</h1>
-            <p class="text-gray-600">{{ count($cartItems) }} article(s)</p>
+            <p class="text-gray-600">{{ $cartItems->count() }} article(s)</p>
         </div>
 
-        @if(count($cartItems) > 0)
+        @if($cartItems->count() > 0)
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <!-- Liste des produits -->
             <div class="lg:col-span-2 space-y-4">
                 @foreach($cartItems as $item)
-                <div class="bg-white rounded-lg shadow p-6 flex items-center gap-6">
+                <div wire:key="cart-item-{{ $item->id }}" class="bg-white rounded-lg shadow p-6 flex items-center gap-6">
                     <!-- Image -->
                     <div class="w-24 h-24 flex-shrink-0 bg-gray-200 rounded overflow-hidden">
                         @if($item->product->main_image)
@@ -41,17 +36,17 @@
 
                     <!-- Quantité -->
                     <div class="flex items-center border border-gray-300 rounded-lg">
-                        <button wire:click="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})" 
-                                class="px-3 py-2 hover:bg-gray-100 transition"
-                                @if($item->quantity <= 1) disabled @endif>
+                        <button wire:click="updateQuantity({{ $item->id }}, {{ max(1, $item->quantity - 1) }})" 
+                                class="px-3 py-2 hover:bg-gray-100 transition {{ $item->quantity <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                {{ $item->quantity <= 1 ? 'disabled' : '' }}>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
                             </svg>
                         </button>
                         <span class="px-4 py-2 font-semibold">{{ $item->quantity }}</span>
-                        <button wire:click="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})" 
-                                class="px-3 py-2 hover:bg-gray-100 transition"
-                                @if($item->quantity >= $item->product->stock) disabled @endif>
+                        <button wire:click="updateQuantity({{ $item->id }}, {{ min($item->product->stock, $item->quantity + 1) }})" 
+                                class="px-3 py-2 hover:bg-gray-100 transition {{ $item->quantity >= $item->product->stock ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                {{ $item->quantity >= $item->product->stock ? 'disabled' : '' }}>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -67,7 +62,7 @@
 
                     <!-- Supprimer -->
                     <button wire:click="removeItem({{ $item->id }})" 
-                            wire:confirm="Supprimer cet article ?"
+                            onclick="return confirm('Supprimer cet article du panier ?')"
                             class="text-red-600 hover:text-red-800">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -78,7 +73,7 @@
 
                 <!-- Vider le panier -->
                 <button wire:click="clearCart" 
-                        wire:confirm="Vider tout le panier ?"
+                        onclick="return confirm('Vider tout le panier ?')"
                         class="text-red-600 hover:text-red-800 font-semibold">
                     Vider le panier
                 </button>
@@ -108,7 +103,7 @@
 
                     <a href="{{ route('checkout') }}" 
                        class="block w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-lg text-center transition duration-200 mb-3">
-                        Procéder au paiement
+                        Commander
                     </a>
                     
                     <a href="{{ route('shop') }}" 
@@ -122,9 +117,7 @@
         @else
         <!-- Panier vide -->
         <div class="bg-white rounded-lg shadow p-12 text-center">
-            <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-            </svg>
+            <div class="text-6xl mb-4">🛒</div>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Votre panier est vide</h2>
             <p class="text-gray-600 mb-8">Découvrez nos produits et ajoutez-les à votre panier !</p>
             <a href="{{ route('shop') }}" 
@@ -135,4 +128,3 @@
         @endif
     </div>
 </div>
-@endsection
