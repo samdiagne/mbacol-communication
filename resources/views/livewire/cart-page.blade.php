@@ -3,17 +3,6 @@
 @section('title', 'Mon panier')
 
 @section('content')
-
-<!-- DEBUG -->
-<div class="bg-yellow-100 p-4 mb-4">
-    <p><strong>Debug:</strong></p>
-    <p>Session ID: {{ session()->getId() }}</p>
-    <p>User ID: {{ Auth::id() ?? 'Non connecté' }}</p>
-    <p>Items count: {{ $cartItems->count() }}</p>
-    <p>Cart items: {{ json_encode($cartItems->pluck('id')) }}</p>
-</div>
-<!-- FIN DEBUG -->
-
 <div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
