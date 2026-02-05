@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 class CartPage extends Component
 {
     public Collection $cartItems;
+    public array $quantities = [];
     public float $subtotal = 0;
     public float $shippingCost = 2000;
     public float $total = 0;
@@ -33,15 +34,35 @@ class CartPage extends Component
         }
 
         $this->cartItems = $query->get();
+        $this->syncQuantities();
         $this->calculateTotals();
     }
 
-    public function updateQuantity($cartItemId, $quantity)
+    public function syncQuantities()
+    {
+        $this->quantities = [];
+        foreach ($this->cartItems as $item) {
+            $this->quantities[$item->id] = $item->quantity;
+        }
+    }
+
+    public function incrementQuantity($cartItemId)
     {
         $cartItem = CartItem::find($cartItemId);
+        
+        if ($cartItem && $cartItem->quantity < $cartItem->product->stock) {
+            $cartItem->increment('quantity');
+            $this->loadCart();
+            $this->dispatch('cartUpdated');
+        }
+    }
 
-        if ($cartItem && $quantity > 0 && $quantity <= $cartItem->product->stock) {
-            $cartItem->update(['quantity' => $quantity]);
+    public function decrementQuantity($cartItemId)
+    {
+        $cartItem = CartItem::find($cartItemId);
+        
+        if ($cartItem && $cartItem->quantity > 1) {
+            $cartItem->decrement('quantity');
             $this->loadCart();
             $this->dispatch('cartUpdated');
         }

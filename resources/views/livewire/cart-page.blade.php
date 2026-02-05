@@ -36,17 +36,19 @@
 
                     <!-- Quantité -->
                     <div class="flex items-center border border-gray-300 rounded-lg">
-                        <button wire:click="updateQuantity({{ $item->id }}, {{ max(1, $item->quantity - 1) }})" 
-                                class="px-3 py-2 hover:bg-gray-100 transition {{ $item->quantity <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                {{ $item->quantity <= 1 ? 'disabled' : '' }}>
+                        <button wire:click="decrementQuantity({{ $item->id }})" 
+                                type="button"
+                                class="px-3 py-2 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                @if($item->quantity <= 1) disabled @endif>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
                             </svg>
                         </button>
-                        <span class="px-4 py-2 font-semibold">{{ $item->quantity }}</span>
-                        <button wire:click="updateQuantity({{ $item->id }}, {{ min($item->product->stock, $item->quantity + 1) }})" 
-                                class="px-3 py-2 hover:bg-gray-100 transition {{ $item->quantity >= $item->product->stock ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                {{ $item->quantity >= $item->product->stock ? 'disabled' : '' }}>
+                        <span class="px-4 py-2 font-semibold min-w-[3rem] text-center">{{ $item->quantity }}</span>
+                        <button wire:click="incrementQuantity({{ $item->id }})" 
+                                type="button"
+                                class="px-3 py-2 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                @if($item->quantity >= $item->product->stock) disabled @endif>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -62,6 +64,7 @@
 
                     <!-- Supprimer -->
                     <button wire:click="removeItem({{ $item->id }})" 
+                            type="button"
                             onclick="return confirm('Supprimer cet article du panier ?')"
                             class="text-red-600 hover:text-red-800">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,6 +76,7 @@
 
                 <!-- Vider le panier -->
                 <button wire:click="clearCart" 
+                        type="button"
                         onclick="return confirm('Vider tout le panier ?')"
                         class="text-red-600 hover:text-red-800 font-semibold">
                     Vider le panier
@@ -103,7 +107,7 @@
 
                     <a href="{{ route('checkout') }}" 
                        class="block w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-lg text-center transition duration-200 mb-3">
-                        Commander
+                        Procéder au paiement
                     </a>
                     
                     <a href="{{ route('shop') }}" 
@@ -117,7 +121,9 @@
         @else
         <!-- Panier vide -->
         <div class="bg-white rounded-lg shadow p-12 text-center">
-            <div class="text-6xl mb-4">🛒</div>
+            <svg class="w-24 h-24 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Votre panier est vide</h2>
             <p class="text-gray-600 mb-8">Découvrez nos produits et ajoutez-les à votre panier !</p>
             <a href="{{ route('shop') }}" 
