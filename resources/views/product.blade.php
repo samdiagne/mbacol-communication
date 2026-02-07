@@ -224,22 +224,4 @@
     </div>
     @endif
 </div>
-
-<script>
-function incrementQuantity(max) {
-    const input = document.getElementById('quantity');
-    const current = parseInt(input.value);
-    if (current < max) {
-        input.value = current + 1;
-    }
-}
-
-function decrementQuantity() {
-    const input = document.getElementById('quantity');
-    const current = parseInt(input.value);
-    if (current > 1) {
-        input.value = current - 1;
-    }
-}
-</script>
 @endsection

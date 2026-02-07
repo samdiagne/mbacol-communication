@@ -18,6 +18,9 @@ class AddToCart extends Component
         $this->product = $product;
     }
 
+    /**
+     * Incrémenter la quantité LOCALE (pas dans le panier)
+     */
     public function increment()
     {
         if ($this->quantity < $this->product->stock) {
@@ -25,6 +28,9 @@ class AddToCart extends Component
         }
     }
 
+    /**
+     * Décrémenter la quantité LOCALE (pas dans le panier)
+     */
     public function decrement()
     {
         if ($this->quantity > 1) {
@@ -32,25 +38,19 @@ class AddToCart extends Component
         }
     }
 
+    /**
+     * Ajouter au panier avec la quantité choisie
+     */
     public function addToCart()
     {
         if ($this->product->stock < $this->quantity) {
-            $this->dispatch('notification', [
-                'type' => 'error',
-                'message' => 'Stock insuffisant'
-            ]);
             return;
-        }
-
-        // IMPORTANT : S'assurer que session_id est défini
-        if (!Auth::check() && !session()->has('_token')) {
-            session()->regenerate();
         }
 
         $sessionId = Auth::check() ? null : session()->getId();
         $userId = Auth::id();
 
-        // Vérifier si l'article existe déjà
+        // Vérifier si l'article existe déjà dans le panier
         $existingItem = CartItem::where('product_id', $this->product->id)
             ->where(function($query) use ($userId, $sessionId) {
                 if ($userId) {
@@ -62,7 +62,7 @@ class AddToCart extends Component
             ->first();
 
         if ($existingItem) {
-            // Mettre à jour la quantité
+            // Ajouter la quantité sélectionnée à l'existante
             $newQuantity = $existingItem->quantity + $this->quantity;
             
             if ($newQuantity > $this->product->stock) {
@@ -74,7 +74,7 @@ class AddToCart extends Component
                 'price' => $this->product->price,
             ]);
         } else {
-            // Créer un nouvel article
+            // Créer avec la quantité sélectionnée
             CartItem::create([
                 'user_id' => $userId,
                 'session_id' => $sessionId,
@@ -84,9 +84,17 @@ class AddToCart extends Component
             ]);
         }
 
+        // Afficher la notification
         $this->showNotification = true;
+        
+        // Réinitialiser la quantité à 1 après ajout
+        $this->quantity = 1;
+        
+        // Mettre à jour l'icône panier
         $this->dispatch('cartUpdated');
-        $this->dispatch('hideNotification');
+        
+        // Masquer la notification après 3 secondes
+        $this->js('setTimeout(() => $wire.showNotification = false, 3000)');
     }
 
     public function render()
