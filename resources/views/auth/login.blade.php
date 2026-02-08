@@ -62,13 +62,14 @@
                 <!-- PARTIE DROITE -->
                 <div class="hidden md:flex items-center justify-center bg-gradient-to-br from-primary-600 to-secondary-600 text-white p-10">
                     <div class="text-center">
+                        <svg class="mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
                         <h2 class="text-4xl font-bold mb-4">Bienvenue !</h2>
                         <p class="mb-6 text-lg">
-                            Connectez-vous pour accéder à votre espace
+                            Saisissez vos informations personnelles et commencez votre voyage avec nous.
                         </p>
                         <a href="{{ route('register') }}"
                            class="inline-block border border-white rounded-full px-6 py-3 hover:bg-white hover:text-orange-600 transition">
-                            Pas encore de compte ? Inscrivez-vous
+                            Inscrivez-vous 
                         </a>
                     </div>
                 </div>
