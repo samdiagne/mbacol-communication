@@ -157,6 +157,22 @@
         </div>
     </div>
 
+        <!-- Scroll to top button -->
+    <button
+        id="scrollToTopBtn"
+        aria-label="Revenir en haut"
+        class="fixed bottom-6 right-6 z-50 hidden items-center justify-center
+            w-12 h-12 rounded-full bg-primary-600 text-white
+            shadow-lg hover:bg-primary-700
+            transition-all duration-300 ease-in-out
+            focus:outline-none focus:ring-2 focus:ring-primary-400"
+    >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
     @livewireScripts
 </body>
 </html>

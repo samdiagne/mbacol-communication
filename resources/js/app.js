@@ -1,7 +1,23 @@
-import './bootstrap';
+import './bootstrap'
 
-import Alpine from 'alpinejs';
+// Scroll to top button
+const scrollBtn = document.getElementById('scrollToTopBtn')
 
-window.Alpine = Alpine;
+if (scrollBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.classList.remove('hidden')
+            scrollBtn.classList.add('flex')
+        } else {
+            scrollBtn.classList.add('hidden')
+            scrollBtn.classList.remove('flex')
+        }
+    })
 
-Alpine.start();
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
+    })
+}
