@@ -107,12 +107,12 @@
 
                     <a href="{{ route('checkout') }}" 
                        class="block w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-lg text-center transition duration-200 mb-3">
-                        Procéder au paiement
+                        Finaliser votre commande
                     </a>
                     
                     <a href="{{ route('shop') }}" 
                        class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-lg text-center transition duration-200">
-                        Continuer mes achats
+                        Voir d'autres articles
                     </a>
                 </div>
             </div>

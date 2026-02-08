@@ -57,9 +57,12 @@
                         
                         <!-- Compte -->
                         @auth
+                            <a href="{{ route('customer.orders.index') }}" class="text-gray-700 hover:text-primary-600 text-sm font-medium">
+                                Mes commandes
+                            </a>
                             @if(Auth::user()->role === 'admin')
                                 <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-primary-600 text-sm font-medium">
-                                    Dashboard
+                                    Admin
                                 </a>
                             @endif
                             <form method="POST" action="{{ route('logout') }}" class="inline">

@@ -5,9 +5,11 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Checkout;
 use App\Livewire\CartPage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 
 // Routes publiques
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -23,7 +25,12 @@ Route::get('/commander', function () {
     return view('checkout');
 })->name('checkout');
 
-// Routes temporaires
+// Ajoute la route de confirmation (temporaire)
+Route::get('/commande/{order}/confirmation', function (\App\Models\Order $order) {
+    return view('order-confirmation', compact('order'));
+})->name('order.confirmation');
+
+// Autres Routes temporaires
 Route::get('/a-propos', function () {
     return view('about');
 })->name('about');
@@ -50,8 +57,22 @@ Route::middleware('auth')->group(function () {
 // Routes Admin (protégées)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Produits
     Route::resource('products', AdminProductController::class);
     Route::delete('products/{image}/delete-image', [AdminProductController::class, 'deleteImage'])->name('products.delete-image');
+    
+    // Commandes
+    Route::get('orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::patch('orders/{order}/payment', [\App\Http\Controllers\Admin\OrderController::class, 'updatePaymentStatus'])->name('orders.update-payment-status');
+});
+
+// Routes client (après auth)
+Route::middleware('auth')->prefix('mon-compte')->name('customer.')->group(function () {
+    Route::get('commandes', [CustomerOrderController::class, 'index'])->name('orders.index');
+    Route::get('commandes/{order}', [CustomerOrderController::class, 'show'])->name('orders.show');
 });
 
 require __DIR__.'/auth.php';

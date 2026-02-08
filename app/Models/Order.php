@@ -74,11 +74,12 @@ class Order extends Model
     /**
      * Accessor : Statut traduit
      */
-    public function getStatusLabelAttribute()
+        public function getStatusLabelAttribute()
     {
         return match($this->status) {
             'pending' => 'En attente',
-            'processing' => 'En traitement',
+            'confirmed' => 'Confirmée',
+            'processing' => 'En préparation',
             'shipped' => 'Expédiée',
             'delivered' => 'Livrée',
             'cancelled' => 'Annulée',
@@ -86,9 +87,6 @@ class Order extends Model
         };
     }
 
-    /**
-     * Accessor : Statut paiement traduit
-     */
     public function getPaymentStatusLabelAttribute()
     {
         return match($this->payment_status) {
@@ -100,17 +98,15 @@ class Order extends Model
         };
     }
 
-    /**
-     * Accessor : Méthode de paiement traduite
-     */
     public function getPaymentMethodLabelAttribute()
     {
         return match($this->payment_method) {
             'wave' => 'Wave',
             'orange_money' => 'Orange Money',
             'free_money' => 'Free Money',
-            'cash' => 'Espèces',
-            default => 'Inconnu',
+            'cash' => 'Espèces à la livraison',
+            default => 'Autre',
         };
     }
+
 }
