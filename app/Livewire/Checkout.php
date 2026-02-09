@@ -9,6 +9,9 @@ use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmation;
+use App\Mail\NewOrderAdmin;
 
 class Checkout extends Component
 {
@@ -144,6 +147,19 @@ class Checkout extends Component
             }
 
             DB::commit();
+
+            // Envoyer emails
+            try {
+                // Email client
+                Mail::to($order->customer_email)
+                    ->send(new OrderConfirmation($order));
+
+                // Email admin
+                Mail::to('admin@mbacol.sn')
+                    ->send(new NewOrderAdmin($order));
+            } catch (\Exception $e) {
+                \Log::error('Email error: ' . $e->getMessage());
+            }
 
             // Rediriger vers la page de confirmation
             return redirect()->route('order.confirmation', $order);
