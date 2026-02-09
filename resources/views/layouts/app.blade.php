@@ -107,6 +107,7 @@
                             <li><a href="{{ route('shop') }}" class="hover:text-white">Boutique</a></li>
                             <li><a href="{{ route('about') }}" class="hover:text-white">À propos</a></li>
                             <li><a href="{{ route('contact') }}" class="hover:text-white">Contact</a></li>
+                            <li><a href="{{ route('terms') }}" class="hover:text-white">CGV</a></li>
                         </ul>
                     </div>
                     

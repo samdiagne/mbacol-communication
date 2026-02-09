@@ -10,6 +10,7 @@ use App\Livewire\CartPage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
+use App\Http\Controllers\ContactController;
 
 // Routes publiques
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -30,14 +31,10 @@ Route::get('/commande/{order}/confirmation', function (\App\Models\Order $order)
     return view('order-confirmation', compact('order'));
 })->name('order.confirmation');
 
-// Autres Routes temporaires
-Route::get('/a-propos', function () {
-    return view('about');
-})->name('about');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
+Route::get('/a-propos', fn() => view('about'))->name('about');
+Route::get('/contact', fn() => view('contact'))->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+Route::get('/cgv', fn() => view('terms'))->name('terms');
 
 // Routes authentifiées (redirection)
 Route::middleware('auth')->group(function () {
