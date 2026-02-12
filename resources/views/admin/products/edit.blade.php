@@ -35,7 +35,7 @@
                         Nom du produit <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="name" value="{{ old('name', $product->name) }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('name') border-red-500 @enderror">
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('name') @enderror">
                     @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -48,7 +48,7 @@
                     </label>
                     <input type="text" name="short_description" value="{{ old('short_description', $product->short_description) }}"
                            maxlength="500"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('short_description') border-red-500 @enderror">
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('short_description') @enderror">
                     @error('short_description')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -60,7 +60,7 @@
                         Description complète <span class="text-red-500">*</span>
                     </label>
                     <textarea name="description" rows="6" required
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('description') border-red-500 @enderror">{{ old('description', $product->description) }}</textarea>
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('description') @enderror">{{ old('description', $product->description) }}</textarea>
                     @error('description')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -72,7 +72,7 @@
                         Catégorie <span class="text-red-500">*</span>
                     </label>
                     <select name="category_id" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('category_id') border-red-500 @enderror">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('category_id') @enderror">
                         <option value="">Sélectionner une catégorie</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
@@ -97,7 +97,7 @@
                             Prix (FCFA) <span class="text-red-500">*</span>
                         </label>
                         <input type="number" name="price" value="{{ old('price', $product->price) }}" required min="0" step="1"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('price') border-red-500 @enderror">
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('price') @enderror">
                         @error('price')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -109,7 +109,7 @@
                             Ancien prix (FCFA)
                         </label>
                         <input type="number" name="old_price" value="{{ old('old_price', $product->old_price) }}" min="0" step="1"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('old_price') border-red-500 @enderror">
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('old_price') @enderror">
                         @error('old_price')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -121,7 +121,7 @@
                             Quantité en stock <span class="text-red-500">*</span>
                         </label>
                         <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" required min="0"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('stock') border-red-500 @enderror">
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('stock') @enderror">
                         @error('stock')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -133,7 +133,7 @@
                             SKU (Référence)
                         </label>
                         <input type="text" name="sku" value="{{ old('sku', $product->sku) }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('sku') border-red-500 @enderror">
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('sku') @enderror">
                         @error('sku')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror

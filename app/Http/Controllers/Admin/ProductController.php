@@ -46,20 +46,79 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::with('category')->latest();
+        $query = Product::with('category');
 
-        // Filtres
-        if ($request->filter === 'active') {
-            $query->active();
-        } elseif ($request->filter === 'inactive') {
-            $query->where('is_active', false);
-        } elseif ($request->filter === 'out_of_stock') {
-            $query->where('stock', 0);
+        // Recherche par nom ou SKU
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%");
+            });
         }
 
-        $products = $query->paginate(20);
-        
-        return view('admin.products.index', compact('products'));
+        // Filtre par catégorie
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Filtre par statut stock
+        if ($request->filled('stock_status')) {
+            switch ($request->stock_status) {
+                case 'in_stock':
+                    $query->where('stock', '>', 0);
+                    break;
+                case 'low_stock':
+                    $query->where('stock', '>', 0)->where('stock', '<=', 5);
+                    break;
+                case 'out_of_stock':
+                    $query->where('stock', 0);
+                    break;
+            }
+        }
+
+        // Filtre produits en vedette
+        if ($request->filled('featured')) {
+            $query->where('is_featured', $request->featured);
+        }
+
+        // Filtre produits actifs/inactifs
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status);
+        }
+
+        // Tri
+        switch ($request->sort ?? 'newest') {
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'name_asc':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'stock_asc':
+                $query->orderBy('stock', 'asc');
+                break;
+            case 'stock_desc':
+                $query->orderBy('stock', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(20)->withQueryString();
+        $categories = \App\Models\Category::orderBy('name')->get();
+
+        return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()

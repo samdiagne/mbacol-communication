@@ -12,119 +12,170 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-gray-50" x-data="{ mobileMenuOpen: false, userMenuOpen: false }">
+<body class="font-sans antialiased bg-gray-50" x-data="{ mobileMenuOpen: false, userMenuOpen: false,  searchOpen: false }">
     <!-- Navigation fixe -->
     <nav class="bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <!-- Logo -->
                 <div class="flex items-center">
-                    <!-- Logo -->
                     <a href="{{ route('home') }}" class="flex items-center">
-                        <span class="text-3xl font-bold text-primary-600">Mbacol</span>
-                        <span class="text-3xl font-bold text-secondary-600 ml-1">Communication</span>
+                        <span class="text-xl md:text-3xl font-bold text-primary-600">Mbacol</span>
+                        <span class="text-xl md:text-3xl font-bold text-secondary-600 ml-1">Communication</span>
                     </a>
-                    
-                    <!-- Menu principal (Desktop) -->
-                    <div class="hidden md:flex md:ml-10 md:space-x-6">
-                        <a href="{{ route('home') }}" 
-                           class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
-                            Accueil
-                        </a>
-                        <a href="{{ route('shop') }}" 
-                           class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('shop') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
-                            Boutique
-                        </a>
-                        <a href="{{ route('customer.orders.index') }}" 
-                           class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('customer.orders.*') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
-                            Mes commandes
-                        </a>
-                    </div>
+                </div>
+                
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="{{ route('home') }}" 
+                    class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
+                        Accueil
+                    </a>
+                    <a href="{{ route('shop') }}" 
+                    class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('shop') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
+                        Boutique
+                    </a>
+                    <a href="{{ route('about') }}" 
+                    class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('about') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
+                        À propos
+                    </a>
+                    <a href="{{ route('contact') }}" 
+                    class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('contact') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
+                        Contact
+                    </a>
                 </div>
                 
                 <!-- Actions droite -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <!-- Recherche (Desktop uniquement) -->
+                    <div class="hidden lg:block">
+                        <form action="{{ route('shop') }}" method="GET" class="relative">
+                            <input type="search" 
+                                name="search"
+                                placeholder="Rechercher..." 
+                                value="{{ request('search') }}"
+                                class="w-64 pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm transition">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </form>
+                    </div>
+
+                    <!-- Recherche Mobile (icône) -->
+                    <button @click="searchOpen = !searchOpen" 
+                            class="md:hidden text-gray-700 hover:text-primary-600 p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                    
                     <!-- Panier -->
                     @livewire('cart-icon')
                     
-                    <!-- Menu utilisateur -->
-                    <div class="relative">
-                        <button @click="userMenuOpen = !userMenuOpen"
-                                @click.away="userMenuOpen = false" 
-                                class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors group">
-                            <!-- Avatar -->
-                            <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold shadow-md group-hover:shadow-lg transition">
-                                {{ substr(Auth::user()->name, 0, 1) }}
-                            </div>
-                            <!-- Flèche -->
-                            <svg class="w-4 h-4 transition-transform duration-200" 
-                                 :class="{ 'rotate-180': userMenuOpen }" 
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
+                    <!-- Menu utilisateur (Desktop) / Icône (Mobile) -->
+                    @auth
+                        <div x-data="{ open: false }" class="relative hidden md:block">
+                            <button @click="open = !open" 
+                                    @click.away="open = false"
+                                    class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors group">
+                                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold shadow-md group-hover:shadow-lg transition">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                                <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
 
-                        <!-- Menu déroulant -->
-                        <div x-show="userMenuOpen"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform scale-95"
-                             x-transition:enter-end="opacity-100 transform scale-100"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 transform scale-100"
-                             x-transition:leave-end="opacity-0 transform scale-95"
-                             class="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50"
-                             style="display: none;">
-                            
-                            <!-- En-tête -->
-                            <div class="px-5 py-4 border-b border-gray-100">
-                                <p class="text-sm font-bold text-gray-900 truncate">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
-                            </div>
+                            <!-- Menu déroulant Desktop -->
+                            <div x-show="open"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 transform scale-95"
+                                x-transition:enter-end="opacity-100 transform scale-100"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 transform scale-100"
+                                x-transition:leave-end="opacity-0 transform scale-95"
+                                class="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50"
+                                style="display: none;">
+                                
+                                <div class="px-5 py-4 border-b border-gray-100">
+                                    <p class="text-sm font-bold text-gray-900 truncate">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                                </div>
 
-                            <!-- Items du menu -->
-                            <div class="py-2">
-                                <a href="{{ route('customer.orders.index') }}" 
-                                   class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
-                                    <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                                    </svg>
-                                    Mes commandes
-                                </a>
+                                <div class="py-2">
+                                    @if(Auth::user()->role === 'admin')
+                                        <div class="px-3 py-1">
+                                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Administration</p>
+                                        </div>
+                                        <a href="{{ route('admin.dashboard') }}" 
+                                        class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
+                                            <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                            </svg>
+                                            Dashboard
+                                        </a>
+                                        <a href="{{ route('admin.orders.index') }}" 
+                                        class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
+                                            <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                            </svg>
+                                            Gérer les commandes
+                                        </a>
+                                        <div class="border-t border-gray-100 my-2"></div>
+                                        <div class="px-3 py-1">
+                                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Mon compte</p>
+                                        </div>
+                                    @endif
 
-                                <a href="{{ route('profile.edit') }}" 
-                                   class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
-                                    <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                    Mon profil
-                                </a>
-
-                                <div class="border-t border-gray-100 my-2"></div>
-
-                                <a href="{{ route('shop') }}" 
-                                   class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-                                    <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                    </svg>
-                                    Continuer mes achats
-                                </a>
-
-                                <div class="border-t border-gray-100 my-2"></div>
-
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="flex items-center w-full px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors group">
-                                        <svg class="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    <a href="{{ route('customer.orders.index') }}" 
+                                    class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
+                                        <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
-                                        Déconnexion
-                                    </button>
-                                </form>
+                                        Mes commandes
+                                    </a>
+
+                                    <a href="{{ route('profile.edit') }}" 
+                                    class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
+                                        <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                        Mon profil
+                                    </a>
+
+                                    <div class="border-t border-gray-100 my-2"></div>
+
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="flex items-center w-full px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors group">
+                                            <svg class="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                            </svg>
+                                            Déconnexion
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Menu mobile toggle -->
+                        <!-- Icône utilisateur Mobile -->
+                        <a href="{{ route('customer.orders.index') }}" 
+                        class="md:hidden text-gray-700 hover:text-primary-600 p-2">
+                            <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" 
+                        class="text-gray-700 hover:text-primary-600 p-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </a>
+                    @endauth
+
+                    <!-- Menu hamburger (Mobile uniquement) -->
                     <button @click="mobileMenuOpen = !mobileMenuOpen" 
                             class="md:hidden text-gray-700 hover:text-primary-600 p-2">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,16 +186,102 @@
             </div>
         </div>
 
-        <!-- Menu mobile -->
+        <!-- Barre de recherche mobile -->
+        <div x-show="searchOpen" 
+            x-transition
+            class="md:hidden border-t border-gray-200 bg-white p-4"
+            style="display: none;">
+            <form action="{{ route('shop') }}" method="GET">
+                <div class="relative">
+                    <input type="search" 
+                        name="search"
+                        placeholder="Rechercher un produit..." 
+                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+            </form>
+        </div>
+
+        <!-- Menu mobile (pages) -->
         <div x-show="mobileMenuOpen" 
-             x-transition
-             @click.away="mobileMenuOpen = false"
-             class="md:hidden border-t border-gray-200 bg-white shadow-lg"
-             style="display: none;">
-            <div class="px-4 py-4 space-y-2">
-                <a href="{{ route('home') }}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition">Accueil</a>
-                <a href="{{ route('shop') }}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition">Boutique</a>
-                <a href="{{ route('customer.orders.index') }}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition">Mes commandes</a>
+            x-transition
+            @click.away="mobileMenuOpen = false"
+            class="md:hidden border-t border-gray-200 bg-white shadow-lg"
+            style="display: none;">
+            <div class="px-4 py-4 space-y-1">
+                <a href="{{ route('home') }}" 
+                class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('home') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Accueil
+                </a>
+                <a href="{{ route('shop') }}" 
+                class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('shop') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    Boutique
+                </a>
+                <a href="{{ route('about') }}" 
+                class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('about') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    À propos
+                </a>
+                <a href="{{ route('contact') }}" 
+                class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('contact') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Contact
+                </a>
+
+                @auth
+                    <div class="border-t border-gray-200 my-3 pt-3">
+                        <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Mon compte</p>
+                        
+                        @if(Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" 
+                            class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                                Dashboard Admin
+                            </a>
+                        @endif
+
+                        <a href="{{ route('customer.orders.index') }}" 
+                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                            Mes commandes
+                        </a>
+
+                        <a href="{{ route('profile.edit') }}" 
+                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            Mon profil
+                        </a>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" 
+                                    class="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                                Déconnexion
+                            </button>
+                        </form>
+                    </div>
+                @endauth
             </div>
         </div>
     </nav>
