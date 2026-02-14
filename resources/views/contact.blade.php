@@ -40,7 +40,7 @@
                                    name="name" 
                                    value="{{ old('name', Auth::user()->name ?? '') }}"
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('name') border-red-500 @enderror">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('name') @enderror">
                             @error('name')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -55,7 +55,7 @@
                                    name="email" 
                                    value="{{ old('email', Auth::user()->email ?? '') }}"
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('email') border-red-500 @enderror">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('email') @enderror">
                             @error('email')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -98,7 +98,7 @@
                                       rows="6" 
                                       required
                                       placeholder="Décrivez votre demande..."
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('message') border-red-500 @enderror">{{ old('message') }}</textarea>
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('message') @enderror">{{ old('message') }}</textarea>
                             @error('message')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -193,21 +193,45 @@
             </div>
 
             <!-- Réseaux sociaux -->
-            <div class="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-xl shadow-lg p-8 text-white">
-                <h3 class="text-xl font-bold mb-4">Suivez-nous</h3>
-                <div class="flex gap-4">
-                    <a href="#" class="w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center transition">
-                        <span class="text-2xl">📘</span>
+            <div class="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl shadow-xl p-8 text-white">
+                
+                <h3 class="text-2xl font-bold mb-2">Suivez-nous</h3>
+                <p class="text-primary-100 mb-6">
+                    Restez connectés avec nous sur nos réseaux sociaux
+                </p>
+
+                <div class="flex gap-6">
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/abdoulxadredieylani/" 
+                    target="_blank"
+                    class="group flex items-center gap-3 bg-white/10 hover:bg-white/20 px-5 py-3 rounded-xl transition duration-300">
+
+                        <!-- Logo Instagram -->
+                        <svg class="w-6 h-6 text-white group-hover:scale-110 transition"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M7.75 2C4.57 2 2 4.57 2 7.75v8.5C2 19.43 4.57 22 7.75 22h8.5C19.43 22 22 19.43 22 16.25v-8.5C22 4.57 19.43 2 16.25 2h-8.5zm0 2h8.5C18.01 4 20 5.99 20 7.75v8.5c0 1.76-1.99 3.75-3.75 3.75h-8.5C5.99 20 4 18.01 4 16.25v-8.5C4 5.99 5.99 4 7.75 4zm8.25 1.5a1 1 0 110 2 1 1 0 010-2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+                        </svg>
+
+                        <span class="font-medium">Instagram</span>
                     </a>
-                    <a href="#" class="w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center transition">
-                        <span class="text-2xl">📸</span>
-                    </a>
-                    <a href="#" class="w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center transition">
-                        <span class="text-2xl">🐦</span>
+
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@mbacol_communication_313?_r=1&_t=ZS-93tGZwL49sg" 
+                    target="_blank"
+                    class="group flex items-center gap-3 bg-white/10 hover:bg-white/20 px-5 py-3 rounded-xl transition duration-300">
+
+                        <!-- Logo TikTok -->
+                        <svg class="w-6 h-6 text-white group-hover:scale-110 transition"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.75 2h2.25a5.5 5.5 0 005.5 5.5v2.25a7.75 7.75 0 01-5.5-2.25v7.25a6 6 0 11-6-6c.3 0 .6.03.88.1v2.3a3.75 3.75 0 102.87 3.6V2z"/>
+                        </svg>
+
+                        <span class="font-medium">TikTok</span>
                     </a>
                 </div>
             </div>
-        </div>
     </div>
+</div>
 </div>
 @endsection

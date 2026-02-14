@@ -143,4 +143,26 @@ class Product extends Model
     {
         $this->increment('views');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews()
+    {
+        return $this->hasMany(Review::class)->where('is_approved', true);
+    }
+
+    // Moyenne des notes
+    public function getAverageRatingAttribute()
+    {
+        return $this->approvedReviews()->avg('rating') ?? 0;
+    }
+
+    // Nombre d'avis
+    public function getReviewsCountAttribute()
+    {
+        return $this->approvedReviews()->count();
+    }
 }

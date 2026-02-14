@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmation;
 use App\Mail\NewOrderAdmin;
+use App\Services\Payment\PaymentService;
+use App\Models\Payment;
 
 class Checkout extends Component
 {
@@ -25,37 +27,53 @@ class Checkout extends Component
     // Paiement
     public string $payment_method = 'wave';
     public string $notes = '';
-    
+    public $payment_phone;
+
     // Données panier
     public Collection $cartItems;
     public float $subtotal = 0;
     public float $shippingCost = 2000;
     public float $total = 0;
 
-    protected $rules = [
-        'customer_name' => 'required|string|min:3|max:255',
-        'customer_email' => 'required|email|max:255',
-        'customer_phone' => 'required|string|min:9|max:20',
-        'customer_address' => 'required|string|min:10',
-        'customer_city' => 'required|string',
-        'payment_method' => 'required|in:wave,orange_money,free_money,cash',
-    ];
+    protected function rules()
+    {
+        $rules = [
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'required|email',
+            'customer_phone' => 'required|string|max:20',
+            'customer_address' => 'required|string',
+            'customer_city' => 'required|string|max:100',
+            'payment_method' => 'required|in:wave,orange_money,cash',
+            'notes' => 'nullable|string|max:500',
+        ];
 
-    protected $messages = [
-        'customer_name.required' => 'Veuillez entrer votre nom complet',
-        'customer_name.min' => 'Le nom doit contenir au moins 3 caractères',
-        'customer_email.required' => 'Veuillez entrer votre email',
-        'customer_email.email' => 'Email invalide',
-        'customer_phone.required' => 'Veuillez entrer votre numéro de téléphone',
-        'customer_phone.min' => 'Numéro de téléphone invalide',
-        'customer_address.required' => 'Veuillez entrer votre adresse de livraison',
-        'customer_address.min' => 'Adresse trop courte',
-        'customer_city.required' => 'Veuillez sélectionner une ville',
-    ];
+        // Si paiement mobile money, le numéro est requis
+        if (in_array($this->payment_method, ['wave', 'orange_money'])) {
+            $rules['payment_phone'] = 'required|string|digits:9|starts_with:77,78,76,70,75';
+        }
+
+        return $rules;
+    }
+
+    protected function messages()
+    {
+        return [
+            'customer_name.required' => 'Le nom est obligatoire.',
+            'customer_email.required' => 'L\'email est obligatoire.',
+            'customer_email.email' => 'L\'email doit être valide.',
+            'customer_phone.required' => 'Le téléphone est obligatoire.',
+            'customer_address.required' => 'L\'adresse de livraison est obligatoire.',
+            'customer_city.required' => 'La ville est obligatoire.',
+            'payment_method.required' => 'Veuillez sélectionner un mode de paiement.',
+            'payment_phone.required' => 'Le numéro de téléphone mobile money est obligatoire.',
+            'payment_phone.digits' => 'Le numéro doit contenir exactement 9 chiffres.',
+            'payment_phone.starts_with' => 'Le numéro doit commencer par 77, 78, 76, 70 ou 75.',
+        ];
+    }
 
     public function mount()
     {
-        $this->cartItems = collect(); // Initialiser comme Collection vide
+        $this->cartItems = collect();
         $this->loadCart();
         
         // Pré-remplir si connecté
@@ -98,45 +116,40 @@ class Checkout extends Component
     {
         $this->validate();
 
-        // Vérifier que le panier n'est pas vide
-        if ($this->cartItems->isEmpty()) {
-            session()->flash('error', 'Votre panier est vide');
-            return redirect()->route('cart');
-        }
-
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+
             // Créer la commande
             $order = Order::create([
                 'user_id' => Auth::id(),
+                'order_number' => 'CMD-' . strtoupper(uniqid()),
                 'customer_name' => $this->customer_name,
                 'customer_email' => $this->customer_email,
                 'customer_phone' => $this->customer_phone,
                 'customer_address' => $this->customer_address,
                 'customer_city' => $this->customer_city,
-                'subtotal' => $this->subtotal,
-                'shipping_cost' => $this->shippingCost,
-                'total' => $this->total,
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'pending',
                 'status' => 'pending',
+                'subtotal' => $this->subtotal,
+                'shipping_cost' => $this->shippingCost,
+                'total' => $this->total,
                 'notes' => $this->notes,
             ]);
 
-            // Créer les items de commande
-            foreach ($this->cartItems as $cartItem) {
+            // Créer les order items AVEC CALCUL DU TOTAL
+            foreach ($this->cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $cartItem->product_id,
-                    'product_name' => $cartItem->product->name,
-                    'price' => $cartItem->price,
-                    'quantity' => $cartItem->quantity,
-                    'total' => $cartItem->quantity * $cartItem->price,
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->name,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->price,
+                    'total' => $item->quantity * $item->product->price, // ✅ CORRECTION
                 ]);
 
                 // Décrémenter le stock
-                $cartItem->product->decrement('stock', $cartItem->quantity);
+                $item->product->decrement('stock', $item->quantity);
             }
 
             // Vider le panier
@@ -148,27 +161,37 @@ class Checkout extends Component
 
             DB::commit();
 
-            // Envoyer emails
-            try {
-                // Email client
-                Mail::to($order->customer_email)
-                    ->send(new OrderConfirmation($order));
+            // Traiter le paiement
+            $paymentService = new PaymentService();
+            $paymentResult = $paymentService->processPayment($order, $this->payment_phone);
 
-                // Email admin
-                Mail::to('admin@mbacol.sn')
-                    ->send(new NewOrderAdmin($order));
+            // Envoyer les emails
+            try {
+                Mail::to($order->customer_email)->send(new OrderConfirmation($order));
+                Mail::to(config('mail.from.address'))->send(new NewOrderAdmin($order));
             } catch (\Exception $e) {
                 \Log::error('Email error: ' . $e->getMessage());
             }
 
-            // Rediriger vers la page de confirmation
-            return redirect()->route('order.confirmation', $order);
+            // Redirection selon le résultat du paiement
+            if ($paymentResult['success']) {
+                if (isset($paymentResult['checkout_url'])) {
+                    // Rediriger vers la page de paiement
+                    return redirect($paymentResult['checkout_url']);
+                } else {
+                    // Cash : rediriger vers confirmation
+                    return redirect()->route('order.confirmation', $order);
+                }
+            } else {
+                session()->flash('error', $paymentResult['message'] ?? 'Erreur lors du paiement');
+                return redirect()->route('checkout');
+            }
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
-            session()->flash('error', 'Une erreur est survenue. Veuillez réessayer.');
-            return;
+            \Log::error('Order creation error: ' . $e->getMessage());
+            session()->flash('error', 'Une erreur est survenue lors de la commande.');
+            return redirect()->route('checkout');
         }
     }
 

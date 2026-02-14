@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\PaymentController;
+
+
 
 // Routes publiques
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -66,10 +71,37 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('orders/{order}/payment', [\App\Http\Controllers\Admin\OrderController::class, 'updatePaymentStatus'])->name('orders.update-payment-status');
 });
 
+// Reviews Frontend (authentification requise)
+Route::middleware('auth')->group(function () {
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+});
+
+// Reviews Admin
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+    Route::patch('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+    Route::patch('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
+    Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+});
+
 // Routes client (après auth)
 Route::middleware('auth')->prefix('mon-compte')->name('customer.')->group(function () {
     Route::get('commandes', [CustomerOrderController::class, 'index'])->name('orders.index');
     Route::get('commandes/{order}', [CustomerOrderController::class, 'show'])->name('orders.show');
+});
+
+// Routes paiement
+Route::prefix('payment')->name('payment.')->group(function () {
+    // Simulation (sandbox)
+    Route::get('simulate/{order}', [PaymentController::class, 'simulate'])->name('simulate');
+    Route::post('simulate/{order}/confirm', [PaymentController::class, 'simulateConfirm'])->name('simulate.confirm');
+    
+    // Callbacks (production)
+    Route::get('success/{order}', [PaymentController::class, 'success'])->name('success');
+    Route::get('error/{order}', [PaymentController::class, 'error'])->name('error');
+    
+    // Webhooks (production)
+    Route::post('webhook/{provider}', [PaymentController::class, 'webhook'])->name('webhook');
 });
 
 require __DIR__.'/auth.php';
