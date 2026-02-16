@@ -14,7 +14,7 @@
         
         <!-- Sidebar Desktop FIXE -->
         <aside class="hidden md:flex md:flex-shrink-0 md:fixed md:inset-y-0 md:left-0 transition-all duration-300 z-30" 
-            :class="sidebarOpen ? 'md:w-64' : 'md:w-20'">
+            :class="sidebarOpen ? 'md:w-64' : 'md:w-22'">
             <div class="flex flex-col w-full bg-gradient-to-b from-primary-700 to-primary-900 text-white">
                 
                 <!-- Header Sidebar -->
