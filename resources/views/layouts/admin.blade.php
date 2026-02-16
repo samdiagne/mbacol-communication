@@ -15,7 +15,7 @@
         <!-- Sidebar Desktop FIXE -->
         <aside class="hidden md:flex md:flex-shrink-0 md:fixed md:inset-y-0 md:left-0 transition-all duration-300 z-30" 
             :class="sidebarOpen ? 'md:w-64' : 'md:w-22'">
-            <div class="flex flex-col w-full bg-gradient-to-b from-primary-700 to-primary-900 text-white">
+            <div class="flex flex-col w-full bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 text-white">
                 
                 <!-- Header Sidebar -->
                 <div class="flex items-center justify-between h-20 px-4 border-b border-primary-600 flex-shrink-0">
@@ -187,7 +187,7 @@
                x-transition:leave="transition ease-in-out duration-300 transform"
                x-transition:leave-start="translate-x-0"
                x-transition:leave-end="-translate-x-full"
-               class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-primary-700 to-primary-900 text-white md:hidden overflow-y-auto"
+               class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 text-white md:hidden overflow-y-auto"
                style="display: none;">
             
             <!-- Header Mobile -->
@@ -262,45 +262,77 @@
             </nav>
 
             <!-- User Section -->
-            <div class="border-t border-primary-600 p-4 mt-auto">
-                <div class="flex items-center mb-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-white shadow-lg">
-                        {{ substr(Auth::user()->name, 0, 1) }}
+            <div x-data="{ open: false }" class="border-t border-primary-600 p-4 mt-auto relative">
+                <!-- Bouton principal -->
+                <button @click="open = !open"
+                        class="w-full flex items-center justify-between">
+
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-white shadow-lg">
+                            {{ substr(Auth::user()->name, 0, 1) }}
+                        </div>
+                        <div class="ml-3 text-left">
+                            <p class="text-sm font-semibold">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-primary-200">Administrateur 🔒</p>
+                        </div>
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-semibold">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-primary-200">Administrateur</p>
-                    </div>
-                </div>
 
-                <!-- Lien Voir le Site (NOUVEAU) -->
-                <a href="{{ route('home') }}" 
-                target="_blank"
-                class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm mb-2 transition-colors group">
-                    <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    <!-- Icône flèche -->
+                    <svg class="w-4 h-4 transition-transform duration-300"
+                        :class="{ 'rotate-180': open }"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 9l-7 7-7-7"/>
                     </svg>
-                    Voir le site
-                </a>
+                </button>
 
-                <a href="{{ route('profile.edit') }}" 
-                class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm mb-2 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
-                    Mon profil
-                </a>
+                <!-- Dropdown -->
+                <div x-show="open"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 translate-y-2"
+                    @click.away="open = false"
+                    class="mt-4 space-y-2 bg-primary-700/40 backdrop-blur-md p-3 rounded-xl shadow-xl"
+                    style="display: none;">
 
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" 
-                            class="flex items-center w-full text-left px-3 py-2 rounded-lg hover:bg-red-600/50 text-sm text-red-200 transition-colors">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    <!-- Voir le site -->
+                    <a href="{{ route('home') }}" 
+                    target="_blank"
+                    class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm transition group">
+                        <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                         </svg>
-                        Déconnexion
-                    </button>
-                </form>
+                        Voir le site
+                    </a>
+
+                    <!-- Profil -->
+                    <a href="{{ route('profile.edit') }}" 
+                    class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        Mon profil
+                    </a>
+
+                    <!-- Déconnexion -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                                class="flex items-center w-full text-left px-3 py-2 rounded-lg hover:bg-red-600/50 text-sm text-red-200 transition">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            Déconnexion
+                        </button>
+                    </form>
+
+                </div>
             </div>
         </aside>
 
