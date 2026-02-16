@@ -23,11 +23,21 @@
         <nav class="bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16 md:h-20">
-                    <!-- Logo -->
-                    <div class="flex items-center">
+                    
+                    <!-- Menu Burger (Mobile uniquement - GAUCHE) -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                            class="md:hidden text-gray-700 hover:text-primary-600 p-2 -ml-2">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+
+                    <!-- Logo (CENTRE sur mobile, GAUCHE sur desktop) -->
+                    <div class="flex items-center flex-1 md:flex-initial justify-center md:justify-start">
                         <a href="{{ route('home') }}" class="flex items-center">
-                            <span class="text-xl md:text-3xl font-bold text-primary-600">Mbacol</span>
-                            <span class="text-xl md:text-3xl font-bold text-secondary-600 ml-1">Communication</span>
+                            <!-- Logo texte (adaptatif) -->
+                            <span class="text-lg sm:text-xl md:text-3xl font-bold text-primary-600">Mbacol</span>
+                            <span class="text-lg sm:text-xl md:text-3xl font-bold text-secondary-600 ml-1">Communication</span>
                         </a>
                     </div>
                     
@@ -51,8 +61,9 @@
                         </a>
                     </div>
                     
-                    <!-- Actions droite -->
-                    <div class="flex items-center space-x-2 md:space-x-4">
+                    <!-- Actions droite (Mobile + Desktop) -->
+                    <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+                        
                         <!-- Recherche (Desktop uniquement) -->
                         <div class="hidden lg:block">
                             <form action="{{ route('shop') }}" method="GET" class="relative">
@@ -69,7 +80,7 @@
 
                         <!-- Recherche Mobile (icône) -->
                         <button @click="searchOpen = !searchOpen" 
-                                class="md:hidden text-gray-700 hover:text-primary-600 p-2">
+                                class="lg:hidden text-gray-700 hover:text-primary-600 p-1.5">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
@@ -78,7 +89,7 @@
                         <!-- Panier -->
                         @livewire('cart-icon')
                         
-                        <!-- Menu utilisateur (Desktop) / Icône (Mobile) -->
+                        <!-- Menu utilisateur Desktop -->
                         @auth
                             <div x-data="{ open: false }" class="relative hidden md:block">
                                 <button @click="open = !open" 
@@ -92,7 +103,7 @@
                                     </svg>
                                 </button>
 
-                                <!-- Menu déroulant Desktop -->
+                                <!-- Dropdown Desktop -->
                                 <div x-show="open"
                                     x-transition:enter="transition ease-out duration-200"
                                     x-transition:enter-start="opacity-0 transform scale-95"
@@ -123,7 +134,6 @@
                                             <div class="border-t border-gray-100 my-2"></div>
                                         @endif
 
-                                        <!-- Mes commandes (SEULEMENT pour clients) -->
                                         @if(Auth::user()->role !== 'admin')
                                             <a href="{{ route('customer.orders.index') }}" 
                                             class="flex items-center px-5 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors group">
@@ -159,28 +169,29 @@
                             </div>
 
                             <!-- Icône utilisateur Mobile -->
-                            <a href="{{ route('customer.orders.index') }}" 
-                            class="md:hidden text-gray-700 hover:text-primary-600 p-2">
-                                <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            <a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('customer.orders.index') }}" 
+                            class="md:hidden p-1.5">
+                                <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                                     {{ substr(Auth::user()->name, 0, 1) }}
                                 </div>
                             </a>
                         @else
+                            <!-- Icône Login Desktop -->
                             <a href="{{ route('login') }}" 
-                            class="text-gray-700 hover:text-primary-600 p-2">
+                            class="hidden md:block text-gray-700 hover:text-primary-600 p-2">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </a>
-                        @endauth
 
-                        <!-- Menu hamburger (Mobile uniquement) -->
-                        <button @click="mobileMenuOpen = !mobileMenuOpen" 
-                                class="md:hidden text-gray-700 hover:text-primary-600 p-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                            </svg>
-                        </button>
+                            <!-- Icône Login Mobile -->
+                            <a href="{{ route('login') }}" 
+                            class="md:hidden p-1.5">
+                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </a>
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -188,7 +199,7 @@
             <!-- Barre de recherche mobile -->
             <div x-show="searchOpen" 
                 x-transition
-                class="md:hidden border-t border-gray-200 bg-white p-4"
+                class="lg:hidden border-t border-gray-200 bg-white p-4"
                 style="display: none;">
                 <form action="{{ route('shop') }}" method="GET">
                     <div class="relative">
@@ -203,105 +214,157 @@
                 </form>
             </div>
 
-            <!-- Menu mobile (pages) -->
+            <!-- Menu mobile (Burger) -->
             <div x-show="mobileMenuOpen" 
-                x-transition
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-x-full"
+                x-transition:enter-end="opacity-100 translate-x-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-x-0"
+                x-transition:leave-end="opacity-0 -translate-x-full"
                 @click.away="mobileMenuOpen = false"
-                class="md:hidden border-t border-gray-200 bg-white shadow-lg"
+                class="md:hidden fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-50 overflow-y-auto"
                 style="display: none;">
-                <div class="px-4 py-4 space-y-1">
+                
+                <!-- Header Menu -->
+                <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-secondary-50">
+                    <div class="flex items-center space-x-3">
+                        @auth
+                            <div class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-900 text-sm">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                            </div>
+                        @else
+                            <div class="flex items-center">
+                                <span class="text-lg font-bold text-primary-600">Mbacol</span>
+                                <span class="text-lg font-bold text-secondary-600 ml-1">Com</span>
+                            </div>
+                        @endauth
+                    </div>
+                    <button @click="mobileMenuOpen = false" 
+                            class="text-gray-500 hover:text-gray-700 p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="px-4 py-6 space-y-1">
                     <a href="{{ route('home') }}" 
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('home') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition {{ request()->routeIs('home') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        Accueil
+                        <span class="font-medium">Accueil</span>
                     </a>
+
                     <a href="{{ route('shop') }}" 
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('shop') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition {{ request()->routeIs('shop') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                         </svg>
-                        Boutique
+                        <span class="font-medium">Boutique</span>
                     </a>
+
                     <a href="{{ route('about') }}" 
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('about') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition {{ request()->routeIs('about') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        À propos
+                        <span class="font-medium">À propos</span>
                     </a>
+
                     <a href="{{ route('contact') }}" 
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition {{ request()->routeIs('contact') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
+                    class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition {{ request()->routeIs('contact') ? 'bg-primary-50 text-primary-600 font-semibold' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
-                        Contact
+                        <span class="font-medium">Contact</span>
                     </a>
+
                     @auth
-                    <div x-data="{ mobileUserOpen: false }" class="mt-4 border-t pt-4">
-
-                        <!-- Bouton -->
-                        <button 
-                            @click="mobileUserOpen = !mobileUserOpen"
-                            class="w-full flex items-center justify-between px-4 py-3 bg-gray-100 rounded-lg text-left">
-
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
-                                </div>
-                                <span class="font-semibold text-gray-800">
-                                    Mon compte
-                                </span>
-                            </div>
-
-                            <svg class="w-5 h-5 transition-transform"
-                                :class="{ 'rotate-180': mobileUserOpen }"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown -->
-                        <div x-show="mobileUserOpen"
-                            x-transition
-                            class="mt-3 space-y-2">
-
+                        <div class="border-t border-gray-200 mt-4 pt-4">
+                            <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Mon Espace</p>
+                            
                             @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('admin.dashboard') }}"
-                                class="block px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium">
-                                    Dashboard Admin
+                                <a href="{{ route('admin.dashboard') }}" 
+                                class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                    <span class="font-medium">Dashboard Admin</span>
+                                </a>
+                            @else
+                                <a href="{{ route('customer.orders.index') }}" 
+                                class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    <span class="font-medium">Mes commandes</span>
                                 </a>
                             @endif
 
-                            @if(Auth::user()->role !== 'admin')
-                                <a href="{{ route('customer.orders.index') }}"
-                                class="block px-4 py-3 rounded-lg bg-gray-50 hover:bg-primary-50">
-                                    Mes commandes
-                                </a>
-                            @endif
-
-                            <a href="{{ route('profile.edit') }}"
-                            class="block px-4 py-3 rounded-lg bg-gray-50 hover:bg-primary-50">
-                                Mon profil
+                            <a href="{{ route('profile.edit') }}" 
+                            class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                <span class="font-medium">Mon profil</span>
                             </a>
 
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('logout') }}" class="mt-2">
                                 @csrf
-                                <button type="submit"
-                                    class="w-full text-left px-4 py-3 rounded-lg bg-red-50 text-red-600 font-medium">
-                                    Déconnexion
+                                <button type="submit" 
+                                        class="flex items-center w-full px-4 py-3.5 text-red-600 hover:bg-red-50 rounded-xl transition">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </svg>
+                                    <span class="font-medium">Déconnexion</span>
                                 </button>
                             </form>
                         </div>
-                    </div>
+                    @else
+                        <div class="border-t border-gray-200 mt-4 pt-4">
+                            <a href="{{ route('login') }}" 
+                            class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                </svg>
+                                <span class="font-medium">Connexion</span>
+                            </a>
+                            <a href="{{ route('register') }}" 
+                            class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                                </svg>
+                                <span class="font-medium">Inscription</span>
+                            </a>
+                        </div>
                     @endauth
                 </div>
             </div>
+
+            <!-- Overlay -->
+            <div x-show="mobileMenuOpen" 
+                @click="mobileMenuOpen = false"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="md:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-40"
+                style="display: none;">
+            </div>
         </nav>
 
-        <div class="h-20"></div>
+        <!-- Spacer -->
+        <div class="h-16 md:h-20"></div>
+
         <!-- Contenu principal -->
         <main>
             @yield('content')

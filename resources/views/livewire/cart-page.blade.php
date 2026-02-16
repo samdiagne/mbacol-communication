@@ -8,71 +8,85 @@
         </div>
 
         @if($cartItems->count() > 0)
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
             
             <!-- Liste des produits -->
             <div class="lg:col-span-2 space-y-4">
                 @foreach($cartItems as $item)
-                <div wire:key="cart-item-{{ $item->id }}" class="bg-white rounded-lg shadow p-6 flex items-center gap-6">
-                    <!-- Image -->
-                    <div class="w-24 h-24 flex-shrink-0 bg-gray-200 rounded overflow-hidden">
-                        @if($item->product->main_image)
-                            <img src="{{ asset('storage/' . $item->product->main_image) }}" 
-                                 alt="{{ $item->product->name }}" 
-                                 class="w-full h-full object-cover">
-                        @endif
-                    </div>
+                <div wire:key="cart-item-{{ $item->id }}" 
+                    class="bg-white rounded-xl shadow-sm p-4 sm:p-6">
 
-                    <!-- Infos -->
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">
-                            <a href="{{ route('product.show', $item->product) }}" class="hover:text-primary-600">
-                                {{ $item->product->name }}
-                            </a>
-                        </h3>
-                        <p class="text-sm text-gray-600 mb-2">{{ $item->product->category->name }}</p>
-                        <p class="text-lg font-bold text-gray-900">{{ number_format($item->price, 0, ',', ' ') }} FCFA</p>
-                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
 
-                    <!-- Quantité -->
-                    <div class="flex items-center border border-gray-300 rounded-lg">
-                        <button wire:click="decrementQuantity({{ $item->id }})" 
-                                type="button"
-                                class="px-3 py-2 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                @if($item->quantity <= 1) disabled @endif>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                            </svg>
-                        </button>
-                        <span class="px-4 py-2 font-semibold min-w-[3rem] text-center">{{ $item->quantity }}</span>
-                        <button wire:click="incrementQuantity({{ $item->id }})" 
-                                type="button"
-                                class="px-3 py-2 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                @if($item->quantity >= $item->product->stock) disabled @endif>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                        </button>
-                    </div>
+                        <!-- Image -->
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0">
+                            @if($item->product->main_image)
+                                <img src="{{ asset('storage/' . $item->product->main_image) }}" 
+                                    alt="{{ $item->product->name }}" 
+                                    class="w-full h-full object-cover">
+                            @endif
+                        </div>
 
-                    <!-- Sous-total -->
-                    <div class="text-right">
-                        <p class="text-lg font-bold text-gray-900">
-                            {{ number_format($item->quantity * $item->price, 0, ',', ' ') }} FCFA
-                        </p>
-                    </div>
+                        <!-- Infos -->
+                        <div class="flex-1 text-center sm:text-left">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1">
+                                <a href="{{ route('product.show', $item->product) }}" 
+                                class="hover:text-primary-600 transition">
+                                    {{ $item->product->name }}
+                                </a>
+                            </h3>
 
-                    <!-- Supprimer -->
-                    <button wire:click="removeItem({{ $item->id }})" 
-                            type="button"
-                            class="text-red-600 hover:text-red-800">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                        </svg>
-                    </button>
+                            <p class="text-sm text-gray-500 mb-2">
+                                {{ $item->product->category->name }}
+                            </p>
+
+                            <p class="text-lg font-bold text-gray-900">
+                                {{ number_format($item->price, 0, ',', ' ') }} FCFA
+                            </p>
+                        </div>
+
+                        <!-- Quantité + Prix + Delete -->
+                        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+
+                            <!-- Quantité -->
+                            <div class="flex items-center border border-gray-300 rounded-lg">
+                                <button wire:click="decrementQuantity({{ $item->id }})" 
+                                        type="button"
+                                        class="px-3 py-2 hover:bg-gray-100 transition"
+                                        @if($item->quantity <= 1) disabled @endif>
+                                    −
+                                </button>
+
+                                <span class="px-4 py-2 font-semibold min-w-[2.5rem] text-center">
+                                    {{ $item->quantity }}
+                                </span>
+
+                                <button wire:click="incrementQuantity({{ $item->id }})" 
+                                        type="button"
+                                        class="px-3 py-2 hover:bg-gray-100 transition"
+                                        @if($item->quantity >= $item->product->stock) disabled @endif>
+                                    +
+                                </button>
+                            </div>
+
+                            <!-- Sous-total -->
+                            <div class="text-center sm:text-right">
+                                <p class="text-lg font-bold text-primary-600">
+                                    {{ number_format($item->quantity * $item->price, 0, ',', ' ') }} FCFA
+                                </p>
+                            </div>
+
+                            <!-- Supprimer -->
+                            <button wire:click="removeItem({{ $item->id }})" 
+                                    type="button"
+                                    class="text-red-500 hover:text-red-700 transition">
+                                🗑
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
                 @endforeach
-
                 <!-- Vider le panier -->
                 <button wire:click="clearCart" 
                         type="button"

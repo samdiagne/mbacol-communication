@@ -245,7 +245,7 @@
                 </a>
             </nav>
 
-            <!-- User Mobile -->
+            <!-- User Section -->
             <div class="border-t border-primary-600 p-4 mt-auto">
                 <div class="flex items-center mb-3">
                     <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-white shadow-lg">
@@ -256,12 +256,32 @@
                         <p class="text-xs text-primary-200">Administrateur</p>
                     </div>
                 </div>
-                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm mb-2">
+
+                <!-- Lien Voir le Site (NOUVEAU) -->
+                <a href="{{ route('home') }}" 
+                target="_blank"
+                class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm mb-2 transition-colors group">
+                    <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                    Voir le site
+                </a>
+
+                <a href="{{ route('profile.edit') }}" 
+                class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm mb-2 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
                     Mon profil
                 </a>
+
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-600/50 text-sm text-red-200">
+                    <button type="submit" 
+                            class="flex items-center w-full text-left px-3 py-2 rounded-lg hover:bg-red-600/50 text-sm text-red-200 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
                         Déconnexion
                     </button>
                 </form>
