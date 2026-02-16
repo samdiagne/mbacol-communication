@@ -234,6 +234,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>
                     <span class="ml-3 font-medium">Commandes</span>
+                    @php
+                        $pendingCount = \App\Models\Order::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingCount > 0)
+                        <span class="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0" x-show="sidebarOpen">
+                             {{ $pendingCount }}
+                        </span>
+                    @endif
                 </a>
                 <!-- AVIS (AJOUT) -->
                 <a href="{{ route('admin.reviews.index') }}" 
@@ -242,6 +250,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
                     </svg>
                     <span class="ml-3 font-medium">Avis clients</span>
+                    @php
+                        $pendingReviews = \App\Models\Review::pending()->count();
+                    @endphp
+                    @if($pendingReviews > 0)
+                        <span class="ml-auto bg-yellow-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0" x-show="sidebarOpen">
+                            {{ $pendingReviews }}
+                        </span>
+                    @endif
                 </a>
             </nav>
 

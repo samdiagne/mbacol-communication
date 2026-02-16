@@ -293,7 +293,7 @@
             @else
                 <a href="{{ route('login') }}" 
                 class="bg-gray-600 hover:bg-gray-700 text-white font-bold px-6 py-3 rounded-lg transition whitespace-nowrap">
-                    Connectez-vous pour laisser un avis
+                    Vous devez etre connecté(e)
                 </a>
             @endauth
         </div>

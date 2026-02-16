@@ -179,79 +179,84 @@
 </div>
 
 <!-- Tableau -->
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">N° Commande</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Articles</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paiement</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            @forelse($orders as $order)
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4">
-                    <span class="font-mono font-semibold text-primary-600">{{ $order->order_number }}</span>
-                </td>
-                <td class="px-6 py-4">
-                    <div class="text-sm">
-                        <p class="font-semibold">{{ $order->customer_name }}</p>
-                        <p class="text-gray-500">{{ $order->customer_phone }}</p>
-                    </div>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="text-sm">{{ $order->items->count() }} article(s)</span>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="font-semibold">{{ $order->formatted_total }}</span>
-                </td>
-                <td class="px-6 py-4">
-                    @if($order->payment_status === 'paid')
-                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Payée</span>
-                    @elseif($order->payment_status === 'pending')
-                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">En attente</span>
-                    @else
-                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ $order->payment_status_label }}</span>
-                    @endif
-                </td>
-                <td class="px-6 py-4">
-                    @if($order->status === 'delivered')
-                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
-                    @elseif($order->status === 'cancelled')
-                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
-                    @else
-                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
-                    @endif
-                </td>
-                <td class="px-6 py-4 text-sm text-gray-500">
-                    {{ $order->created_at->format('d/m/Y H:i') }}
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <a href="{{ route('admin.orders.show', $order) }}" class="text-primary-600 hover:text-primary-900">
-                        Détails →
+<div class="bg-white rounded-2x1 shadow-lg overflow-hidden border border-gray-100">
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">N° Commande</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Articles</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paiement</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @forelse($orders as $order)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                    <a href="{{ route('admin.orders.show', $order) }}"> 
+                        <span class="font-mono font-semibold text-primary-600">{{ $order->order_number }}</span>
                     </a>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="8" class="px-6 py-12 text-center text-gray-500">
-                    Aucune commande trouvée
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm">
+                            <p class="font-semibold">{{ $order->customer_name }}</p>
+                            <p class="text-gray-500">{{ $order->customer_phone }}</p>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm">{{ $order->items->count() }} article(s)</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="font-semibold">{{ $order->formatted_total }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($order->payment_status === 'paid')
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Payée</span>
+                        @elseif($order->payment_status === 'pending')
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">En attente</span>
+                        @else
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ $order->payment_status_label }}</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($order->status === 'delivered')
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
+                        @elseif($order->status === 'cancelled')
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
+                        @else
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        {{ $order->created_at->format('d/m/Y H:i') }}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <a href="{{ route('admin.orders.show', $order) }}" class="text-primary-600 hover:text-primary-900">
+                            Détails →
+                        </a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                        Aucune commande trouvée
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-@if($orders->hasPages())
-<div class="mt-6">
-    {{ $orders->links() }}
-</div>
+    <!-- Pagination -->
+    @if($orders->hasPages())
+    <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+        {{ $orders->links() }}
+    </div>
 @endif
 @endsection
