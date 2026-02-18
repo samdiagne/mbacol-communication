@@ -237,6 +237,194 @@
     </div>
 </div>
 
+<!-- Avis Clients Carousel -->
+<div class="bg-gradient-to-br from-gray-50 to-gray-100 py-16 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl mb-4 shadow-xl">
+                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">⭐ Ce que disent nos clients</h2>
+            <p class="text-gray-600 text-lg">Découvrez les avis authentiques de notre communauté</p>
+        </div>
+
+        @if($reviews->count() > 0)
+        <!-- Carousel Container -->
+        <div x-data="{
+            currentIndex: 0,
+            reviews: {{ $reviews->count() }},
+            autoplay: null,
+            init() {
+                this.startAutoplay();
+            },
+            startAutoplay() {
+                this.autoplay = setInterval(() => {
+                    this.next();
+                }, 2000);
+            },
+            stopAutoplay() {
+                clearInterval(this.autoplay);
+            },
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.reviews;
+            },
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.reviews) % this.reviews;
+            },
+            goTo(index) {
+                this.currentIndex = index;
+                this.stopAutoplay();
+                this.startAutoplay();
+            }
+        }" 
+             @mouseenter="stopAutoplay()" 
+             @mouseleave="startAutoplay()"
+             class="relative">
+            
+            <!-- Cards Container -->
+            <div class="relative h-[400px] md:h-[320px]">
+                @foreach($reviews as $index => $review)
+                <div x-show="currentIndex === {{ $index }}"
+                     x-transition:enter="transition ease-out duration-500"
+                     x-transition:enter-start="opacity-0 translate-x-full"
+                     x-transition:enter-end="opacity-100 translate-x-0"
+                     x-transition:leave="transition ease-in duration-500"
+                     x-transition:leave-start="opacity-100 translate-x-0"
+                     x-transition:leave-end="opacity-0 -translate-x-full"
+                     class="absolute inset-0"
+                     style="display: none;">
+                    
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 mx-auto max-w-4xl border border-gray-200 hover:shadow-3xl transition-shadow duration-300">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <!-- Avatar + Info Client -->
+                            <div class="flex-shrink-0 text-center md:text-left">
+                                <div class="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto md:mx-0 shadow-lg mb-3">
+                                    {{ strtoupper(substr($review->user->name, 0, 1)) }}
+                                </div>
+                                <h4 class="font-bold text-gray-900 text-lg">{{ $review->user->name }}</h4>
+                                <p class="text-sm text-gray-500">Client vérifié</p>
+                                
+                                <!-- Note étoiles -->
+                                <div class="flex justify-center md:justify-start gap-1 mt-2">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $review->rating)
+                                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                        @else
+                                            <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                        @endif
+                                    @endfor
+                                </div>
+                            </div>
+
+                            <!-- Contenu Avis -->
+                            <div class="flex-1">
+                                <!-- Quote Icon -->
+                                <svg class="w-10 h-10 text-primary-200 mb-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                                </svg>
+
+                                <!-- Commentaire -->
+                                <p class="text-gray-700 text-lg leading-relaxed mb-4 italic">
+                                    "{{ $review->comment }}"
+                                </p>
+
+                                <!-- Produit concerné -->
+                                <div class="flex items-center gap-3 pt-4 border-t border-gray-200">
+                                    <div class="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                        @if($review->product->main_image)
+                                            <img src="{{ asset('storage/' . $review->product->main_image) }}" 
+                                                 alt="{{ $review->product->name }}" 
+                                                 class="w-full h-full object-cover">
+                                        @else
+                                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-semibold text-gray-900 truncate">{{ $review->product->name }}</p>
+                                        <p class="text-xs text-gray-500">{{ $review->created_at->diffForHumans() }}</p>
+                                    </div>
+                                    <a href="{{ route('product.show', $review->product) }}" 
+                                       class="flex-shrink-0 text-primary-600 hover:text-primary-700 font-semibold text-sm flex items-center gap-1 group">
+                                        Voir
+                                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button @click="prev()" 
+                    class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 bg-white hover:bg-primary-600 text-gray-800 hover:text-white w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+
+            <button @click="next()" 
+                    class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 bg-white hover:bg-primary-600 text-gray-800 hover:text-white w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+
+            <!-- Dots Navigation -->
+            <div class="flex justify-center gap-2 mt-8">
+                @foreach($reviews as $index => $review)
+                <button @click="goTo({{ $index }})"
+                        :class="currentIndex === {{ $index }} ? 'bg-primary-600 w-8' : 'bg-gray-300 w-2 hover:bg-gray-400'"
+                        class="h-2 rounded-full transition-all duration-300">
+                </button>
+                @endforeach
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-6 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full transition-all duration-5000 ease-linear"
+                     :style="`width: ${((currentIndex + 1) / reviews) * 100}%`">
+                </div>
+            </div>
+        </div>
+
+        @else
+        <!-- État vide -->
+        <div class="text-center py-12 bg-white rounded-2xl shadow-lg">
+            <div class="text-6xl mb-4">💬</div>
+            <p class="text-gray-500 text-lg">Aucun avis pour le moment.</p>
+            <p class="text-gray-400 text-sm mt-2">Soyez le premier à partager votre expérience !</p>
+        </div>
+        @endif
+
+        <!-- CTA Laisser un avis -->
+        <div class="text-center mt-12">
+            <p class="text-gray-600 mb-4">Vous avez acheté chez nous ?</p>
+            <a href="{{ route('shop') }}" 
+               class="inline-flex items-center bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold px-8 py-4 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                </svg>
+                Laisser un avis
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- Section confiance -->
 <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
