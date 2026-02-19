@@ -77,17 +77,8 @@
                     <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
                         
                         <!-- Recherche (Desktop uniquement) -->
-                        <div class="hidden lg:block">
-                            <form action="{{ route('shop') }}" method="GET" class="relative">
-                                <input type="search" 
-                                    name="search"
-                                    placeholder="Rechercher..." 
-                                    value="{{ request('search') }}"
-                                    class="w-64 pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm transition">
-                                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                </svg>
-                            </form>
+                        <div class="hidden lg:block w-64">
+                            @livewire('search-autocomplete')
                         </div>
 
                         <!-- Recherche Mobile (icône) -->
@@ -213,17 +204,7 @@
                 x-transition
                 class="lg:hidden border-t border-gray-200 bg-white p-4"
                 style="display: none;">
-                <form action="{{ route('shop') }}" method="GET">
-                    <div class="relative">
-                        <input type="search" 
-                            name="search"
-                            placeholder="Rechercher un produit..." 
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
-                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                    </div>
-                </form>
+                @livewire('search-autocomplete')
             </div>
 
             <!-- Menu mobile (Burger) avec Animations Avancées -->

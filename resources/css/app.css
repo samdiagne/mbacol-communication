@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Highlighting des résultats de recherche */
+mark {
+    background-color: #fef3c7; /* yellow-100 */
+    color: #92400e; /* yellow-900 */
+    font-weight: 600;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* Animation du badge compteur */
+@keyframes badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.animate-badge-pulse {
+    animation: badge-pulse 2s ease-in-out infinite;
+}
