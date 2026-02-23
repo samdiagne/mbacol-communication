@@ -50,10 +50,12 @@
                     
                     <template x-if="activeImage">
                         <img :src="activeImage" 
-                             alt="{{ $product->name }}" 
-                             class="w-full h-full object-contain transition-transform duration-200"
-                             :class="{ 'scale-150 cursor-zoom-in': zoom }"
-                             :style="zoom ? `transform-origin: ${position.x}% ${position.y}%` : ''">
+                            alt="{{ $product->name }} - {{ $product->category->name }} - Mbacol Communication Sénégal" 
+                            title="{{ $product->name }}"
+                            loading="eager"
+                            class="w-full h-full object-contain transition-transform duration-200"
+                            :class="{ 'scale-150 cursor-zoom-in': zoom }"
+                            :style="zoom ? `transform-origin: ${position.x}% ${position.y}%` : ''">
                     </template>
                     <template x-if="!activeImage">
                         <div class="text-gray-300">
@@ -83,9 +85,12 @@
                 <button @click="activeImage = '{{ asset('storage/' . $product->main_image) }}'"
                         :class="activeImage === '{{ asset('storage/' . $product->main_image) }}' ? 'border-primary-600 ring-2 ring-primary-600' : 'border-gray-200'"
                         class="relative h-20 bg-gray-100 rounded-lg overflow-hidden border-2 hover:border-primary-600 transition">
-                    <img src="{{ asset('storage/' . $product->main_image) }}" 
-                         alt="Image 1" 
-                         class="w-full h-full object-cover">
+                    <x-product-image 
+                        :src="asset('storage/' . $product->main_image)"
+                        :product="$product"
+                        :alt="$product->name . ' - Image principale'"
+                        class="w-full h-full object-cover"
+                        loading="eager" />
                 </button>
                 @endif
                 
@@ -93,9 +98,12 @@
                 <button @click="activeImage = '{{ asset('storage/' . $image->image_path) }}'"
                         :class="activeImage === '{{ asset('storage/' . $image->image_path) }}' ? 'border-primary-600 ring-2 ring-primary-600' : 'border-gray-200'"
                         class="relative h-20 bg-gray-100 rounded-lg overflow-hidden border-2 hover:border-primary-600 transition">
-                    <img src="{{ asset('storage/' . $image->image_path) }}" 
-                         alt="Image {{ $loop->iteration + 1 }}" 
-                         class="w-full h-full object-cover">
+                    <x-product-image 
+                        :src="asset('storage/' . $image->image_path)"
+                        :product="$product"
+                        :alt="$product->name . ' - Vue ' . $loop->iteration"
+                        class="w-full h-full object-cover"
+                        loading="eager" />
                 </button>
                 @endforeach
             </div>
@@ -293,7 +301,7 @@
             @else
                 <a href="{{ route('login') }}" 
                 class="bg-gray-600 hover:bg-gray-700 text-white font-bold px-6 py-3 rounded-lg transition whitespace-nowrap">
-                    Vous devez etre connecté(e)
+                    Connectez-vous puis laisser un avis
                 </a>
             @endauth
         </div>
@@ -439,9 +447,10 @@
             <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-200 overflow-hidden group">
                 <a href="{{ route('product.show', $relatedProduct) }}" class="block relative h-48 bg-gray-200 overflow-hidden">
                     @if($relatedProduct->main_image)
-                        <img src="{{ asset('storage/' . $relatedProduct->main_image) }}" 
-                             alt="{{ $relatedProduct->name }}" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        <x-product-image 
+                            :src="asset('storage/' . $relatedProduct->main_image)"
+                            :product="$relatedProduct"
+                            class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                     @else
                         <div class="w-full h-full flex items-center justify-center text-gray-400">
                             <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">

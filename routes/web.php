@@ -14,6 +14,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FaqController;
+
 
 
 
@@ -40,6 +42,8 @@ Route::get('/a-propos', fn() => view('about'))->name('about');
 Route::get('/contact', fn() => view('contact'))->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 Route::get('/cgv', fn() => view('terms'))->name('terms');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+
 
 // Routes authentifiées (redirection)
 Route::middleware('auth')->group(function () {

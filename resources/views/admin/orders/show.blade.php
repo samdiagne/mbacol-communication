@@ -37,9 +37,10 @@
                 <div class="flex gap-4 pb-4 border-b last:border-0">
                     <div class="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
                         @if($item->product && $item->product->main_image)
-                            <img src="{{ asset('storage/' . $item->product->main_image) }}" 
-                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-200"
-                                 alt="{{ $item->product_name }}">
+                            <x-product-image 
+                                :src="asset('storage/' . $item->product->main_image)"
+                                :product="$item->product"
+                                class="w-full h-full object-cover hover:scale-110 transition-transform duration-200" />
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-400">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

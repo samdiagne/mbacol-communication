@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>{{ config('app.name', 'Mbacol Communication') }} - @yield('title', 'Électronique et Matériel')</title>
+    {!! SEO::generate() !!}
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,6 +15,8 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
+    @stack('scripts')
 </head>
 <body class="font-sans antialiased" x-data="{ mobileMenuOpen: false, searchOpen: false }"> 
     <div class="min-h-screen bg-gray-50">
@@ -409,6 +411,7 @@
                             <li><a href="{{ route('shop') }}" class="hover:text-white">Boutique</a></li>
                             <li><a href="{{ route('about') }}" class="hover:text-white">À propos</a></li>
                             <li><a href="{{ route('contact') }}" class="hover:text-white">Contact</a></li>
+                            <li><a href="{{ route('faq') }}" class="text-gray-300 hover:text-white transition">FAQ</a></li>
                             <li><a href="{{ route('terms') }}" class="hover:text-white">CGV</a></li>
                         </ul>
                     </div>
@@ -456,7 +459,7 @@
     </button>
 
         <!-- Bouton WhatsApp flottant -->
-    <a href="https://wa.me/221778610188?text=Bonjour%20Mbacol%20Communication" 
+    <a href="https://wa.me/221784465192?text=Bonjour%20Mbacol%20Communication" 
     target="_blank"
     class="fixed bottom-6 left-6 bg-green-500 hover:bg-green-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl hover:shadow-green-500/50 hover:scale-110 transition-all duration-300 z-50 group animate-pulse">
         <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">

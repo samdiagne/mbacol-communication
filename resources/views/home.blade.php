@@ -142,9 +142,10 @@
                 <!-- Image produit -->
                 <div class="relative h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                     @if($product->main_image)
-                        <img src="{{ asset('storage/' . $product->main_image) }}" 
-                             alt="{{ $product->name }}" 
-                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                        <x-product-image 
+                            :src="asset('storage/' . $product->main_image)"
+                            :product="$product"
+                            class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                     @else
                         <div class="w-full h-full flex items-center justify-center text-gray-300">
                             <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -339,9 +340,10 @@
                                 <div class="flex items-center gap-3 pt-4 border-t border-gray-200">
                                     <div class="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                                         @if($review->product->main_image)
-                                            <img src="{{ asset('storage/' . $review->product->main_image) }}" 
-                                                 alt="{{ $review->product->name }}" 
-                                                 class="w-full h-full object-cover">
+                                            <x-product-image 
+                                                :src="asset('storage/' . $review->product->main_image)"
+                                                :product="$review->product"
+                                                class="w-full h-full object-cover" />
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-gray-400">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
