@@ -15,6 +15,8 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\Admin\StatisticsController;
+
 
 
 
@@ -86,6 +88,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
     Route::patch('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
     Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
+
 });
 
 // Routes client (après auth)
