@@ -6,7 +6,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     
     <!-- Fil d'Ariane -->
-    <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
+    <nav class="scroll-reveal flex mb-8 text-sm" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-2">
             <li>
                 <a href="{{ route('home') }}" class="text-gray-500 hover:text-primary-600">Accueil</a>
@@ -36,7 +36,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
         
         <!-- Galerie d'images avec ZOOM -->
-        <div x-data="{ 
+        <div class="scroll-reveal-left" x-data="{ 
             activeImage: '{{ $product->main_image ? asset('storage/' . $product->main_image) : '' }}',
             zoom: false,
             position: { x: 0, y: 0 }
@@ -111,7 +111,7 @@
         </div>
 
         <!-- Informations produit -->
-        <div>
+        <div class="scroll-reveal-right">
             <!-- Catégorie -->
             <p class="text-sm text-primary-600 font-semibold mb-2 uppercase">
                 {{ $product->category->name }}
@@ -122,11 +122,11 @@
                 {{ $product->name }}
             </h1>
 
-            <!-- Avis et notes (nouveau) -->
+            <!-- Avis et notes -->
             <div class="flex items-center gap-4 mb-6">
                 <div class="flex items-center">
                     @php
-                        $rating = 4.5; // À remplacer par la vraie moyenne des avis
+                        $rating = 4.5;
                         $fullStars = floor($rating);
                         $hasHalfStar = ($rating - $fullStars) >= 0.5;
                     @endphp
@@ -178,7 +178,7 @@
                 </div>
             </div>
 
-            <!-- Stock (statut simplifié) -->
+            <!-- Stock -->
             <div class="flex items-center gap-6 mb-6 text-sm">
                 <div class="flex items-center">
                     <span class="text-gray-600 mr-2 font-medium">Disponibilité :</span>
@@ -243,15 +243,15 @@
     </div>
 
     <!-- Description détaillée -->
-    <div class="bg-white rounded-lg shadow-md p-8 mb-16">
+    <div class="scroll-reveal bg-white rounded-lg shadow-md p-8 mb-16">
         <h2 class="text-2xl font-bold mb-6">Description du produit</h2>
         <div class="prose max-w-none text-gray-700">
             {!! nl2br(e($product->description)) !!}
         </div>
     </div>
 
-    <!-- SECTION AVIS (FONCTIONNEL) -->
-    <div class="bg-white rounded-lg shadow-md p-8 mb-16">
+    <!-- SECTION AVIS -->
+    <div class="scroll-reveal bg-white rounded-lg shadow-md p-8 mb-16">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4">
             <div>
                 <h2 class="text-2xl font-bold mb-2">Avis clients</h2>
@@ -348,7 +348,7 @@
         @endif
     </div>
 
-    <!-- Modal Avis (Alpine.js) - CORRECTION CONFLIT -->
+    <!-- Modal Avis -->
     <div x-data="{ 
         reviewModalOpen: false, 
         rating: 0,
@@ -441,10 +441,10 @@
     <!-- Produits similaires -->
     @if($relatedProducts->count() > 0)
     <div class="mb-16">
-        <h2 class="text-2xl font-bold mb-8">Produits similaires</h2>
+        <h2 class="scroll-reveal text-2xl font-bold mb-8">Produits similaires</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach($relatedProducts as $relatedProduct)
-            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-200 overflow-hidden group">
+            @foreach($relatedProducts as $index => $relatedProduct)
+            <div class="scroll-reveal-scale delay-{{ $index * 100 }} bg-white rounded-lg shadow-md hover:shadow-xl transition duration-200 overflow-hidden group">
                 <a href="{{ route('product.show', $relatedProduct) }}" class="block relative h-48 bg-gray-200 overflow-hidden">
                     @if($relatedProduct->main_image)
                         <x-product-image 

@@ -86,8 +86,8 @@
         <!-- PRODUITS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-        @forelse($products as $product)
-        <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-2">
+        @forelse($products as $index => $product)
+        <div class="scroll-reveal delay-{{ ($index % 3) * 100}} group bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-2">
 
             <!-- IMAGE -->
             <a href="{{ route('product.show', $product) }}" class="relative block aspect-[4/3] bg-gray-100 overflow-hidden">
@@ -193,7 +193,7 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold mb-2">💳 Paiement Sécurisé</h3>
-                <p class="text-gray-600">Wave, Orange Money, Free Money...</p>
+                <p class="text-gray-600">Wave, Orange Money, Cash...</p>
             </div>
             
             <div class="text-center group">

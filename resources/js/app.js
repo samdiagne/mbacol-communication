@@ -1,4 +1,5 @@
 import './bootstrap'
+import './scroll-animations'; // ✅ Ajoute cette ligne
 
 // Scroll to top button
 const scrollBtn = document.getElementById('scrollToTopBtn')

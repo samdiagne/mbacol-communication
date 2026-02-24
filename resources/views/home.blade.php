@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Hero Section avec Gradient Animé -->
-<div class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 text-white overflow-hidden">
+<div class="scroll-reveal relative bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 text-white overflow-hidden">
     <!-- Formes décoratives -->
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-blob"></div>
@@ -50,22 +50,22 @@
 </div>
 
 <!-- Stats rapides -->
-<div class="bg-white border-b border-gray-100">
+<div class="scroll-reveal bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="scroll-reveal-scale delay-100 bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
                 <p class="text-3xl md:text-4xl font-extrabold text-primary-600 mb-1">500+</p>
                 <p class="text-sm text-gray-600">Produits</p>
             </div>
-            <div class="bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="scroll-reveal-scale delay-200 bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
                 <p class="text-3xl md:text-4xl font-extrabold text-primary-600 mb-1">2K+</p>
                 <p class="text-sm text-gray-600">Clients satisfaits</p>
             </div>
-            <div class="bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="scroll-reveal-scale delay-300 bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
                 <p class="text-3xl md:text-4xl font-extrabold text-primary-600 mb-1">24/7</p>
                 <p class="text-sm text-gray-600">Support client</p>
             </div>
-            <div class="bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+            <div class="scroll-reveal-scale delay-400 bg-white/70 backdrop-blur-lg rounded-2xl p-6 shadow-sm hover:shadow-md transition">
                 <p class="text-3xl md:text-4xl font-extrabold text-primary-600 mb-1">🇸🇳</p>
                 <p class="text-sm text-gray-600">Made in Senegal</p>
             </div>
@@ -76,15 +76,15 @@
 <!-- Catégories populaires -->
 <div class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
+        <div class="scroll-reveal text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Catégories populaires</h2>
             <p class="text-gray-600 text-lg">Explorez nos différentes gammes de produits</p>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            @foreach($categories as $category)
+            @foreach($categories as $index => $category)
             <a href="{{ route('shop') }}?category={{ $category->slug }}" 
-               class="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 text-center overflow-hidden transform hover:-translate-y-2">
+               class="scroll-reveal delay-{{ ($index % 4) * 100 }} group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 text-center overflow-hidden transform hover:-translate-y-2">
                 <!-- Background gradient on hover -->
                 <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
@@ -122,7 +122,7 @@
 <!-- Produits en vedette -->
 <div class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+        <div class="scroll-reveal flex flex-col md:flex-row justify-between items-center mb-12">
             <div>
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">⭐ Produits en vedette</h2>
                 <p class="text-gray-600">Les meilleures offres du moment</p>
@@ -137,8 +137,8 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            @forelse($featuredProducts as $product)
-            <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 transform hover:-translate-y-2">
+            @forelse($featuredProducts as $index => $product)
+            <div class="scroll-reveal-scale delay-{{ ($index % 3) * 100 }} group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 transform hover:-translate-y-2">
                 <!-- Image produit -->
                 <div class="relative h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                     @if($product->main_image)
@@ -242,7 +242,7 @@
 <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-16 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="text-center mb-12">
+        <div class="scroll-reveal text-center mb-12">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl mb-4 shadow-xl">
                 <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
@@ -254,7 +254,7 @@
 
         @if($reviews->count() > 0)
         <!-- Carousel Container -->
-        <div x-data="{
+        <div class="scroll-reveal" x-data="{
             currentIndex: 0,
             reviews: {{ $reviews->count() }},
             autoplay: null,
@@ -264,7 +264,7 @@
             startAutoplay() {
                 this.autoplay = setInterval(() => {
                     this.next();
-                }, 2000);
+                }, 5000);
             },
             stopAutoplay() {
                 clearInterval(this.autoplay);
@@ -406,7 +406,7 @@
 
         @else
         <!-- État vide -->
-        <div class="text-center py-12 bg-white rounded-2xl shadow-lg">
+        <div class="scroll-reveal text-center py-12 bg-white rounded-2xl shadow-lg">
             <div class="text-6xl mb-4">💬</div>
             <p class="text-gray-500 text-lg">Aucun avis pour le moment.</p>
             <p class="text-gray-400 text-sm mt-2">Soyez le premier à partager votre expérience !</p>
@@ -414,7 +414,7 @@
         @endif
 
         <!-- CTA Laisser un avis -->
-        <div class="text-center mt-12">
+        <div class="scroll-reveal text-center mt-12">
             <p class="text-gray-600 mb-4">Vous avez acheté chez nous ?</p>
             <a href="{{ route('shop') }}" 
                class="inline-flex items-center bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold px-8 py-4 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-200">
@@ -431,9 +431,9 @@
 <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="text-center group">
+            <div class="scroll-reveal delay-100 text-center group">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 text-white rounded-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-16 h-16 rounded-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                 </div>
@@ -441,19 +441,19 @@
                 <p class="text-gray-600">Tous nos produits sont authentiques avec garantie constructeur</p>
             </div>
             
-            <div class="text-center group">
+            <div class="scroll-reveal delay-200 text-center group">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-16 h-16 rounded-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold mb-2">💳 Paiement Sécurisé</h3>
-                <p class="text-gray-600">Wave, Orange Money, Free Money...</p>
+                <p class="text-gray-600">Wave, Orange Money, Cash...</p>
             </div>
             
-            <div class="text-center group">
+            <div class="scroll-reveal delay-300 text-center group">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl mb-4 shadow-xl group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-16 h-16 rounded-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
                 </div>

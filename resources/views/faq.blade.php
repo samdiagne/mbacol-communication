@@ -7,7 +7,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 srcoll-reveal">
             <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl mb-6 shadow-xl">
                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -24,7 +24,7 @@
 
         <!-- FAQ Categories -->
         @foreach($faqs as $categoryIndex => $category)
-        <div class="mb-8">
+        <div class="mb-8 scroll-reveal delay-{{ $categoryIndex * 100}}">
             <!-- Category Header -->
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-xl flex items-center justify-center">
@@ -75,7 +75,7 @@
         @endforeach
 
         <!-- CTA Contact -->
-        <div class="mt-12 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl p-8 text-center text-white shadow-2xl">
+        <div class="mt-12 scroll-reveal bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl p-8 text-center text-white shadow-2xl">
             <h3 class="text-2xl font-bold mb-3">Vous ne trouvez pas votre réponse ?</h3>
             <p class="text-white/90 mb-6 max-w-xl mx-auto">
                 Notre équipe est là pour vous aider ! Contactez-nous par WhatsApp, email ou téléphone.
