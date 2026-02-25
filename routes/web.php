@@ -20,7 +20,6 @@ use App\Http\Controllers\Admin\StatisticsController;
 
 
 
-
 // Routes publiques
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/boutique', [ShopController::class, 'index'])->name('shop');

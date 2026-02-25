@@ -28,8 +28,24 @@
 
                 <!-- Statuts -->
                 <div class="flex flex-wrap gap-2 mb-4">
-                    <x-order-status-badge :status="$order->status" />
-                        
+                    @if($order->status === 'delivered')
+                        <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
+                            ✓ {{ $order->status_label }}
+                        </span>
+                    @elseif($order->status === 'cancelled')
+                        <span class="px-3 py-1 bg-red-100 text-red-800 text-sm font-semibold rounded-full">
+                            ✕ {{ $order->status_label }}
+                        </span>
+                    @elseif($order->status === 'shipped')
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
+                            🚚 {{ $order->status_label }}
+                        </span>
+                    @else
+                        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm font-semibold rounded-full">
+                            ⏳ {{ $order->status_label }}
+                        </span>
+                    @endif
+
                     @if($order->payment_status === 'paid')
                         <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
                             💳 Payée

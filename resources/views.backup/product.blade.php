@@ -1,17 +1,36 @@
-@extends('layouts.app-refactored')
+@extends('layouts.app')
 
 @section('title', $product->name)
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     
-    <!-- Breadcrumb Component -->
-    <x-breadcrumb :items="[
-        ['label' => 'Accueil', 'url' => route('home')],
-        ['label' => 'Boutique', 'url' => route('shop')],
-        ['label' => $product->category->name, 'url' => route('shop', ['category' => $product->category->slug])],
-        ['label' => $product->name]
-    ]" />
+    <!-- Fil d'Ariane -->
+    <nav class="scroll-reveal flex mb-8 text-sm" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-2">
+            <li>
+                <a href="{{ route('home') }}" class="text-gray-500 hover:text-primary-600">Accueil</a>
+            </li>
+            <li>
+                <span class="text-gray-400">/</span>
+            </li>
+            <li>
+                <a href="{{ route('shop') }}" class="text-gray-500 hover:text-primary-600">Boutique</a>
+            </li>
+            <li>
+                <span class="text-gray-400">/</span>
+            </li>
+            <li>
+                <a href="{{ route('shop', ['category' => $product->category->slug]) }}" class="text-gray-500 hover:text-primary-600">
+                    {{ $product->category->name }}
+                </a>
+            </li>
+            <li>
+                <span class="text-gray-400">/</span>
+            </li>
+            <li class="text-gray-900 font-semibold">{{ $product->name }}</li>
+        </ol>
+    </nav>
 
     <!-- Contenu principal -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -105,7 +124,35 @@
 
             <!-- Avis et notes -->
             <div class="flex items-center gap-4 mb-6">
-                <x-rating-stars :rating="4.5" />
+                <div class="flex items-center">
+                    @php
+                        $rating = 4.5;
+                        $fullStars = floor($rating);
+                        $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                    @endphp
+                    @for($i = 1; $i <= 5; $i++)
+                        @if($i <= $fullStars)
+                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                        @elseif($i == $fullStars + 1 && $hasHalfStar)
+                            <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 20 20">
+                                <defs>
+                                    <linearGradient id="half">
+                                        <stop offset="50%" stop-color="#FBBF24"/>
+                                        <stop offset="50%" stop-color="#E5E7EB"/>
+                                    </linearGradient>
+                                </defs>
+                                <path fill="url(#half)" d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                        @else
+                            <svg class="w-5 h-5 text-gray-300 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                        @endif
+                    @endfor
+                    <span class="ml-2 text-sm font-semibold text-gray-700">{{ $rating }} / 5</span>
+                </div>
                 <span class="text-sm text-gray-500">(23 avis)</span>
             </div>
 
@@ -210,7 +257,35 @@
                 <h2 class="text-2xl font-bold mb-2">Avis clients</h2>
                 @if($product->reviews_count > 0)
                     <div class="flex items-center gap-3">
-                        <x-rating-stars :rating="round($product->average_rating, 1)" />
+                        <div class="flex items-center">
+                            @php
+                                $avgRating = round($product->average_rating, 1);
+                                $fullStars = floor($avgRating);
+                                $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
+                            @endphp
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $fullStars)
+                                    <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                @elseif($i == $fullStars + 1 && $hasHalfStar)
+                                    <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 20 20">
+                                        <defs>
+                                            <linearGradient id="half">
+                                                <stop offset="50%" stop-color="#FBBF24"/>
+                                                <stop offset="50%" stop-color="#E5E7EB"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <path fill="url(#half)" d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                @else
+                                    <svg class="w-5 h-5 text-gray-300 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                @endif
+                            @endfor
+                            <span class="ml-2 text-sm font-semibold text-gray-700">{{ $avgRating }} / 5</span>
+                        </div>
                         <span class="text-sm text-gray-500">({{ $product->reviews_count }} avis)</span>
                     </div>
                 @else
@@ -244,7 +319,13 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
                                 <div>
                                     <h4 class="font-bold text-gray-900">{{ $review->user->name }}</h4>
-                                    <x-rating-stars :rating="$review->rating" size="sm" :showValue="false" />
+                                    <div class="flex items-center mt-1">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }} fill-current" viewBox="0 0 20 20">
+                                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                            </svg>
+                                        @endfor
+                                    </div>
                                 </div>
                                 <span class="text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
                             </div>
@@ -363,7 +444,32 @@
         <h2 class="scroll-reveal text-2xl font-bold mb-8">Produits similaires</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach($relatedProducts as $index => $relatedProduct)
-                <x-product-card :product="$relatedProduct" :index="$index" />
+            <div class="scroll-reveal-scale delay-{{ $index * 100 }} bg-white rounded-lg shadow-md hover:shadow-xl transition duration-200 overflow-hidden group">
+                <a href="{{ route('product.show', $relatedProduct) }}" class="block relative h-48 bg-gray-200 overflow-hidden">
+                    @if($relatedProduct->main_image)
+                        <x-product-image 
+                            :src="asset('storage/' . $relatedProduct->main_image)"
+                            :product="$relatedProduct"
+                            class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    @endif
+                </a>
+                <div class="p-4">
+                    <a href="{{ route('product.show', $relatedProduct) }}">
+                        <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 hover:text-primary-600">
+                            {{ $relatedProduct->name }}
+                        </h3>
+                    </a>
+                    <p class="text-lg font-bold text-gray-900">
+                        {{ $relatedProduct->formatted_price }}
+                    </p>
+                </div>
+            </div>
             @endforeach
         </div>
     </div>

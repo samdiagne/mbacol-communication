@@ -1,4 +1,4 @@
-@extends('layouts.app-refactored')
+@extends('layouts.app')
 
 @section('title', 'Boutique')
 
@@ -83,11 +83,72 @@
         </p>
     </div>
 
-    <!-- PRODUITS -->
+        <!-- PRODUITS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
         @forelse($products as $index => $product)
-        <x-product-card :product="$product" :index="$index" />
+        <div class="scroll-reveal delay-{{ ($index % 3) * 100}} group bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-2">
+
+            <!-- IMAGE -->
+            <a href="{{ route('product.show', $product) }}" class="relative block aspect-[4/3] bg-gray-100 overflow-hidden">
+                @if($product->main_image)
+                    <x-product-image 
+                        :src="asset('storage/' . $product->main_image)"
+                        :product="$product"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+                @else
+                    <div class="w-full h-full flex items-center justify-center text-gray-300">
+                        <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                @endif
+
+                <!-- Badge réduction -->
+                @if($product->discount_percentage > 0)
+                <div class="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg animate-pulse">
+                    -{{ $product->discount_percentage }}%
+                </div>
+                @endif
+            </a>
+
+            <!-- TEXTE -->
+            <div class="p-5">
+                <p class="text-xs text-primary-600 font-bold uppercase mb-1">
+                    {{ $product->category->name }}
+                </p>
+
+                <h3 class="font-bold text-gray-900 mb-2 line-clamp-2">
+                    {{ $product->name }}
+                </h3>
+
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-lg font-extrabold text-gray-900">
+                        {{ $product->formatted_price }}
+                    </span>
+                    @if($product->old_price)
+                        <span class="text-sm line-through text-gray-400">
+                            {{ $product->formatted_old_price }}
+                        </span>
+                    @endif
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-2">
+                    @livewire('quick-add-to-cart', ['product' => $product], key('shop-'.$product->id))
+                    
+                    <a href="{{ route('product.show', $product) }}" 
+                       class="flex-shrink-0 bg-gray-100 hover:bg-primary-600 hover:text-white text-gray-700 p-3 rounded-xl transition-all duration-200 group/btn">
+                        <svg class="w-5 h-5 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
         @empty
+
         <!-- ÉTAT VIDE -->
         <div class="col-span-full">
             <div class="bg-white rounded-2xl shadow-xl p-16 text-center">

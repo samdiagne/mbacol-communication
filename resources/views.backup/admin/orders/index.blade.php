@@ -224,7 +224,13 @@
                         @endif
                     </td>
                     <td class="px-6 py-4">
-                        <x-order-status-badge :status="$order->status" />
+                        @if($order->status === 'delivered')
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
+                        @elseif($order->status === 'cancelled')
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
+                        @else
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">{{ $order->status_label }}</span>
+                        @endif
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500">
                         {{ $order->created_at->format('d/m/Y H:i') }}

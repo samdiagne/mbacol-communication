@@ -1,4 +1,4 @@
-@extends('layouts.app-refactored')
+@extends('layouts.app')
 
 @section('title', 'Conditions Générales de Vente')
 
