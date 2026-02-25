@@ -93,7 +93,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Email</p>
-                    <p class="font-semibold text-gray-900">{{ $order->customer_email }}</p>
+                    <p class="font-semibold break-words break-all text-gray-900">{{ $order->customer_email }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Téléphone</p>
