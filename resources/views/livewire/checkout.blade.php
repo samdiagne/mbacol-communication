@@ -63,41 +63,41 @@
 
                 <!-- Adresse de livraison -->
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="text-xl font-bold mb-4">Adresse de livraison</h2>
+                    <h2 class="text-xl font-bold mb-4">📍 Adresse de livraison</h2>
                     
-                    <div class="space-y-4">
-                        <!-- Ville -->
+                    <div class="space-y-6">
+                        <!-- Zone de livraison (Component) -->
+                        <div>
+                            <x-delivery-zone-selector />
+                        </div>
+
+                        <!-- Ville (optionnel, garde ou enlève selon besoin) -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Ville <span class="text-red-500">*</span>
                             </label>
-                            <select wire:model="customer_city"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('customer_city') @enderror">
-                                <option value="Dakar">Dakar</option>
-                                <option value="Pikine">Pikine</option>
-                                <option value="Guédiawaye">Guédiawaye</option>
-                                <option value="Rufisque">Rufisque</option>
-                                <option value="Thiès">Thiès</option>
-                                <option value="Saint-Louis">Saint-Louis</option>
-                                <option value="Autre">Autre</option>
-                            </select>
-                            @error('customer_city')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
+                            <input type="text" 
+                                wire:model="customer_city"
+                                value="Dakar"
+                                readonly
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed">
                         </div>
 
                         <!-- Adresse complète -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Adresse complète <span class="text-red-500">*</span>
+                                Adresse détaillée <span class="text-red-500">*</span>
                             </label>
                             <textarea wire:model="customer_address"
-                                      rows="3"
-                                      placeholder="Quartier, rue, numéro, point de repère..."
-                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('customer_address') @enderror"></textarea>
+                                    rows="3"
+                                    placeholder="Indiquez votre adresse exacte : quartier, rue, numéro, point de repère..."
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('customer_address') @enderror"></textarea>
                             @error('customer_address')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
+                            <p class="text-xs text-gray-500 mt-1">
+                                💡 Plus l'adresse est précise, plus la livraison sera rapide
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -236,12 +236,20 @@
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600">Livraison</span>
-                            <span class="font-semibold">{{ number_format($shippingCost, 0, ',', ' ') }} FCFA</span>
+                            <span class="font-semibold">
+                                @if($shippingCost > 0)
+                                    {{ number_format($shippingCost, 0, ',', ' ') }} FCFA
+                                @else
+                                    <span class="text-gray-400">Sélectionnez une zone</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="border-t border-gray-200 pt-3">
                             <div class="flex justify-between">
                                 <span class="text-lg font-bold">Total</span>
-                                <span class="text-2xl font-bold text-primary-600">{{ number_format($total, 0, ',', ' ') }} FCFA</span>
+                                <span class="text-2xl font-bold text-primary-600">
+                                    {{ number_format($total, 0, ',', ' ') }} FCFA
+                                </span>
                             </div>
                         </div>
                     </div>

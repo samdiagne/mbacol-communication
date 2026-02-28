@@ -19,15 +19,19 @@
                 
                 <!-- Header Sidebar -->
                 <div class="flex items-center justify-between h-20 px-4 border-b border-primary-600 flex-shrink-0">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center" x-show="sidebarOpen">
-                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3 shadow-lg">
-                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
+                    <a href="{{ route('admin.dashboard') }}" 
+                    class="flex items-center"
+                    x-show="sidebarOpen">
+
+                        <div class="bg-white rounded-lg p-2 shadow-lg mr-3 overflow-hidden">
+                            <img src="{{ asset('images/logo.png') }}" 
+                                alt="Mbacol Logo"
+                                class="h-6 w-auto transform scale-150">
                         </div>
+
                         <div>
-                            <span class="font-bold text-lg">Mbacol</span>
-                            <p class="text-xs text-primary-200">Admin Panel</p>
+                            <span class="font-bold text-lg">Admin Panel</span>
+                            <p class="text-xs text-primary-200">{{ Auth::user()->name }}</p>
                         </div>
                     </a>
                     
@@ -200,15 +204,19 @@
             
             <!-- Header Mobile -->
             <div class="flex items-center justify-between h-16 px-4 border-b border-primary-600">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center">
-                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3 shadow-lg">
-                        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
+                <a href="{{ route('admin.dashboard') }}" 
+                class="flex items-center"
+                x-show="sidebarOpen">
+
+                    <div class="bg-white rounded-lg p-2 shadow-lg mr-3 overflow-hidden">
+                        <img src="{{ asset('images/logo.png') }}" 
+                            alt="Mbacol Logo"
+                            class="h-6 w-auto transform scale-150">
                     </div>
+
                     <div>
-                        <span class="font-bold text-lg">Mbacol</span>
-                        <p class="text-xs text-primary-200">Admin Panel</p>
+                        <span class="font-bold text-lg">Admin Panel</span>
+                        <p class="text-xs text-primary-200">{{ Auth::user()->name }}</p>
                     </div>
                 </a>
                 <button @click="mobileSidebarOpen = false" class="p-2 rounded-lg hover:bg-primary-600">

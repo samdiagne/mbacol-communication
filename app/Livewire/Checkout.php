@@ -24,6 +24,9 @@ class Checkout extends Component
     public string $customer_address = '';
     public string $customer_city = 'Dakar';
     
+    // Livraison - AJOUT
+    public ?string $delivery_zone = null;
+    
     // Paiement
     public string $payment_method = 'wave';
     public string $notes = '';
@@ -32,8 +35,16 @@ class Checkout extends Component
     // Données panier
     public Collection $cartItems;
     public float $subtotal = 0;
-    public float $shippingCost = 2000;
+    public float $shippingCost = 0; // Sera calculé dynamiquement
     public float $total = 0;
+
+    // Configuration des zones - AJOUT
+    protected array $deliveryZones = [
+        'dakar_centre' => 2000,
+        'dakar_peripherie' => 2500,
+        'banlieue_proche' => 3500,
+        'rufisque' => 5000,
+    ];
 
     protected function rules()
     {
@@ -43,6 +54,7 @@ class Checkout extends Component
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string',
             'customer_city' => 'required|string|max:100',
+            'delivery_zone' => 'required|in:dakar_centre,dakar_peripherie,banlieue_proche,rufisque', // AJOUT
             'payment_method' => 'required|in:wave,orange_money,cash',
             'notes' => 'nullable|string|max:500',
         ];
@@ -64,6 +76,7 @@ class Checkout extends Component
             'customer_phone.required' => 'Le téléphone est obligatoire.',
             'customer_address.required' => 'L\'adresse de livraison est obligatoire.',
             'customer_city.required' => 'La ville est obligatoire.',
+            'delivery_zone.required' => 'Veuillez sélectionner une zone de livraison.', // AJOUT
             'payment_method.required' => 'Veuillez sélectionner un mode de paiement.',
             'payment_phone.required' => 'Le numéro de téléphone mobile money est obligatoire.',
             'payment_phone.digits' => 'Le numéro doit contenir exactement 9 chiffres.',
@@ -103,6 +116,13 @@ class Checkout extends Component
         $this->calculateTotals();
     }
 
+    // AJOUT : Calculer le coût de livraison selon la zone
+    public function updatedDeliveryZone($value)
+    {
+        $this->shippingCost = $this->deliveryZones[$value] ?? 0;
+        $this->calculateTotals();
+    }
+
     public function calculateTotals()
     {
         $this->subtotal = $this->cartItems->sum(function ($item) {
@@ -128,6 +148,7 @@ class Checkout extends Component
                 'customer_phone' => $this->customer_phone,
                 'customer_address' => $this->customer_address,
                 'customer_city' => $this->customer_city,
+                'delivery_zone' => $this->delivery_zone, // AJOUT
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'pending',
                 'status' => 'pending',
@@ -137,7 +158,7 @@ class Checkout extends Component
                 'notes' => $this->notes,
             ]);
 
-            // Créer les order items AVEC CALCUL DU TOTAL
+            // Créer les order items
             foreach ($this->cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -145,7 +166,7 @@ class Checkout extends Component
                     'product_name' => $item->product->name,
                     'quantity' => $item->quantity,
                     'price' => $item->product->price,
-                    'total' => $item->quantity * $item->product->price, // ✅ CORRECTION
+                    'total' => $item->quantity * $item->product->price,
                 ]);
 
                 // Décrémenter le stock
@@ -176,10 +197,8 @@ class Checkout extends Component
             // Redirection selon le résultat du paiement
             if ($paymentResult['success']) {
                 if (isset($paymentResult['checkout_url'])) {
-                    // Rediriger vers la page de paiement
                     return redirect($paymentResult['checkout_url']);
                 } else {
-                    // Cash : rediriger vers confirmation
                     return redirect()->route('order.confirmation', $order);
                 }
             } else {

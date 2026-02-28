@@ -1,12 +1,11 @@
 <!-- Footer -->
-<footer class="bg-gray-900 text-white mt-16">
+<footer class="bg-gray-900 text-white mt-0">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-                <h3 class="text-xl font-bold mb-4">
-                    <span class="text-primary-400">Mbacol</span>
-                    <span class="text-secondary-400">Communication</span>
-                </h3>
+                <img src="{{ asset('images/logo.png') }}" 
+                            alt="Mbacol Logo"
+                            class="h-16 w-auto transform scale-150">
                 <p class="text-gray-400">Votre partenaire en électronique et matériel au Sénégal.</p>
             </div>
             

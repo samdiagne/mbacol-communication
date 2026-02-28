@@ -46,15 +46,36 @@
                 </a>
             </div>
             
-            <!-- Actions droite -->
+            <!-- Actions droite (Mobile + Desktop) -->
             <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                
-                <!-- Recherche Desktop -->
-                <div class="hidden lg:block w-64">
-                    @livewire('search-autocomplete')
-                </div>
+                    @auth
+                    <!-- Recherche avec dropdown (Desktop) -->
+                    <div x-data="{ searchOpen: false }" 
+                    @click.outside="searchOpen = false" 
+                    class="hidden lg:block relative">
+                        <button @click="searchOpen = !searchOpen" 
+                                class="text-gray-700 hover:text-primary-600 hover:bg-gray-100 p-2 rounded-lg transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
 
-                <!-- Recherche Mobile -->
+                        <!-- Dropdown recherche -->
+                        <div x-show="searchOpen"
+                            x-transition
+                            class="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-100 p-4 z-50"
+                            style="display: none;">
+                            @livewire('search-autocomplete')
+                        </div>
+                    </div>
+                @else
+                    <!-- Recherche complète inline -->
+                    <div class="hidden lg:block w-64">
+                        @livewire('search-autocomplete')
+                    </div>
+                @endauth
+
+                <!-- Recherche Mobile (icône pour tous) -->
                 <button @click="searchOpen = !searchOpen" 
                         class="lg:hidden text-gray-700 hover:text-primary-600 p-1.5">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,35 +89,78 @@
                 <!-- User Menu -->
                 @auth
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" 
-                                class="hidden md:flex items-center space-x-2 text-gray-700 hover:text-primary-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                            <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        
+                        <button @click="open = !open"
+                            class="hidden md:flex items-center space-x-3 
+                                px-3 py-2 rounded-xl 
+                                hover:bg-gray-50 transition-all duration-200">
+
+                            <!-- Avatar -->
+                            <div class="w-9 h-9 bg-gradient-to-br 
+                                        from-primary-500 to-secondary-500 
+                                        rounded-full flex items-center justify-center 
+                                        text-white font-bold text-sm shadow-md">
                                 {{ substr(Auth::user()->name, 0, 1) }}
                             </div>
-                            <span class="font-medium">{{ Auth::user()->name }}</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+
+                            <!-- Texte -->
+                            <div class="text-left leading-tight">
+                                <p class="text-xs text-gray-500">Bonjour 👋</p>
+                                <p class="text-sm font-semibold text-gray-800">
+                                    {{ Auth::user()->name }}
+                                </p>
+                            </div>
+
+                            <!-- Arrow -->
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
 
                         <div x-show="open" 
-                             @click.away="open = false"
-                             x-transition
-                             class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
-                             style="display: none;">
+                            @click.away="open = false"
+                            x-transition
+                            class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
+                            style="display: none;">
+
+                            <!-- Bloc identité -->
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm font-semibold text-gray-900">
+                                    {{ Auth::user()->name }}
+                                </p>
+                                <p class="text-xs text-gray-500">
+                                    {{ Auth::user()->email }}
+                                </p>
+                            </div>
+
+                            <!-- Mon profil (pour tous) -->
+                            <a href="{{ route('profile.edit') }}" 
+                            class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        d="M5.121 17.804A9 9 0 1118.364 4.56M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span>Mon profil</span>
+                            </a>
+
                             @if(Auth::user()->role === 'admin')
+                                <!-- Administration -->
                                 <a href="{{ route('admin.dashboard') }}" 
-                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                                class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2"/>
                                     </svg>
-                                    <span>Administration</span>
+                                    <span>Tableau de bord</span>
                                 </a>
                             @else
+                                <!-- Mes commandes (clients uniquement) -->
                                 <a href="{{ route('customer.orders.index') }}" 
-                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                                class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                     </svg>
                                     <span>Mes commandes</span>
                                 </a>
@@ -104,22 +168,37 @@
 
                             <div class="border-t border-gray-100 my-2"></div>
 
+                            <!-- Déconnexion -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center px-4 py-2 text-red-600 hover:bg-red-50">
+                                <button type="submit" 
+                                        class="w-full flex items-center px-4 py-2 text-red-600 hover:bg-red-50">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7"/>
                                     </svg>
                                     <span>Déconnexion</span>
                                 </button>
                             </form>
                         </div>
                     </div>
+                    
+                    <a href="{{ route('home') }}" 
+                    class="md:hidden flex items-center">
+                        <div class="relative">
+                            <div class="w-8 h-8 bg-gradient-to-br 
+                                    from-primary-500 to-secondary-500 
+                                      rounded-full flex items-center justify-center 
+                                    text-white font-bold text-sm shadow-md">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
 
-                    <a href="{{ route('customer.orders.index') }}" class="md:hidden p-1.5">
-                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
+                            <!-- Badge online -->
+                            <span class="absolute -bottom-0.5 -right-0.5 
+                                w-3 h-3 bg-green-500 border-2 border-white 
+                                rounded-full">
+                            </span>
+                        </div>
                     </a>
                 @else
                     <a href="{{ route('login') }}" 
@@ -169,8 +248,8 @@
                     </div>
                 @else
                     <div class="flex items-center">
-                        <span class="text-lg font-bold text-primary-600">Mbacol</span>
-                        <span class="text-lg font-bold text-secondary-600 ml-1">Com</span>
+                        <span class="text-lg font-bold text-primary-600">MBC</span>
+                        <span class="text-lg font-bold text-secondary-600 ml-1">313</span>
                     </div>
                 @endauth
             </div>
