@@ -103,40 +103,72 @@
                 </div>
 
                 <!-- Modes de paiement -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">
-                        💳 Mode de paiement <span class="text-red-500">*</span>
-                    </label>
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h2 class="text-xl font-bold mb-4">💳 Mode de paiement</h2>
+                    
                     <div class="space-y-3">
-                        <!-- Wave -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'wave' ? 'border-primary-600 bg-primary-50' : 'border-gray-200 hover:border-primary-300' }}">
+                        <!-- PayDunya - Tous les moyens -->
+                        <label class="flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'paydunya' ? 'border-primary-600 bg-gradient-to-br from-primary-50 to-secondary-50 ring-2 ring-primary-200' : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50' }}">
                             <input type="radio" 
                                 wire:model.live="payment_method" 
-                                value="wave" 
-                                class="mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500">
-                            <div class="ml-3 flex-1">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-semibold text-gray-900">Wave</span>
-                                    <div class="flex items-center gap-1 bg-green-100 px-2 py-1 rounded-full">
+                                value="paydunya" 
+                                class="mt-1 h-5 w-5 text-primary-600">
+                            <div class="ml-4 flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-gray-900 text-lg">Paiement en ligne</span>
+                                    <div class="flex items-center gap-1 bg-green-100 px-3 py-1 rounded-full">
                                         <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                         </svg>
-                                        <span class="text-xs font-semibold text-green-700">Recommandé</span>
+                                        <span class="text-xs font-bold text-green-700">Recommandé</span>
                                     </div>
                                 </div>
-                                <p class="text-sm text-gray-600 mt-1">Paiement sécurisé via Wave Money</p>
-                            </div>
-                        </label>
-
-                        <!-- Orange Money -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'orange_money' ? 'border-primary-600 bg-primary-50' : 'border-gray-200 hover:border-primary-300' }}">
-                            <input type="radio" 
-                                wire:model.live="payment_method" 
-                                value="orange_money" 
-                                class="mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500">
-                            <div class="ml-3 flex-1">
-                                <span class="font-semibold text-gray-900">Orange Money</span>
-                                <p class="text-sm text-gray-600 mt-1">Paiement via votre compte Orange Money</p>
+                                
+                                <p class="text-sm text-gray-600 mb-3">
+                                    Paiement sécurisé avec tous les moyens de paiement
+                                </p>
+                                
+                                <!-- Logos moyens de paiement -->
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                                        <div class="w-6 h-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">W</span>
+                                        </div>
+                                        <span class="text-xs font-semibold text-gray-700">Wave</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                                        <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">OM</span>
+                                        </div>
+                                        <span class="text-xs font-semibold text-gray-700">Orange Money</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                                        <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">F</span>
+                                        </div>
+                                        <span class="text-xs font-semibold text-gray-700">Free Money</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <rect width="24" height="16" y="4" rx="2" fill="currentColor" opacity="0.2"/>
+                                            <path d="M4 8h16M4 12h8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                        </svg>
+                                        <span class="text-xs font-semibold text-gray-700">Carte Bancaire</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Badge sécurisé -->
+                                <div class="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                                    <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="font-medium">Paiement 100% sécurisé</span>
+                                    <span>•</span>
+                                    <span>Powered by PayDunya</span>
+                                </div>
                             </div>
                         </label>
 
@@ -145,54 +177,19 @@
                             <input type="radio" 
                                 wire:model.live="payment_method" 
                                 value="cash" 
-                                class="mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500">
+                                class="mt-1 h-5 w-5 text-primary-600">
                             <div class="ml-3 flex-1">
                                 <span class="font-semibold text-gray-900">Espèces à la livraison</span>
                                 <p class="text-sm text-gray-600 mt-1">Payez en espèces lors de la réception</p>
                             </div>
                         </label>
                     </div>
+                    
                     @error('payment_method')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <!-- Numéro de téléphone Mobile Money (si Wave ou Orange Money) -->
-                @if(in_array($payment_method, ['wave', 'orange_money']))
-                <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                    <div class="flex items-start">
-                        <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                        </svg>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-blue-900 mb-2">
-                                Numéro {{ $payment_method === 'wave' ? 'Wave' : 'Orange Money' }}
-                            </h4>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Numéro de téléphone <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-500 text-sm">🇸🇳 +221</span>
-                                </div>
-                                <input type="tel" 
-                                    wire:model="payment_phone"
-                                    placeholder="77 123 45 67"
-                                    maxlength="9"
-                                    class="block w-full pl-20 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('payment_phone') @enderror">
-                            </div>
-                            <p class="text-xs text-gray-600 mt-1">
-                                ℹ️ Entrez le numéro lié à votre compte {{ $payment_method === 'wave' ? 'Wave' : 'Orange Money' }}
-                            </p>
-                            @error('payment_phone')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-                @endif
-
-
+                
                 <!-- Notes -->
                 <div class="bg-white rounded-lg shadow p-6">
                     <h2 class="text-xl font-bold mb-4">Notes (optionnel)</h2>

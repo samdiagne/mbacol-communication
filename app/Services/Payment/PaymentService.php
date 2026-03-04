@@ -12,6 +12,7 @@ class PaymentService
         return match($method) {
             'wave' => new WavePaymentGateway(),
             'orange_money' => new OrangeMoneyGateway(),
+            'paydunya' => new PayDunyaGateway(),
             default => throw new \Exception('Méthode de paiement non supportée'),
         };
     }

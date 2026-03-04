@@ -40,10 +40,10 @@ class Checkout extends Component
 
     // Configuration des zones - AJOUT
     protected array $deliveryZones = [
-        'dakar_centre' => 2000,
-        'dakar_peripherie' => 2500,
-        'banlieue_proche' => 3500,
-        'rufisque' => 5000,
+        'dakar_centre' => 1500,
+        'dakar_peripherie' => 2000,
+        'banlieue_proche' => 2500,
+        'rufisque' => 4000,
     ];
 
     protected function rules()
@@ -55,14 +55,12 @@ class Checkout extends Component
             'customer_address' => 'required|string',
             'customer_city' => 'required|string|max:100',
             'delivery_zone' => 'required|in:dakar_centre,dakar_peripherie,banlieue_proche,rufisque', // AJOUT
-            'payment_method' => 'required|in:wave,orange_money,cash',
+            'payment_method' => 'required|in:paydunya,cash',
             'notes' => 'nullable|string|max:500',
         ];
 
-        // Si paiement mobile money, le numéro est requis
-        if (in_array($this->payment_method, ['wave', 'orange_money'])) {
-            $rules['payment_phone'] = 'required|string|digits:9|starts_with:77,78,76,70,75';
-        }
+        // PayDunya ne nécessite pas de numéro à l'avance
+        // Le client choisit sur la page PayDunya
 
         return $rules;
     }
@@ -148,7 +146,7 @@ class Checkout extends Component
                 'customer_phone' => $this->customer_phone,
                 'customer_address' => $this->customer_address,
                 'customer_city' => $this->customer_city,
-                'delivery_zone' => $this->delivery_zone, // AJOUT
+                'delivery_zone' => $this->delivery_zone,
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'pending',
                 'status' => 'pending',
@@ -173,46 +171,68 @@ class Checkout extends Component
                 $item->product->decrement('stock', $item->quantity);
             }
 
-            // Vider le panier
-            if (Auth::check()) {
-                CartItem::where('user_id', Auth::id())->delete();
-            } else {
-                CartItem::where('session_id', session()->getId())->delete();
-            }
-
             DB::commit();
 
-            // Traiter le paiement
-            $paymentService = new PaymentService();
-            $paymentResult = $paymentService->processPayment($order, $this->payment_phone);
+            // ✅ TRAITEMENT SELON MÉTHODE
+            if ($this->payment_method === 'cash') {
+                // CASH : Vider panier + emails + redirect
+                $this->clearCart();
+                $this->sendOrderEmails($order);
+                
+                session()->flash('success', 'Commande enregistrée ! Paiement à la livraison.');
+                return redirect()->route('order.confirmation', $order);
+                
+            } elseif ($this->payment_method === 'paydunya') {
+                // PAYDUNYA : NE PAS vider panier, NE PAS envoyer emails
+                $paymentService = new PaymentService();
+                $paymentResult = $paymentService->processPayment($order, null);
 
-            // Envoyer les emails
-            try {
-                Mail::to($order->customer_email)->send(new OrderConfirmation($order));
-                Mail::to(config('mail.from.address'))->send(new NewOrderAdmin($order));
-            } catch (\Exception $e) {
-                \Log::error('Email error: ' . $e->getMessage());
-            }
-
-            // Redirection selon le résultat du paiement
-            if ($paymentResult['success']) {
-                if (isset($paymentResult['checkout_url'])) {
-                    return redirect($paymentResult['checkout_url']);
+                if ($paymentResult['success'] && isset($paymentResult['checkout_url'])) {
+                    // ✅ Redirection PayDunya
+                    \Log::info('Redirecting to PayDunya', [
+                        'order_id' => $order->id,
+                        'url' => $paymentResult['checkout_url']
+                    ]);
+                    
+                    return redirect()->away($paymentResult['checkout_url']);
                 } else {
-                    return redirect()->route('order.confirmation', $order);
+                    session()->flash('error', $paymentResult['message'] ?? 'Erreur paiement');
+                    return redirect()->route('checkout');
                 }
-            } else {
-                session()->flash('error', $paymentResult['message'] ?? 'Erreur lors du paiement');
-                return redirect()->route('checkout');
             }
 
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Order creation error: ' . $e->getMessage());
-            session()->flash('error', 'Une erreur est survenue lors de la commande.');
+            session()->flash('error', 'Erreur lors de la commande.');
             return redirect()->route('checkout');
         }
     }
+
+/**
+ * Vider le panier (appelé uniquement après confirmation)
+ */
+private function clearCart()
+{
+    if (Auth::check()) {
+        CartItem::where('user_id', Auth::id())->delete();
+    } else {
+        CartItem::where('session_id', session()->getId())->delete();
+    }
+}
+
+/**
+ * Envoyer les emails de confirmation (appelé uniquement après paiement)
+ */
+private function sendOrderEmails(Order $order)
+{
+    try {
+        Mail::to($order->customer_email)->send(new OrderConfirmation($order));
+        Mail::to(config('mail.from.address'))->send(new NewOrderAdmin($order));
+    } catch (\Exception $e) {
+        \Log::error('Email error: ' . $e->getMessage());
+    }
+}
 
     public function render()
     {

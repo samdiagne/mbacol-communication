@@ -5,25 +5,67 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Collection;
 
 class CartPage extends Component
 {
-    public Collection $cartItems;
-    public array $quantities = [];
-    public float $subtotal = 0;
-    public float $shippingCost = 2000;
-    public float $total = 0;
-
-    protected $listeners = ['cartUpdated' => 'loadCart'];
-
-    public function mount()
+    public function incrementQuantity($cartItemId)
     {
-        $this->cartItems = collect();
-        $this->loadCart();
+        $cartItem = CartItem::find($cartItemId);
+        
+        if ($cartItem && $cartItem->product && $cartItem->quantity < $cartItem->product->stock) {
+            $cartItem->increment('quantity');
+        }
+        
+        // ✅ Refresh complet
+        return redirect()->route('cart')->with('navigate', true);
     }
 
-    public function loadCart()
+    public function decrementQuantity($cartItemId)
+    {
+        $cartItem = CartItem::find($cartItemId);
+        
+        if ($cartItem && $cartItem->quantity > 1) {
+            $cartItem->decrement('quantity');
+        }
+        
+        // ✅ Refresh complet
+        return redirect()->route('cart')->with('navigate', true);
+    }
+
+    public function removeItem($cartItemId)
+    {
+        $cartItem = CartItem::find($cartItemId);
+        
+        if ($cartItem) {
+            $productName = $cartItem->product?->name ?? 'Article';
+            $cartItem->delete();
+            
+            session()->flash('success', $productName . ' supprimé du panier');
+        }
+        
+        // ✅ Refresh complet
+        return redirect()->route('cart')->with('navigate', true);
+    }
+
+    public function clearCart()
+    {
+        $count = 0;
+        
+        if (Auth::check()) {
+            $count = CartItem::where('user_id', Auth::id())->count();
+            CartItem::where('user_id', Auth::id())->delete();
+        } else {
+            $count = CartItem::where('session_id', session()->getId())->count();
+            CartItem::where('session_id', session()->getId())->delete();
+        }
+        
+        session()->flash('success', "$count article(s) supprimé(s)");
+        
+        // ✅ Refresh complet
+        return redirect()->route('cart')->with('navigate', true);
+    }
+
+    public function render()
     {
         $query = CartItem::with('product.category');
 
@@ -33,71 +75,15 @@ class CartPage extends Component
             $query->where('session_id', session()->getId());
         }
 
-        $this->cartItems = $query->get();
-        $this->syncQuantities();
-        $this->calculateTotals();
-    }
-
-    public function syncQuantities()
-    {
-        $this->quantities = [];
-        foreach ($this->cartItems as $item) {
-            $this->quantities[$item->id] = $item->quantity;
-        }
-    }
-
-    public function incrementQuantity($cartItemId)
-    {
-        $cartItem = CartItem::find($cartItemId);
+        $cartItems = $query->get();
         
-        if ($cartItem && $cartItem->quantity < $cartItem->product->stock) {
-            $cartItem->increment('quantity');
-            $this->loadCart();
-            $this->dispatch('cartUpdated');
-        }
-    }
-
-    public function decrementQuantity($cartItemId)
-    {
-        $cartItem = CartItem::find($cartItemId);
-        
-        if ($cartItem && $cartItem->quantity > 1) {
-            $cartItem->decrement('quantity');
-            $this->loadCart();
-            $this->dispatch('cartUpdated');
-        }
-    }
-
-    public function removeItem($cartItemId)
-    {
-        CartItem::find($cartItemId)?->delete();
-        $this->loadCart();
-        $this->dispatch('cartUpdated');
-    }
-
-    public function clearCart()
-    {
-        if (Auth::check()) {
-            CartItem::where('user_id', Auth::id())->delete();
-        } else {
-            CartItem::where('session_id', session()->getId())->delete();
-        }
-
-        $this->loadCart();
-        $this->dispatch('cartUpdated');
-    }
-
-    private function calculateTotals()
-    {
-        $this->subtotal = $this->cartItems->sum(function ($item) {
+        $subtotal = $cartItems->sum(function ($item) {
             return $item->quantity * $item->price;
         });
-
-        $this->total = $this->subtotal + ($this->cartItems->count() > 0 ? $this->shippingCost : 0);
-    }
-
-    public function render()
-    {
-        return view('livewire.cart-page');
+        
+        return view('livewire.cart-page', [
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+        ]);
     }
 }

@@ -5,8 +5,6 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\ProfileController;
-use App\Livewire\Checkout;
-use App\Livewire\CartPage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
@@ -16,8 +14,6 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Admin\StatisticsController;
-
-
 
 
 // Routes publiques
@@ -111,5 +107,16 @@ Route::prefix('payment')->name('payment.')->group(function () {
     // Webhooks (production)
     Route::post('webhook/{provider}', [PaymentController::class, 'webhook'])->name('webhook');
 });
+
+// PayDunya Routes
+Route::prefix('payment/paydunya')->name('payment.paydunya.')->group(function () {
+    Route::get('return', [\App\Http\Controllers\PayDunyaController::class, 'return'])->name('return');
+    Route::get('cancel', [\App\Http\Controllers\PayDunyaController::class, 'cancel'])->name('cancel');
+});
+
+// PayDunya Webhook (sans CSRF - Laravel 12)
+Route::post('payment/webhook/paydunya', [\App\Http\Controllers\PayDunyaController::class, 'webhook'])
+    ->name('payment.webhook.paydunya')
+    ->middleware('api');  // ← Utilise le middleware API (pas de CSRF)
 
 require __DIR__.'/auth.php';
