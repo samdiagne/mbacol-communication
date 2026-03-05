@@ -11,7 +11,6 @@ use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Admin\StatisticsController;
 
@@ -92,20 +91,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware('auth')->prefix('mon-compte')->name('customer.')->group(function () {
     Route::get('commandes', [CustomerOrderController::class, 'index'])->name('orders.index');
     Route::get('commandes/{order}', [CustomerOrderController::class, 'show'])->name('orders.show');
-});
-
-// Routes paiement
-Route::prefix('payment')->name('payment.')->group(function () {
-    // Simulation (sandbox)
-    Route::get('simulate/{order}', [PaymentController::class, 'simulate'])->name('simulate');
-    Route::post('simulate/{order}/confirm', [PaymentController::class, 'simulateConfirm'])->name('simulate.confirm');
-    
-    // Callbacks (production)
-    Route::get('success/{order}', [PaymentController::class, 'success'])->name('success');
-    Route::get('error/{order}', [PaymentController::class, 'error'])->name('error');
-    
-    // Webhooks (production)
-    Route::post('webhook/{provider}', [PaymentController::class, 'webhook'])->name('webhook');
 });
 
 // PayDunya Routes

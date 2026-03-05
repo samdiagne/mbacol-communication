@@ -181,7 +181,7 @@
                                 </svg>
                                 <div class="text-xs text-blue-800">
                                     <p class="font-semibold mb-1">🚚 Frais de livraison</p>
-                                    <p>Entre <strong>2 000 et 5 000 FCFA</strong> selon votre zone (calculés au checkout)</p>
+                                    <p>Entre <strong>1 500 et 5 000 FCFA</strong> selon votre zone (calculés au checkout)</p>
                                 </div>
                             </div>
                         </div>

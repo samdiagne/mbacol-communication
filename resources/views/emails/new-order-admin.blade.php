@@ -30,8 +30,30 @@
             @endforeach
 
             <h3 style="color: #3b82f6;">Total: {{ $order->formatted_total }}</h3>
-
-            <p><strong>Paiement :</strong> {{ $order->payment_method_label }}</p>
+            <p>
+                <strong>Paiement :</strong> @if($order->payment_method === 'paydunya')
+                    @switch($order->payment_provider)
+                        @case('wave')
+                            Wave
+                            @break
+                        @case('orange_money')
+                            Orange Money
+                            @break
+                        @case('free_money')
+                            Free Money
+                            @break
+                        @case('card')
+                            Carte Bancaire
+                            @break
+                        @default
+                            Paiement en ligne (PayDunya)
+                    @endswitch
+                @elseif($order->payment_method === 'cash')
+                    Espèces à la livraison
+                @else
+                    {{ ucfirst($order->payment_method) }}
+                @endif
+            </p>
 
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{{ route('admin.orders.show', $order) }}" class="btn">

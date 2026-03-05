@@ -71,7 +71,30 @@
             </div>
 
             <div class="info-box" style="margin-top: 20px;">
-                <strong>Mode de paiement :</strong> {{ $order->payment_method_label }}<br>
+                <strong>Mode de paiement :</strong> 
+                @if($order->payment_method === 'paydunya')
+                    @switch($order->payment_provider)
+                        @case('wave')
+                            Wave
+                            @break
+                        @case('orange_money')
+                            Orange Money
+                            @break
+                        @case('free_money')
+                            Free Money
+                            @break
+                        @case('card')
+                            Carte Bancaire
+                            @break
+                        @default
+                            Paiement en ligne (PayDunya)
+                    @endswitch
+                @elseif($order->payment_method === 'cash')
+                    Espèces à la livraison
+                @else
+                    {{ ucfirst($order->payment_method) }}
+                @endif
+                <br>
                 <strong>Statut :</strong> {{ $order->payment_status_label }}
             </div>
 

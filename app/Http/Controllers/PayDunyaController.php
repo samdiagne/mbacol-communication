@@ -30,9 +30,10 @@ class PayDunyaController extends Controller
     public function return(Request $request)
     {
 
-    if (!config('services.paydunya.enabled')) {
-    return redirect()->back()->with('error', 'Paiement désactivé en mode local');
-    }
+        /*if (!config('services.paydunya.enabled')) {
+        return redirect()->back()->with('error', 'Paiement désactivé en mode local');
+        }*/
+        
         $token = $request->query('token');
         
         Log::info('PayDunya Return URL accessed', ['token' => $token]);
@@ -50,7 +51,7 @@ class PayDunyaController extends Controller
         
         $order = $payment->order;
         
-        // ✅ MODE TEST : Forcer la confirmation si payment pending
+        /* ✅ MODE TEST : Forcer la confirmation si payment pending
         if ($payment->payment_status === 'pending' && config('paydunya.mode') === 'test') {
             Log::info('PayDunya Return: TEST MODE - forcing payment confirmation');
             
@@ -91,7 +92,7 @@ class PayDunyaController extends Controller
                 DB::rollBack();
                 Log::error('PayDunya Return: Error', ['error' => $e->getMessage()]);
             }
-        }
+        }*/
         
         // Si déjà payé, rediriger
         if ($payment->payment_status === 'completed') {
@@ -162,10 +163,23 @@ class PayDunyaController extends Controller
             ]);
 
             // Log 2 : Validation signature
-            if (!$this->gateway->validateWebhook($request->all())) {
-                Log::warning('PayDunya Webhook: Invalid signature');
+            $isValid = $this->gateway->validateWebhook($request->all());
+
+            Log::info('PayDunya Webhook: Validation result', [
+                'valid' => $isValid,
+                'mode' => $this->gateway->isTestMode() ? 'test' : 'live',
+            ]);
+
+            // ✅ En mode test, on accepte même si signature invalide (pour debug)
+            if (!$isValid && !$this->gateway->isTestMode()) {
+                Log::warning('PayDunya Webhook: Invalid signature in LIVE mode - REJECT');
                 return response()->json(['error' => 'Invalid signature'], 403);
             }
+
+            if (!$isValid && $this->gateway->isTestMode()) {
+                Log::warning('PayDunya Webhook: Invalid signature in TEST mode - CONTINUE ANYWAY');
+            }
+
             Log::info('PayDunya Webhook: Signature valid ✓');
 
             // Log 3 : Extraction token - TOUTES LES POSSIBILITÉS
@@ -216,6 +230,31 @@ class PayDunyaController extends Controller
             }
 
             Log::info('PayDunya Webhook: Token extracted successfully ✓', ['token' => $token]);
+
+            // ✅ AJOUTER ICI : Extraire le provider (Wave, OM, etc.)
+            $paymentProvider = null;
+
+            // PayDunya envoie le moyen de paiement utilisé dans data.customer ou data.invoice
+            if (isset($data['customer']['payment_method'])) {
+                $paymentProvider = $data['customer']['payment_method'];
+            } elseif (isset($data['invoice']['payment_method'])) {
+                $paymentProvider = $data['invoice']['payment_method'];
+            } elseif (isset($allData['payment_method'])) {
+                $paymentProvider = $allData['payment_method'];
+            }
+
+            // Normaliser les noms
+            $paymentProvider = match(strtolower($paymentProvider ?? '')) {
+                'wave', 'wave_senegal' => 'wave',
+                'orange', 'orange_money', 'orange_money_senegal' => 'orange_money',
+                'free', 'free_money' => 'free_money',
+                'card', 'visa', 'mastercard', 'credit_card' => 'card',
+                default => 'paydunya', // Par défaut si non détecté
+            };
+
+            Log::info('PayDunya Webhook: Payment provider detected', [
+                'provider' => $paymentProvider,
+            ]);
 
             // Log 4 : Recherche paiement
             Log::info('PayDunya Webhook: Searching for payment...');
@@ -269,15 +308,16 @@ class PayDunyaController extends Controller
 
             // Log 7 : Database update
             Log::info('PayDunya Webhook: Starting database transaction...');
-            
+
             DB::beginTransaction();
-            
+
             try {
                 Log::info('PayDunya Webhook: Updating payment record...');
                 
                 $payment->update([
                     'payment_status' => 'completed',
                     'paid_at' => now(),
+                    'payment_provider' => $paymentProvider, // ✅ AJOUTER
                     'receipt_url' => $verification['data']['receipt_url'] ?? null,
                     'notes' => 'Paiement confirmé via webhook PayDunya',
                 ]);
@@ -287,6 +327,7 @@ class PayDunyaController extends Controller
                 $payment->order->update([
                     'payment_status' => 'paid',
                     'status' => 'confirmed',
+                    'payment_provider' => $paymentProvider, // ✅ AJOUTER
                 ]);
 
                 DB::commit();

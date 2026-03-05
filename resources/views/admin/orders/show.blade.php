@@ -206,7 +206,31 @@
             
             <div class="mt-3 p-3 bg-gray-50 rounded-lg space-y-1">
                 <p class="text-sm text-gray-600">
-                    Mode: <strong class="text-gray-900">{{ $order->payment_method_label }}</strong>
+                    Mode:
+                @if($order->payment_method === 'paydunya')
+                        <strong class="text-gray-900">
+                            @switch($order->payment_provider)
+                                @case('wave')
+                                    🌊 Wave
+                                    @break
+                                @case('orange_money')
+                                    🍊 Orange Money
+                                    @break
+                                @case('free_money')
+                                    💙 Free Money
+                                    @break
+                                @case('card')
+                                    💳 Carte Bancaire
+                                    @break
+                                @default
+                                    PayDunya
+                            @endswitch
+                        </strong>
+                    @elseif($order->payment_method === 'cash')
+                        <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                            💵 Espèces
+                        </span>
+                    @endif                
                 </p>
                 <p class="text-sm text-gray-600">
                     Statut: <strong class="text-gray-900">{{ $order->payment_status_label }}</strong>

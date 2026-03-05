@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- ✅ FORCER HTTPS pour assets -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     
     {!! SEO::generate() !!}
     
