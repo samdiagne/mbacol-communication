@@ -12,14 +12,27 @@
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
-    
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://fonts.bunny.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     
     @stack('scripts')
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+        img {
+            loading: lazy;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased" x-data="{ mobileMenuOpen: false, searchOpen: false }"> 
     <!-- Page Loader -->
@@ -89,6 +102,11 @@
 
     <!-- Toast Notification Component -->
     <x-toast-notification />
+
+     <!-- Instant.page - Navigation ultra-rapide -->
+    <script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" 
+            type="module" 
+            defer></script>
 
     <!-- ✅ Livewire Scripts (déjà présent - parfait !) -->
     @livewireScripts

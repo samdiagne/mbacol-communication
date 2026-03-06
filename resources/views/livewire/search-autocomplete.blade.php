@@ -229,6 +229,7 @@
                         <div class="w-12 h-12 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                             @if($product->main_image)
                                 <img src="{{ asset('storage/' . $product->main_image) }}" 
+                                     loading="lazy"
                                      alt="{{ $product->name }}" 
                                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200">
                             @else

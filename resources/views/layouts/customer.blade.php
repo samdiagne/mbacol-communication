@@ -8,10 +8,24 @@
     <title>{{ config('app.name', 'Mbacol Communication') }} - @yield('title', 'Mon compte')</title>
     
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://fonts.bunny.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+        img {
+            loading: lazy;
+        }
+    </style>
+
     @livewireStyles
 </head>
 <body class="font-sans antialiased bg-gray-50" x-data="{ mobileMenuOpen: false, searchOpen: false }">
@@ -87,6 +101,11 @@
 
     <!-- Floating Buttons Component -->
     <x-floating-buttons />
+
+    <!-- Instant.page - Navigation ultra-rapide -->
+    <script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" 
+            type="module" 
+            defer></script>
 
     @livewireScripts
 </body>

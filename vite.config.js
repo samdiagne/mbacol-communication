@@ -16,4 +16,8 @@ export default defineConfig({
             host: 'localhost',
         },
     },
+    build: {
+        minify: 'terser',
+        sourcemap: false,
+    }
 });

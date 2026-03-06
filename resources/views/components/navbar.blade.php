@@ -201,11 +201,7 @@
                         </div>
                     </a>
                 @else
-                    <a href="{{ route('login') }}" 
-                       class="hidden md:inline-flex items-center bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2 rounded-lg transition">
-                        Connexion
-                    </a>
-                    <a href="{{ route('login') }}" class="md:hidden p-1.5">
+                    <a href="{{ route('login') }}" class="p-1.5">
                         <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>

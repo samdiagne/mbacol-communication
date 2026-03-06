@@ -1,6 +1,6 @@
 <img src="{{ $src }}" 
      alt="{{ $alt }}" 
      @if($title) title="{{ $title }}" @endif
-     loading="{{ $loading }}"
+     loading="lazy"
      class="{{ $class }}"
      {{ $attributes->merge(['class' => '']) }}>

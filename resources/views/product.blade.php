@@ -226,7 +226,7 @@
             @else
                 <a href="{{ route('login') }}" 
                 class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-lg transition whitespace-nowrap">
-                    ✍️ Connectez-vous d'abord
+                    ✍️ Connectez-vous pour laisser un avis
                 </a>
             @endauth
         </div>

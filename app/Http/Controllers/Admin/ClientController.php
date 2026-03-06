@@ -62,8 +62,11 @@ class ClientController extends Controller
     /**
      * Détails d'un client
      */
-    public function show(User $user)
+    public function show($userId)
     {
+        // ✅ Inclure les soft deleted
+        $user = User::withTrashed()->findOrFail($userId);
+        
         if ($user->role !== 'customer') {
             abort(404);
         }
@@ -88,8 +91,11 @@ class ClientController extends Controller
     /**
      * Activer/Désactiver un client
      */
-    public function toggleStatus(User $user)
+    public function toggleStatus($userId)
     {
+        // ✅ Chercher le user même s'il est soft deleted
+        $user = User::withTrashed()->findOrFail($userId);
+        
         if ($user->role !== 'customer') {
             abort(404);
         }

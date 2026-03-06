@@ -10,6 +10,16 @@
     <title>@yield('title', 'Dashboard') - Admin Mbacol</title>
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+        img {
+            loading: lazy;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-100" x-data="{ sidebarOpen: true, mobileSidebarOpen: false }">
     <div class="min-h-screen flex">
@@ -21,37 +31,49 @@
                 
                 <!-- Header Sidebar -->
                 <div class="flex items-center justify-between h-20 px-4 border-b border-primary-600 flex-shrink-0">
+                    <!-- Logo + Texte -->
                     <a href="{{ route('admin.dashboard') }}" 
-                    class="flex items-center"
+                    class="flex items-center gap-3"
                     x-show="sidebarOpen">
 
-                        <div class="bg-white rounded-lg p-2 shadow-lg mr-3 overflow-hidden">
-                            <img src="{{ asset('images/logo.webp') }}" 
-                                alt="Mbacol Logo"
-                                class="h-6 w-auto transform scale-150">
-                        </div>
+                        <!-- Logo -->
+                        <img src="{{ asset('images/logo.webp') }}" 
+                            alt="Mbacol Logo"
+                            class="h-12 w-auto object-contain">
 
-                        <div>
-                            <span class="font-bold text-lg">Admin Panel</span>
-                            <p class="text-xs text-primary-200">{{ Auth::user()->name }}</p>
+                        <!-- Texte -->
+                        <div class="leading-tight">
+                            <p class="font-semibold text-lg whitespace-nowrap">
+                                MBC Admin 
+                            </p>
+
+                            <p class="text-xs text-primary-200">
+                                {{ Auth::user()->name }}
+                            </p>
                         </div>
                     </a>
-                    
+
                     <!-- Logo compact -->
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-center w-full" x-show="!sidebarOpen">
-                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg">
-                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
+                    <a href="{{ route('admin.dashboard') }}" 
+                    class="flex items-center justify-center w-full"
+                    x-show="!sidebarOpen">
+
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
+                            <img src="{{ asset('images/logo.webp') }}" 
+                                alt="MBC"
+                                class="h-10 w-auto">
                         </div>
                     </a>
-                    
-                    <!-- Toggle button -->
+
+                    <!-- Toggle -->
                     <button @click="sidebarOpen = !sidebarOpen" 
                             class="p-2 rounded-lg hover:bg-primary-600 transition-colors">
+
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
+
                     </button>
                 </div>
 
@@ -431,6 +453,12 @@
             </main>
         </div>
     </div>
+
+    <!-- Instant.page - Navigation ultra-rapide -->
+    <script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" 
+            type="module" 
+            defer></script>
+            
     @livewireScripts
 </body>
 </html>
