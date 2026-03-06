@@ -3,7 +3,7 @@
 @section('title', 'Contact')
 
 @section('content')
-<div class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-20">
+<div class="relative overflow-hidden bg-gradient-to-br from-primary-700 via-primary-600 to-secondary-600 text-white py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-5xl font-bold mb-6">Contactez-nous</h1>
         <p class="text-xl text-primary-100">

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <title>Réinitialisation du mot de passe - Mbacol Communication</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -198,6 +199,9 @@
                                     <input id="email"
                                            type="email"
                                            name="email"
+                                           autocomplete="email"
+                                           maxlength="255"
+                                           inputmode="email"
                                            value="{{ old('email', $request->email) }}"
                                            required
                                            autofocus
@@ -214,22 +218,51 @@
                                 <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Nouveau mot de passe
                                 </label>
+
                                 <div class="relative">
+                                    <!-- Icone gauche -->
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                         </svg>
                                     </div>
+
                                     <input id="password"
-                                           type="password"
-                                           name="password"
-                                           required
-                                           placeholder="Minimum 8 caractères"
-                                           class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition @error('password') @enderror">
+                                        type="password"
+                                        name="password"
+                                        minlength="8"
+                                        required
+                                        placeholder="Minimum 8 caractères"
+                                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition @error('password') @enderror">
+
+                                    <!-- Bouton afficher -->
+                                    <button type="button"
+                                            onclick="toggleNewPassword()"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 
+                                                8.268 2.943 9.542 7-1.274 4.057-5.064 
+                                                7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </button>
                                 </div>
+
                                 @error('password')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
+                            </div>
+
+                            <!-- indicateur de force du mot de passe -->
+                            <div class="mt-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="password-strength-bar" class="h-2 rounded-full transition-all"></div>
+                                </div>
+                                <p id="password-strength-text" class="text-sm mt-1 text-gray-500"></p>
                             </div>
 
                             <!-- Confirmation mot de passe -->
@@ -237,23 +270,59 @@
                                 <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Confirmer le mot de passe
                                 </label>
+
                                 <div class="relative">
+                                    <!-- Icone gauche -->
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944
+                                                a11.955 11.955 0 01-8.618 3.04A12.02
+                                                12.02 0 003 9c0 5.591 3.824 10.29
+                                                9 11.622 5.176-1.332
+                                                9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                                         </svg>
                                     </div>
+
                                     <input id="password_confirmation"
-                                           type="password"
-                                           name="password_confirmation"
-                                           required
-                                           placeholder="Retapez le mot de passe"
-                                           class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition @error('password_confirmation') @enderror">
+                                        type="password"
+                                        name="password_confirmation"
+                                        required
+                                        placeholder="Retapez le mot de passe"
+                                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition @error('password_confirmation') @enderror">
+
+                                    <!-- Bouton afficher -->
+                                    <button type="button"
+                                            onclick="toggleConfirmPassword()"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 
+                                                8.268 2.943 9.542 7-1.274 4.057-5.064 
+                                                7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </button>
                                 </div>
+
                                 @error('password_confirmation')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <script>
+                            function toggleNewPassword() {
+                                const input = document.getElementById("password");
+                                input.type = input.type === "password" ? "text" : "password";
+                            }
+
+                            function toggleConfirmPassword() {
+                                const input = document.getElementById("password_confirmation");
+                                input.type = input.type === "password" ? "text" : "password";
+                            }
+                            </script>
 
                             <!-- Bouton -->
                             <button type="submit"
@@ -321,5 +390,55 @@
             </div>
         </div>
     </div>
+
+<script>
+    const passwordInput = document.getElementById("password");
+    const strengthBar = document.getElementById("password-strength-bar");
+    const strengthText = document.getElementById("password-strength-text");
+
+    passwordInput.addEventListener("input", function () {
+
+        const password = passwordInput.value;
+        let score = 0;
+
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+
+        switch(score) {
+
+            case 0:
+            case 1:
+                strengthBar.style.width = "25%";
+                strengthBar.className = "h-2 rounded-full bg-red-500";
+                strengthText.textContent = "Mot de passe faible";
+                strengthText.className = "text-sm mt-1 text-red-500";
+                break;
+
+            case 2:
+                strengthBar.style.width = "50%";
+                strengthBar.className = "h-2 rounded-full bg-yellow-500";
+                strengthText.textContent = "Mot de passe moyen";
+                strengthText.className = "text-sm mt-1 text-yellow-600";
+                break;
+
+            case 3:
+                strengthBar.style.width = "75%";
+                strengthBar.className = "h-2 rounded-full bg-blue-500";
+                strengthText.textContent = "Bon mot de passe";
+                strengthText.className = "text-sm mt-1 text-blue-600";
+                break;
+
+            case 4:
+                strengthBar.style.width = "100%";
+                strengthBar.className = "h-2 rounded-full bg-green-500";
+                strengthText.textContent = "Mot de passe fort";
+                strengthText.className = "text-sm mt-1 text-green-600";
+                break;
+        }
+
+    });
+</script>
 </body>
 </html>

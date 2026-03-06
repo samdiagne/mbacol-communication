@@ -26,7 +26,7 @@
                     x-show="sidebarOpen">
 
                         <div class="bg-white rounded-lg p-2 shadow-lg mr-3 overflow-hidden">
-                            <img src="{{ asset('images/logo.png') }}" 
+                            <img src="{{ asset('images/logo.webp') }}" 
                                 alt="Mbacol Logo"
                                 class="h-6 w-auto transform scale-150">
                         </div>
@@ -138,41 +138,56 @@
                             </svg>
                         </button>
 
-                        <!-- Dropdown Menu - TOUJOURS AU-DESSUS -->
                         <div x-show="userMenuOpen"
                             @click.away="userMenuOpen = false"
                             x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 transform scale-95"
-                            x-transition:enter-end="opacity-100 transform scale-100"
+                            x-transition:enter-start="opacity-0 translate-y-4"
+                            x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 transform scale-100"
-                            x-transition:leave-end="opacity-0 transform scale-95"
-                            class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-lg shadow-2xl py-2 border border-gray-200 z-50"
-                            style="display: none;">
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-4"
+                            class="absolute bottom-full left-0 mb-4 w-56 bg-white rounded-2xl shadow-2xl py-2 border border-gray-100 z-50 overflow-hidden"
+                            style="display: none; transform-origin: bottom left;">
+                            
+                            <div class="absolute -bottom-1 left-6 w-3 h-3 bg-white rotate-45 border-r border-b border-gray-100"></div>
+
+                            <div class="px-4 py-2 border-b border-gray-50 md:hidden">
+                                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Options</p>
+                            </div>
+
                             <a href="{{ route('home') }}" 
                             target="_blank"
-                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                                <span class="whitespace-nowrap">Voir le site</span>
+                            class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors group">
+                                <div class="p-1.5 bg-gray-50 rounded-lg group-hover:bg-primary-100 transition-colors mr-3">
+                                    <svg class="w-4 h-4 text-gray-500 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Voir le site</span>
                             </a>
+
                             <a href="{{ route('profile.edit') }}" 
-                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                </svg>
-                                <span class="whitespace-nowrap">Mon profil</span>
+                            class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors group">
+                                <div class="p-1.5 bg-gray-50 rounded-lg group-hover:bg-primary-100 transition-colors mr-3">
+                                    <svg class="w-4 h-4 text-gray-500 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Mon profil</span>
                             </a>
+
                             <div class="border-t border-gray-100 my-1"></div>
+
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" 
-                                        class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                    <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                                    </svg>
-                                    <span class="whitespace-nowrap">Déconnexion</span>
+                                        class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors group">
+                                    <div class="p-1.5 bg-red-50 rounded-lg group-hover:bg-red-100 transition-colors mr-3">
+                                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                        </svg>
+                                    </div>
+                                    <span class="font-semibold">Déconnexion</span>
                                 </button>
                             </form>
                         </div>
@@ -211,7 +226,7 @@
                 x-show="sidebarOpen">
 
                     <div class="bg-white rounded-lg p-2 shadow-lg mr-3 overflow-hidden">
-                        <img src="{{ asset('images/logo.png') }}" 
+                        <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
                             class="h-6 w-auto transform scale-150">
                     </div>

@@ -132,7 +132,7 @@
 
     <!-- Supprimer le compte -->
     <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4 text-red-600">Zone dangereuse</h2>
+        <h2 class="text-xl font-bold mb-4 text-red-600">Zone critique</h2>
         
         <p class="text-gray-600 mb-4">
             Une fois votre compte supprimé, toutes vos données seront définitivement effacées. 
