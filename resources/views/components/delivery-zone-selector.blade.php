@@ -16,14 +16,14 @@
             'name' => 'Dakar Centre',
             'price' => 1500,
             'icon' => '🏙️',
-            'areas' => ['Dakar Plateau', 'HLM', 'Colobane', 'Castor', 'Médina', 'Gueule Tapée ', 'Fass', 'Liberté', 'Sicap', 'Mermoz']
+            'areas' => ['Dakar Plateau', 'HLM', 'Colobane', 'Castor', 'Médina', 'Gueule Tapée ', 'Fass', 'Liberté', 'Sicap']
         ],
         [
-            'id' => 'dakar_peripherie',
+            'id' => 'dakar_nord_ouest',
             'name' => 'Dakar Périphérie',
             'price' => 2000,
             'icon' => '🏘️',
-            'areas' => ['Parcelle Assainies', 'Yoff', 'Grand Yoff', 'Almadies', 'Ngor', 'Nord Foire', 'Yarakh', 'Hann Mariste', 'Dalifort', ]
+            'areas' => ['Parcelle Assainies', 'Yoff', 'Grand Yoff', 'Almadies', 'Ngor', 'Nord Foire', 'Hann Mariste', 'Mermoz', 'Ouakam', 'Sacré coeur' ]
         ],
         [
             'id' => 'banlieue_proche',
@@ -37,7 +37,7 @@
             'name' => 'Rufisque',
             'price' => 4000,
             'icon' => '🏞️',
-            'areas' => ['Rufisque', 'Environs de Rufisque']
+            'areas' => ['Rufisque', 'Bargny', 'Sébikotane', 'Diamniadio']
         ]
     ];
     @endphp

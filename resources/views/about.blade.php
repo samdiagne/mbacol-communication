@@ -95,7 +95,7 @@
                 </div>
                 <h3 class="text-xl font-bold mb-3">Paiement Flexible</h3>
                 <p class="text-gray-600 leading-relaxed">
-                    Wave, Orange Money, Free Money ou paiement à la livraison.
+                    Wave, Orange Money, Free Money, Paiement bancaire ou paiement à la livraison.
                 </p>
             </div>
         </div>

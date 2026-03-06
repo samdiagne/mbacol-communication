@@ -189,7 +189,7 @@
                     <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                         Statut
                     </th>
-                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider sticky right-0 bg-gray-100">
                         Actions
                     </th>
                 </tr>
@@ -214,7 +214,7 @@
                                 @endif
                             </div>
                             <div class="ml-4 min-w-0 flex-1">
-                                <p class="text-sm font-bold text-gray-900 truncate">
+                                <p class="text-sm font-bold text-gray-900 line-clamp-2" title="{{ $product->name }}">
                                     {{ $product->name }}
                                 </p>
                                 <p class="text-xs text-gray-500 font-mono">
@@ -274,7 +274,7 @@
                         @endif
                     </td>
                     <!-- Actions -->
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium sticky right-0 bg-white">
                         <div class="flex items-center justify-end gap-2">
                             <a href="{{ route('product.show', $product) }}" 
                                target="_blank"

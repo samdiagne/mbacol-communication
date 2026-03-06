@@ -85,6 +85,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 
+    // ✅ NOUVEAU : Clients
+    Route::get('clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/{user}', [\App\Http\Controllers\Admin\ClientController::class, 'show'])->name('clients.show');
+    Route::patch('clients/{user}/toggle-status', [\App\Http\Controllers\Admin\ClientController::class, 'toggleStatus'])->name('clients.toggle-status');
+    Route::delete('clients/{user}', [\App\Http\Controllers\Admin\ClientController::class, 'destroy'])->name('clients.destroy');
 });
 
 // Routes client (après auth)

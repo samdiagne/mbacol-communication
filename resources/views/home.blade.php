@@ -129,7 +129,7 @@
             </div>
             <a href="{{ route('shop') }}" 
                class="mt-4 md:mt-0 inline-flex items-center text-primary-600 hover:text-primary-700 font-semibold group">
-                Voir tout
+                Visitez la boutique
                 <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -339,6 +339,9 @@
     </div>
 </div>
 
+<!-- ✅ NOUVEAU : Section FAQ -->
+<x-faq-section :limit="4" :compact="true" />
+
 <!-- Section confiance -->
 <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -360,7 +363,7 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold mb-2">💳 Paiement Sécurisé</h3>
-                <p class="text-gray-600">Wave, Orange Money, Cash...</p>
+                <p class="text-gray-600">Wave, Orange Money, Visa, Cash...</p>
             </div>
             
             <div class="scroll-reveal delay-300 text-center group">

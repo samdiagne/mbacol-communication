@@ -38,7 +38,7 @@ class Payment extends Model
             'wave' => 'Wave',
             'orange_money' => 'Orange Money',
             'free_money' => 'Free Money',
-            'yass' => 'Yass',
+            'visa_mastercard' => 'Paiement bancaire',
             'cash' => 'Espèces à la livraison',
             default => $this->payment_method,
         };

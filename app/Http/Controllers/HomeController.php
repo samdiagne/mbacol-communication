@@ -17,7 +17,7 @@ class HomeController extends Controller
     {
         // SEO Meta Tags
         SEOMeta::setTitle('Accueil - Électronique & Informatique au Sénégal')
-            ->setDescription('Découvrez notre large gamme de smartphones, ordinateurs, tablettes et accessoires. Livraison rapide à Dakar. Paiement sécurisé Wave et Orange Money.')
+            ->setDescription('Découvrez notre large gamme de smartphones, ordinateurs, tablettes et accessoires. Livraison rapide à Dakar. Paiement sécurisé Wave, Orange Money Free Money et carte bancaire.')
             ->setKeywords(['électronique Sénégal', 'smartphone Dakar', 'ordinateur portable Sénégal', 'boutique informatique Dakar', 'Mbacol Communication'])
             ->setCanonical(route('home'))
             ->addMeta('robots', 'index, follow')
@@ -44,7 +44,7 @@ class HomeController extends Controller
             ->setType('Store')
             ->addValue('address', [
                 '@type' => 'PostalAddress',
-                'streetAddress' => 'Rue Amadou Lausane Ndoye x Mousse Diop',
+                'streetAddress' => 'Colobane rue 42x45',
                 'addressLocality' => 'Dakar',
                 'addressRegion' => 'Dakar',
                 'addressCountry' => 'SN'
@@ -58,11 +58,12 @@ class HomeController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Produits en vedette (12)
         $featuredProducts = Product::with(['category', 'images'])
             ->where('is_featured', true)
             ->where('stock', '>', 0)
             ->latest()
-            ->take(6)
+            ->take(12)
             ->get();
 
         $reviews = Review::with(['user', 'product'])

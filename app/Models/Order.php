@@ -104,6 +104,7 @@ class Order extends Model
             'wave' => 'Wave',
             'orange_money' => 'Orange Money',
             'free_money' => 'Free Money',
+            'visa_mastercard' => 'Paiement bancaire',
             'cash' => 'Espèces à la livraison',
             default => 'Autre',
         };

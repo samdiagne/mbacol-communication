@@ -126,7 +126,7 @@
                     <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                         Statut
                     </th>
-                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider sticky right-0 bg-gray-100">
                         Actions
                     </th>
                 </tr>
@@ -155,7 +155,7 @@
                                  alt="{{ $review->product->name }}" 
                                  class="w-12 h-12 rounded-lg object-cover mr-3">
                             @endif
-                            <p class="text-sm font-medium text-gray-900 truncate">
+                            <p class="text-sm font-medium text-gray-900 line-clamp-2" title="{{ $review->product->name }}">
                                 {{ Str::limit($review->product->name, 40) }}
                             </p>
                         </div>
@@ -195,7 +195,7 @@
                     </td>
 
                     <!-- Actions -->
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium sticky right-0 bg-white">
                         <div class="flex items-center justify-end gap-2">
                             @if(!$review->is_approved)
                                 <form action="{{ route('admin.reviews.approve', $review) }}" method="POST" class="inline">

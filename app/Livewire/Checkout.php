@@ -41,7 +41,7 @@ class Checkout extends Component
     // Configuration des zones - AJOUT
     protected array $deliveryZones = [
         'dakar_centre' => 1500,
-        'dakar_peripherie' => 2000,
+        'dakar_nord_ouest' => 2000,
         'banlieue_proche' => 2500,
         'rufisque' => 4000,
     ];
@@ -54,7 +54,7 @@ class Checkout extends Component
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string',
             'customer_city' => 'required|string|max:100',
-            'delivery_zone' => 'required|in:dakar_centre,dakar_peripherie,banlieue_proche,rufisque', // AJOUT
+            'delivery_zone' => 'required|in:dakar_centre,dakar_nord_ouest,banlieue_proche,rufisque', // AJOUT
             'payment_method' => 'required|in:paydunya,cash',
             'notes' => 'nullable|string|max:500',
         ];

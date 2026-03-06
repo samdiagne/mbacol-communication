@@ -191,7 +191,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paiement</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase sticky right-0 bg-gray-100">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -229,7 +229,7 @@
                     <td class="px-6 py-4 text-sm text-gray-500">
                         {{ $order->created_at->format('d/m/Y H:i') }}
                     </td>
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-right text-sm font-medium sticky right-0 bg-white">
                         <a href="{{ route('admin.orders.show', $order) }}" class="text-primary-600 hover:text-primary-900">
                             Détails →
                         </a>

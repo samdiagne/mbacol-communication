@@ -165,7 +165,7 @@ class FaqController extends Controller
                     ],
                     [
                         'question' => 'Avez-vous une boutique physique ?',
-                        'answer' => 'Oui, visitez-nous : Colobane rue 43x46, Dakar. Horaires : Lun-Sam 8h-20h.'
+                        'answer' => 'Oui, visitez-nous : Colobane rue 42x45, Dakar. Horaires : Lun-Sam 8h-20h.'
                     ],
                 ]
             ],

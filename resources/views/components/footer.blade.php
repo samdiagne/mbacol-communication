@@ -40,17 +40,32 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        Rue Amadou Lausane Ndoye x Mousse Diop, Dakar - Sénégal
+                        <a href="https://maps.app.goo.gl/VwS9Lv4CRGyysLKR9?g_st=ic">Colobane rue 42x45, Dakar - Sénégal</a>
                     </li>
                 </ul>
             </div>
             
             <div>
                 <h4 class="font-semibold mb-4">Paiements acceptés</h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 bg-gray-800 rounded text-sm">Wave</span>
-                    <span class="px-3 py-1 bg-gray-800 rounded text-sm">Orange Money</span>
-                    <span class="px-3 py-1 bg-gray-800 rounded text-sm">Free Money</span>
+
+                <div class="flex items-center gap-4 flex-wrap">
+                    
+                    <img src="{{ asset('images/wave.svg') }}" 
+                        alt="Wave" 
+                        class="h-8 w-auto">
+
+                    <img src="{{ asset('images/om.svg') }}" 
+                        alt="Orange Money" 
+                        class="h-8 w-auto">
+
+                    <img src="{{ asset('images/yass.svg') }}" 
+                        alt="Free Money" 
+                        class="h-8 w-auto">
+
+                    <img src="{{ asset('images/visa.svg') }}" 
+                        alt="Visa" 
+                        class="h-8 w-auto">
+
                 </div>
             </div>
         </div>

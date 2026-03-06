@@ -65,7 +65,7 @@
                 <h2 class="text-2xl font-bold mt-8 mb-4">6. Livraison</h2>
                 <p>
                     Les livraisons sont effectuées dans un délai de 24 à 48 heures pour Dakar et ses environs.
-                    Les frais de livraison s'élèvent à 2 000 FCFA.
+                    Les frais de livraison s'élèvent entre 1 500 et 4000 FCFA selon la zone.
                 </p>
                 <p>
                     Le délai de livraison court à compter de la validation du paiement.

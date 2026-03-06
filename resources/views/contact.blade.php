@@ -129,9 +129,8 @@
                     <div>
                         <h3 class="text-xl font-bold mb-2">Notre Adresse</h3>
                         <p class="text-gray-600">
-                            Avenue Cheikh Anta Diop<br>
+                            Colobane<br>
                             Dakar, Sénégal<br>
-                            BP 12345
                         </p>
                     </div>
                 </div>
@@ -148,8 +147,8 @@
                     <div>
                         <h3 class="text-xl font-bold mb-2">Téléphone</h3>
                         <p class="text-gray-600">
-                            <a href="tel:+221XXXXXXXXX" class="hover:text-primary-600">+221 XX XXX XX XX</a><br>
-                            <a href="tel:+221YYYYYYYYY" class="hover:text-primary-600">+221 YY YYY YY YY</a>
+                            <a href="tel:+221XXXXXXXXX" class="hover:text-primary-600">+221 77 565 98 78</a><br>
+                            <a href="tel:+221YYYYYYYYY" class="hover:text-primary-600">+221 77 446 51 92</a>
                         </p>
                     </div>
                 </div>
