@@ -17,6 +17,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            screens:{
+                'desktop-nav': '1025px',
+            },
             colors: {
                 primary: {
                     50: '#eff6ff',

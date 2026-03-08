@@ -5,6 +5,8 @@ namespace App\Mail;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class OrderConfirmation extends Mailable
@@ -18,9 +20,22 @@ class OrderConfirmation extends Mailable
         $this->order = $order;
     }
 
-    public function build()
+    public function envelope(): Envelope
     {
-        return $this->subject('Confirmation de commande #' . $this->order->order_number)
-                    ->view('emails.order-confirmation');
+        return new Envelope(
+            subject: '🔔 Confirmation de commande #' . $this->order->order_number,
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.order-confirmation',
+        );
+    }
+
+    public function attachments(): array
+    {
+        return [];
     }
 }

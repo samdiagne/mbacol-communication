@@ -351,17 +351,25 @@ class PayDunyaController extends Controller
 
                 // Log 9 : Send emails
                 Log::info('PayDunya Webhook: Sending emails...');
-                
+
                 try {
+                    // Email client
                     Mail::to($order->customer_email)->send(new OrderConfirmation($order));
-                    Log::info('PayDunya Webhook: Customer email sent ✓');
+                    Log::info('PayDunya Webhook: Customer email sent ✓', [
+                        'to' => $order->customer_email
+                    ]);
                     
-                    Mail::to(config('mail.from.address'))->send(new \App\Mail\NewOrderAdmin($order));
-                    Log::info('PayDunya Webhook: Admin email sent ✓');
+                    // Email admin
+                    Mail::to(config('admin.email'))->send(new \App\Mail\NewOrderAdmin($order));
+                    Log::info('PayDunya Webhook: Admin email sent ✓', [
+                        'to' => config('admin.email')
+                    ]);
                 } catch (\Exception $e) {
                     Log::error('PayDunya Webhook: Email error (non-blocking)', [
                         'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
                     ]);
+                    // Ne pas bloquer la commande si email échoue
                 }
 
                 $duration = round((microtime(true) - $startTime) * 1000, 2);

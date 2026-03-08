@@ -1,0 +1,23 @@
+/* Couleurs primaires */
+.button-primary {
+    background-color: #0284c7; /* Ton bleu primary-600 */
+    border-color: #0284c7;
+}
+
+.button-primary:hover {
+    background-color: #0369a1; /* primary-700 */
+}
+
+/* Header */
+.header a {
+    color: #0284c7;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Footer */
+.footer {
+    background-color: #f8fafc;
+    color: #64748b;
+}

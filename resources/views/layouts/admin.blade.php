@@ -256,17 +256,27 @@
                 class="flex items-center"
                 x-show="sidebarOpen">
 
-                    <div class="bg-white rounded-lg p-2 shadow-lg mr-3 overflow-hidden">
+                    <!-- Logo + Texte -->
+                    <a href="{{ route('admin.dashboard') }}" 
+                    class="flex items-center gap-3"
+                    x-show="sidebarOpen">
+
+                        <!-- Logo -->
                         <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
-                            class="h-6 w-auto transform scale-150">
-                    </div>
+                            class="h-12 w-auto object-contain">
 
-                    <div>
-                        <span class="font-bold text-lg">Admin Panel</span>
-                        <p class="text-xs text-primary-200">{{ Auth::user()->name }}</p>
-                    </div>
-                </a>
+                        <!-- Texte -->
+                        <div class="leading-tight">
+                            <p class="font-semibold text-lg whitespace-nowrap">
+                                MBC Admin 
+                            </p>
+
+                            <p class="text-xs text-primary-200">
+                                {{ Auth::user()->name }}
+                            </p>
+                        </div>
+                    </a>
                 <button @click="mobileSidebarOpen = false" class="p-2 rounded-lg hover:bg-primary-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

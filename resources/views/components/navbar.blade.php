@@ -5,7 +5,7 @@
             
             <!-- Menu Burger avec Rotation du Container -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" 
-                    class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gradient-to-br hover:from-primary-50 hover:to-secondary-50 transition-all duration-300 p-2 -ml-2 group"
+                    class="desktop-nav:hidden relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gradient-to-br hover:from-primary-50 hover:to-secondary-50 transition-all duration-300 p-2 -ml-2 group"
                     :class="mobileMenuOpen ? 'rotate-180 bg-gradient-to-br from-primary-50 to-secondary-50 scale-110' : ''">
                 <div class="w-6 h-5 relative flex flex-col justify-between transition-transform duration-300"
                     :class="mobileMenuOpen ? '-rotate-180' : ''">
@@ -19,7 +19,7 @@
             </button>
 
             <!-- Logo -->
-            <div class="flex items-center flex-1 md:flex-initial justify-center md:justify-start">
+            <div class="flex items-center flex-1 desktop-nav:flex-initial justify-center desktop-nav:justify-start">
                 <a href="{{ route('home') }}" class="flex items-center">
                     <span class="text-lg sm:text-xl md:text-3xl font-bold text-primary-600">Mbacol</span>
                     <span class="text-lg sm:text-xl md:text-3xl font-bold text-secondary-600 ml-1">Communication</span>
@@ -27,7 +27,7 @@
             </div>
             
             <!-- Menu Desktop -->
-            <div class="hidden md:flex md:items-center md:space-x-8">
+            <div class="hidden desktop-nav:flex desktop-nav:items-center desktop-nav:space-x-6">
                 <a href="{{ route('home') }}" 
                    class="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'text-primary-600 border-b-2 border-primary-600' : '' }}">
                     Accueil
@@ -52,7 +52,7 @@
                     <!-- Recherche avec dropdown (Desktop) -->
                     <div x-data="{ searchOpen: false }" 
                     @click.outside="searchOpen = false" 
-                    class="hidden lg:block relative">
+                    class="hidden desktop-nav:block relative">
                         <button @click="searchOpen = !searchOpen" 
                                 class="text-gray-700 hover:text-primary-600 hover:bg-gray-100 p-2 rounded-lg transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,14 +70,14 @@
                     </div>
                 @else
                     <!-- Recherche complète inline -->
-                    <div class="hidden lg:block w-64">
+                    <div class="hidden desktop-nav:block w-64">
                         @livewire('search-autocomplete')
                     </div>
                 @endauth
 
                 <!-- Recherche Mobile (icône pour tous) -->
                 <button @click="searchOpen = !searchOpen" 
-                        class="lg:hidden text-gray-700 hover:text-primary-600 p-1.5">
+                        class="desktop-nav:hidden text-gray-700 hover:text-primary-600 p-1.5">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
@@ -91,7 +91,7 @@
                     <div class="relative" x-data="{ open: false }">
                         
                         <button @click="open = !open"
-                            class="hidden md:flex items-center space-x-3 
+                            class="hidden desktop-nav:flex items-center space-x-3 
                                 px-3 py-2 rounded-xl 
                                 hover:bg-gray-50 transition-all duration-200">
 
@@ -184,7 +184,7 @@
                     </div>
                     
                     <a href="{{ route('home') }}" 
-                    class="md:hidden flex items-center">
+                    class="desktop-nav:hidden flex items-center">
                         <div class="relative">
                             <div class="w-8 h-8 bg-gradient-to-br 
                                     from-primary-500 to-secondary-500 
@@ -214,7 +214,7 @@
     <!-- Barre de recherche mobile -->
     <div x-show="searchOpen" 
          x-transition
-         class="lg:hidden border-t border-gray-200 bg-white p-4"
+         class="desktop-nav:hidden border-t border-gray-200 bg-white p-4"
          style="display: none;">
         @livewire('search-autocomplete')
     </div>
@@ -228,7 +228,7 @@
          x-transition:leave-start="opacity-100 translate-x-0"
          x-transition:leave-end="opacity-0 -translate-x-full"
          @click.away="mobileMenuOpen = false"
-         class="md:hidden fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-50 overflow-y-auto"
+         class="desktop-nav:hidden fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-50 overflow-y-auto"
          style="display: none;">
         
         <!-- Header Menu -->
@@ -244,8 +244,9 @@
                     </div>
                 @else
                     <div class="flex items-center">
-                        <span class="text-lg font-bold text-primary-600">MBC</span>
-                        <span class="text-lg font-bold text-secondary-600 ml-1">313</span>
+                        <img src="{{ asset('images/logo.webp') }}" 
+                            alt="Mbacol Logo"
+                            class="h-12 w-auto transform scale-150">
                     </div>
                 @endauth
             </div>
@@ -349,7 +350,7 @@
     <div x-show="mobileMenuOpen" 
          @click="mobileMenuOpen = false"
          x-transition
-         class="md:hidden fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-40"
+         class="desktop-nav:hidden fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm z-40"
          style="display: none;">
     </div>
 </nav>

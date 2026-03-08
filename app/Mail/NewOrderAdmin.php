@@ -13,9 +13,12 @@ class NewOrderAdmin extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(
-        public Order $order
-    ) {}
+    public $order;
+
+    public function __construct(Order $order)
+    {
+        $this->order = $order;
+    }
 
     public function envelope(): Envelope
     {
@@ -29,5 +32,10 @@ class NewOrderAdmin extends Mailable
         return new Content(
             view: 'emails.new-order-admin',
         );
+    }
+
+    public function attachments(): array
+    {
+        return [];
     }
 }
