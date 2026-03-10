@@ -176,7 +176,7 @@
             startAutoplay() {
                 this.autoplay = setInterval(() => {
                     this.next();
-                }, 5000);
+                }, 2000);
             },
             stopAutoplay() {
                 clearInterval(this.autoplay);
