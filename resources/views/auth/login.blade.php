@@ -98,8 +98,9 @@
                         </div>
                     @else
                         <div class="flex items-center">
-                            <span class="text-lg font-bold text-primary-600">Mbacol</span>
-                            <span class="text-lg font-bold text-secondary-600 ml-1">Com</span>
+                            <img src="{{ asset('images/logo.webp') }}" 
+                            alt="Mbacol Logo"
+                            class="h-12 w-auto transform scale-150">
                         </div>
                     @endauth
                 </div>
