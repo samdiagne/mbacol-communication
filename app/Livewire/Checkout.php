@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log; 
 use App\Mail\OrderConfirmation;
 use App\Mail\NewOrderAdmin;
 use App\Services\Payment\PaymentService;
-use App\Models\Payment;
+
 
 class Checkout extends Component
 {
@@ -55,7 +56,7 @@ class Checkout extends Component
             'customer_address' => 'required|string',
             'customer_city' => 'required|string|max:100',
             'delivery_zone' => 'required|in:dakar_centre,dakar_nord_ouest,banlieue_proche,rufisque', // AJOUT
-            'payment_method' => 'required|in:paydunya,cash',
+            'payment_method' => 'required|in:wave,orange_money,free_money,card,cash',
             'notes' => 'nullable|string|max:500',
         ];
 
@@ -147,7 +148,7 @@ class Checkout extends Component
                 'customer_address' => $this->customer_address,
                 'customer_city' => $this->customer_city,
                 'delivery_zone' => $this->delivery_zone,
-                'payment_method' => $this->payment_method,
+                'payment_method' => $this->payment_method, // ✅ wave, orange_money, card, etc.
                 'payment_status' => 'pending',
                 'status' => 'pending',
                 'subtotal' => $this->subtotal,
@@ -182,18 +183,20 @@ class Checkout extends Component
                 session()->flash('success', 'Commande enregistrée ! Paiement à la livraison.');
                 return redirect()->route('order.confirmation', $order);
                 
-            } elseif ($this->payment_method === 'paydunya') {
-                // PAYDUNYA : NE PAS vider panier, NE PAS envoyer emails
+            } else {
+                // TOUS LES AUTRES : PayDunya (wave, orange_money, free_money, card)
+                // PayDunya affichera les options selon le choix de l'utilisateur
                 $paymentService = new PaymentService();
                 $paymentResult = $paymentService->processPayment($order, null);
 
                 if ($paymentResult['success'] && isset($paymentResult['checkout_url'])) {
-                    // ✅ Redirection PayDunya
-                    \Log::info('Redirecting to PayDunya', [
+                    Log::info('Redirecting to PayDunya', [
                         'order_id' => $order->id,
+                        'selected_method' => $this->payment_method,
                         'url' => $paymentResult['checkout_url']
                     ]);
                     
+                    // ✅ Redirection vers PayDunya
                     return redirect()->away($paymentResult['checkout_url']);
                 } else {
                     session()->flash('error', $paymentResult['message'] ?? 'Erreur paiement');
@@ -203,7 +206,7 @@ class Checkout extends Component
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Order creation error: ' . $e->getMessage());
+            Log::error('Order creation error: ' . $e->getMessage());
             session()->flash('error', 'Erreur lors de la commande.');
             return redirect()->route('checkout');
         }

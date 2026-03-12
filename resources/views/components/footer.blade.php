@@ -50,9 +50,9 @@
 
             <div class="flex items-center justify-start gap-4 flex-wrap">
                 
-                <img src="{{ asset('images/payment/payment_mode.png') }}" 
+                <img src="{{ asset('images/payment/payment_mode.webp') }}" 
                     alt="Modes de paiement"
-                    class="h-12 w-auto ml-6">
+                    class="h-12 w-auto mt-0">
 
             </div>
             

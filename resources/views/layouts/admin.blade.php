@@ -44,11 +44,11 @@
                         <!-- Texte -->
                         <div class="leading-tight">
                             <p class="font-semibold text-lg whitespace-nowrap">
-                                MBC Admin 
+                                Admin Panel
                             </p>
 
                             <p class="text-xs text-primary-200">
-                                {{ Auth::user()->name }}
+                                - {{ Auth::user()->name }} -
                             </p>
                         </div>
                     </a>
@@ -269,11 +269,11 @@
                         <!-- Texte -->
                         <div class="leading-tight">
                             <p class="font-semibold text-lg whitespace-nowrap">
-                                MBC Admin 
+                                Admin Panel
                             </p>
 
                             <p class="text-xs text-primary-200">
-                                {{ Auth::user()->name }}
+                                - {{ Auth::user()->name }} -
                             </p>
                         </div>
                     </a>

@@ -34,14 +34,27 @@ class Payment extends Model
     // Accesseurs
     public function getPaymentMethodLabelAttribute()
     {
-        return match($this->payment_method) {
-            'wave' => 'Wave',
-            'orange_money' => 'Orange Money',
-            'free_money' => 'Free Money',
-            'visa_mastercard' => 'Paiement bancaire',
-            'cash' => 'Espèces à la livraison',
-            default => $this->payment_method,
-        };
+        // Note: payment_method dans la table Payment = toujours 'paydunya' ou 'cash'
+        // Le choix réel (wave, orange_money, etc.) est dans order.payment_method
+        
+        if ($this->payment_method === 'cash') {
+            return 'Espèces à la livraison';
+        }
+        
+        if ($this->payment_method === 'paydunya') {
+            // Récupérer le choix réel depuis la commande
+            $orderMethod = $this->order->payment_method ?? 'paydunya';
+            
+            return match($orderMethod) {
+                'wave' => 'Wave',
+                'orange_money' => 'Orange Money',
+                'free_money' => 'Free Money (Mixx)',
+                'card' => 'Carte Bancaire',
+                default => 'Paiement en ligne',
+            };
+        }
+        
+        return $this->payment_method;
     }
 
     public function getStatusLabelAttribute()
