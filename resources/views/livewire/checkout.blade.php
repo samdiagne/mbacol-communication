@@ -255,7 +255,7 @@
                     <button type="submit"
                             wire:loading.attr="disabled"
                             class="w-full mt-6 bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-lg transition duration-200 disabled:opacity-50">
-                        <span wire:loading.remove>Confirmer la commande</span>
+                        <span wire:loading.remove>Valider la commande</span>
                         <span wire:loading>Traitement...</span>
                     </button>
 

@@ -183,7 +183,7 @@
                         </div>
                     </div>
                     
-                    <a href="{{ route('home') }}" 
+                    <a href="{{ route('customer.orders.index') }}" 
                     class="desktop-nav:hidden flex items-center">
                         <div class="relative">
                             <div class="w-8 h-8 bg-gradient-to-br 
@@ -311,6 +311,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
                             <span class="font-medium">Mes commandes</span>
+                        </a>
+                        <a href="{{ route('profile.edit') }}" 
+                        class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-xl transition-all duration-200 hover:translate-x-1">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <span class="font-medium">Mon profil</span>
                         </a>
                     @endif
 

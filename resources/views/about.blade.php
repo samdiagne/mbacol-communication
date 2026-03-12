@@ -14,7 +14,7 @@
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
             À propos de 
-            <span class="bg-white/20 px-3 py-1 rounded-lg">
+            <span class="bg-white/20 px-3 py-1 rounded-lg line-clamp-2">
                 Mbacol Communication
             </span>
         </h1>

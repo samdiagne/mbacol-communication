@@ -24,6 +24,7 @@ class PayDunyaGateway implements PaymentGatewayInterface
         $this->masterKey = config('paydunya.master_key');
         $this->privateKey = config('paydunya.private_key');
         $this->token = config('paydunya.token');
+        $this->validateUrls();
     }
 
     /**
@@ -88,6 +89,36 @@ class PayDunyaGateway implements PaymentGatewayInterface
                     'amount' => $order->total,
                     'mode' => $this->testMode ? 'test' : 'live',
                 ]);
+            }
+
+            $maxRetries = 3;
+            $retryDelay = 1; // secondes
+            
+            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                try {
+                    $response = Http::withHeaders($headers)
+                        ->timeout(30)
+                        ->retry(3, 1000) // ✅ Retry Laravel natif
+                        ->post($this->baseUrl . '/checkout-invoice/create', $payload);
+
+                    if ($response->successful()) {
+                        break; // Succès, sortir de la boucle
+                    }
+                    
+                    if ($attempt < $maxRetries) {
+                        Log::warning("PayDunya: Attempt {$attempt} failed, retrying...");
+                        sleep($retryDelay);
+                        $retryDelay *= 2; // Exponential backoff
+                    }
+                    
+                } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                    if ($attempt === $maxRetries) {
+                        throw $e; // Dernière tentative, lever l'exception
+                    }
+                    Log::warning("PayDunya: Connection failed on attempt {$attempt}");
+                    sleep($retryDelay);
+                    $retryDelay *= 2;
+                }
             }
 
             // Appel API PayDunya
@@ -163,15 +194,18 @@ class PayDunyaGateway implements PaymentGatewayInterface
 
             // PayDunya renvoie un statut
             $status = strtolower($data['status'] ?? '');
+
+            $invoiceAmount = (float) ($data['invoice']['total_amount'] ?? 0);
             
             return [
                 'success' => true,
                 'status' => $status === 'completed' ? 'completed' : 'pending',
                 'transaction_id' => $transactionId,
                 'data' => [
-                    'amount' => $data['invoice']['total_amount'] ?? 0,
+                    'amount' => $invoiceAmount,
                     'receipt_url' => $data['receipt_url'] ?? null,
                     'customer' => $data['customer'] ?? [],
+                    'payment_method' => $data['customer']['payment_method'] ?? 'unknown',
                 ],
             ];
 
@@ -190,40 +224,63 @@ class PayDunyaGateway implements PaymentGatewayInterface
      */
     public function validateWebhook(array $data): bool
     {
-        // Structure sandbox PayDunya :
-        // root -> data -> invoice -> token
-
-        $token = $data['data']['invoice']['token']
-            ?? $data['data']['token']
-            ?? $data['invoice']['token']
-            ?? $data['token']
-            ?? null;
-
-        if (empty($token)) {
-            Log::warning('PayDunya Webhook: Missing token', [
-                'payload' => $data
-            ]);
-            return false;
-        }
-
-        // Mode test → bypass signature
+        // Mode test → bypass signature (pour debug)
         if ($this->testMode) {
             Log::info('PayDunya Webhook: Skipping hash validation (TEST MODE)');
             return true;
         }
 
-        $receivedHash = $data['data']['hash']
-            ?? $data['hash']
-            ?? null;
-
+        // Extraire le hash reçu
+        $receivedHash = $data['hash'] ?? null;
+        
         if (empty($receivedHash)) {
-            Log::warning('PayDunya Webhook: Missing hash');
+            Log::warning('PayDunya Webhook: Missing hash in payload');
             return false;
         }
 
-        $expectedHash = md5($this->masterKey . $token);
+        // Extraire le payload data
+        $payload = $data['data'] ?? null;
+        
+        if (empty($payload)) {
+            Log::warning('PayDunya Webhook: Missing data in payload');
+            return false;
+        }
+
+        // PayDunya calcule le hash avec HMAC-SHA512
+        // Hash = HMAC-SHA512(JSON(data), MASTER_KEY)
+        $expectedHash = hash_hmac(
+            'sha512',
+            json_encode($payload),
+            $this->masterKey
+        );
+
+        Log::info('PayDunya Webhook: Hash validation', [
+            'received' => substr($receivedHash, 0, 20) . '...',
+            'expected' => substr($expectedHash, 0, 20) . '...',
+            'match' => hash_equals($expectedHash, $receivedHash),
+        ]);
 
         return hash_equals($expectedHash, $receivedHash);
+    }
+
+    /**
+     * Valider que les URLs de callback sont en HTTPS en production
+     */
+    private function validateUrls(): void
+    {
+        if (!$this->testMode) {
+            $urls = [
+                'cancel_url' => config('paydunya.urls.cancel_url'),
+                'return_url' => config('paydunya.urls.return_url'),
+                'callback_url' => config('paydunya.urls.callback_url'),
+            ];
+
+            foreach ($urls as $name => $url) {
+                if (!str_starts_with($url, 'https://')) {
+                    throw new \Exception("PayDunya {$name} must be HTTPS in production mode. Got: {$url}");
+                }
+            }
+        }
     }
 
     /**

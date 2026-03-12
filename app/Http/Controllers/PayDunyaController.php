@@ -304,6 +304,15 @@ class PayDunyaController extends Controller
                 return response()->json(['error' => 'Payment not completed'], 400);
             }
 
+            // ✅ AJOUTER : Vérifier que le paiement n'est pas trop vieux
+            if ($payment->created_at->lt(now()->subHours(48))) {
+                Log::warning('PayDunya Webhook: Payment too old', [
+                    'payment_id' => $payment->id,
+                    'created_at' => $payment->created_at,
+                ]);
+                return response()->json(['error' => 'Payment too old'], 400);
+            }
+
             Log::info('PayDunya Webhook: Verification passed ✓');
 
             // Log 7 : Database update

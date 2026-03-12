@@ -220,13 +220,13 @@
             
             @auth
                 <button @click="$dispatch('open-review-modal')" 
-                        class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-lg transition whitespace-nowrap">
+                        class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-lg transition line-clamp-2">
                     ✍️ Rédiger un avis
                 </button>
             @else
                 <a href="{{ route('login') }}" 
-                class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-lg transition whitespace-nowrap">
-                    ✍️ Connectez-vous pour laisser un avis
+                class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-lg transition line-clamp-2">
+                    ✍️ Connectez-vous puis laisser un avis
                 </a>
             @endauth
         </div>
