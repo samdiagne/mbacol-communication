@@ -16,9 +16,6 @@
             scroll-behavior: smooth;
             scroll-padding-top: 80px;
         }
-        img {
-            loading: lazy;
-        }
     </style>
 </head>
 <body class="font-sans antialiased bg-gray-100" x-data="{ sidebarOpen: true, mobileSidebarOpen: false }">
@@ -39,7 +36,7 @@
                         <!-- Logo -->
                         <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
-                            class="h-12 w-auto object-contain">
+                            class="h-12 w-auto object-contain" loading="eager">
 
                         <!-- Texte -->
                         <div class="leading-tight">
@@ -61,7 +58,7 @@
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
                             <img src="{{ asset('images/logo.webp') }}" 
                                 alt="MBC"
-                                class="h-10 w-auto">
+                                class="h-10 w-auto" loading="eager">
                         </div>
                     </a>
 
@@ -264,7 +261,7 @@
                         <!-- Logo -->
                         <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
-                            class="h-12 w-auto object-contain">
+                            class="h-12 w-auto object-contain" loading="eager">
 
                         <!-- Texte -->
                         <div class="leading-tight">
@@ -470,5 +467,19 @@
             defer></script>
             
     @livewireScripts
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("img").forEach(img => {
+            if (!img.hasAttribute("loading")) {
+                img.loading = "lazy";
+            }
+
+            if (!img.hasAttribute("decoding")) {
+                img.decoding = "async";
+            }
+        });
+    });
+    </script>
 </body>
 </html>

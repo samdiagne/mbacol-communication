@@ -19,7 +19,7 @@ class FaqController extends Controller
                 'FAQ Mbacol Communication',
                 'questions fréquentes électronique Sénégal',
                 'aide livraison Dakar',
-                'paiement Wave Orange Money',
+                'paiement Wave Orange Money, Free money, paiement bancaire',
                 'garantie produits électroniques',
                 'support client Sénégal'
             ])
@@ -165,7 +165,7 @@ class FaqController extends Controller
                     ],
                     [
                         'question' => 'Avez-vous une boutique physique ?',
-                        'answer' => 'Oui, visitez-nous : Colobane rue 42x45, Dakar. Horaires : Lun-Sam 8h-20h.'
+                        'answer' => 'Oui, visitez-nous : Colobane rue 43×45, Dakar. Horaires : Lun-Sam 8h-20h.'
                     ],
                 ]
             ],

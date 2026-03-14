@@ -29,19 +29,11 @@
             scroll-behavior: smooth;
             scroll-padding-top: 80px;
         }
-        img {
-            loading: lazy;
-        }
     </style>
 </head>
 <body class="font-sans antialiased" x-data="{ mobileMenuOpen: false, searchOpen: false }"> 
     <!-- Page Loader -->
-    <div class="page-loader">
-        <div class="flex flex-col items-center">
-            <div class="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
-            <p class="mt-4 text-gray-600 font-semibold">Chargement...</p>
-        </div>
-    </div>
+    <x-page-loader />
     
     <div class="min-h-screen bg-gray-50">
         <!-- Navbar Component -->
@@ -110,5 +102,19 @@
 
     <!-- ✅ Livewire Scripts (déjà présent - parfait !) -->
     @livewireScripts
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("img").forEach(img => {
+            if (!img.hasAttribute("loading")) {
+                img.loading = "lazy";
+            }
+
+            if (!img.hasAttribute("decoding")) {
+                img.decoding = "async";
+            }
+        });
+    });
+    </script>
 </body>
 </html>

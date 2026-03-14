@@ -78,28 +78,7 @@
         <!-- Paiement -->
         <div class="mt-6 p-4 bg-blue-50 rounded-lg">
             <p class="font-semibold mb-2">Mode de paiement : 
-                @if($order->payment_method === 'paydunya')
-                    @switch($order->payment_provider)
-                        @case('wave')
-                            Wave
-                            @break
-                        @case('orange_money')
-                            Orange Money
-                            @break
-                        @case('free_money')
-                            Free Money
-                            @break
-                        @case('card')
-                            Carte Bancaire
-                            @break
-                        @default
-                            Paiement en ligne (PayDunya)
-                    @endswitch
-                @elseif($order->payment_method === 'cash')
-                    Espèces à la livraison
-                @else
-                    {{ ucfirst($order->payment_method) }}
-                @endif
+                {{ $order->payment_method_label }}
             </p>
             @if($order->payment_method !== 'cash')
                 <p class="text-sm text-gray-700">Vous recevrez les instructions de paiement par email et SMS.</p>

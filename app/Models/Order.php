@@ -17,11 +17,13 @@ class Order extends Model
         'customer_phone',
         'customer_address',
         'customer_city',
+        'delivery_zone',
         'subtotal',
         'shipping_cost',
         'total',
         'payment_method',
         'payment_status',
+        'payment_provider',
         'transaction_id',
         'status',
         'notes',
@@ -104,9 +106,9 @@ class Order extends Model
             'wave' => 'Wave',
             'orange_money' => 'Orange Money',
             'free_money' => 'Free Money',
-            'visa_mastercard' => 'Paiement bancaire',
+            'card' => 'Carte bancaire',
             'cash' => 'Espèces à la livraison',
-            default => 'Autre',
+            default => $this->payment_method,
         };
     }
 

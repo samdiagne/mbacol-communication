@@ -1,3 +1,55 @@
+<!-- Barre annonce livraison 
+<div class="fixed top-0 left-0 w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold z-50">
+
+    <div class="topbar-slider font-medium tracking-wide">
+
+        <div class="topbar-messages">
+
+            <div class="topbar-message">
+                🚚 Livraison offerte dès 50 000 FCFA • 🔒 Paiement sécurisé
+            </div>
+
+            <div class="topbar-message">
+                ✨ Des nouveautés arrivent ! Restez connectés 👀
+            </div>
+
+        </div>
+
+    </div>
+
+</div>-->
+
+
+<!-- Barre réseaux sociaux 
+<div class="fixed top-9 left-0 w-full bg-black text-white z-40">
+
+    <div class="max-w-7xl mx-auto px-4 h-8 flex justify-center items-center gap-10 text-sm">
+
+        <a href="#" class="flex items-center gap-2 hover:text-blue-400 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M22 12.07C22 6.49 17.52 2 12 2S2 6.49 2 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.02H7.9v-2.91h2.54V9.79c0-2.5 1.48-3.89 3.75-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.75 8.44-4.91 8.44-9.93z"/>
+            </svg>
+            Facebook
+        </a>
+
+        <a href="#" class="flex items-center gap-2 hover:text-pink-400 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm4.25 5.5A4.75 4.75 0 1016.75 12 4.75 4.75 0 0012 7.5zm6-1.25a1.25 1.25 0 11-1.25-1.25A1.25 1.25 0 0118 6.25z"/>
+            </svg>
+            Instagram
+        </a>
+
+        <a href="#" class="flex items-center gap-2 hover:text-gray-300 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M16 2a6 6 0 006 6v3a9 9 0 01-6-2v7a6 6 0 11-6-6 6.1 6.1 0 011 .08v3.1a3 3 0 102 2.82V2z"/>
+            </svg>
+            TikTok
+        </a>
+
+    </div>
+
+</div>-->
+
 <!-- Navigation fixe -->
 <nav class="bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -246,7 +298,7 @@
                     <div class="flex items-center">
                         <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
-                            class="h-12 w-auto transform scale-150">
+                            class="h-12 w-auto transform scale-150" loading="eager">
                     </div>
                 @endauth
             </div>

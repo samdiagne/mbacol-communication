@@ -369,7 +369,7 @@ class PayDunyaController extends Controller
                     ]);
                     
                     // Email admin
-                    Mail::to(config('admin.email'))->send(new \App\Mail\NewOrderAdmin($order));
+                    Mail::to(config('mail.admin_email'))->send(new \App\Mail\NewOrderAdmin($order));
                     Log::info('PayDunya Webhook: Admin email sent ✓', [
                         'to' => config('admin.email')
                     ]);

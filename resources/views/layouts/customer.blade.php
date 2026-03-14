@@ -21,15 +21,15 @@
             scroll-behavior: smooth;
             scroll-padding-top: 80px;
         }
-        img {
-            loading: lazy;
-        }
     </style>
 
     @livewireStyles
 </head>
 <body class="font-sans antialiased bg-gray-50" x-data="{ mobileMenuOpen: false, searchOpen: false }">
     
+    <!-- Page Loader -->
+    <x-page-loader />
+
     <!-- Navbar Component -->
     <x-navbar />
 
@@ -108,5 +108,19 @@
             defer></script>
 
     @livewireScripts
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("img").forEach(img => {
+            if (!img.hasAttribute("loading")) {
+                img.loading = "lazy";
+            }
+
+            if (!img.hasAttribute("decoding")) {
+                img.decoding = "async";
+            }
+        });
+    });
+    </script>
 </body>
 </html>

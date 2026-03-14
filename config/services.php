@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'whatsapp' => [
+    'enabled' => env('WHATSAPP_ENABLED', false),
+    // Les autres configs seront ajoutées plus tard
+    ],
 
 ];

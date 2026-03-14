@@ -18,6 +18,9 @@ class Payment extends Model
         'phone_number',
         'response_data',
         'paid_at',
+        'payment_provider',
+        'recept_url',
+        'notes',
     ];
 
     protected $casts = [

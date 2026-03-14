@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 use App\Mail\OrderConfirmation;
 use App\Mail\NewOrderAdmin;
 use App\Services\Payment\PaymentService;
+use App\Services\WhatsAppService;
+
 
 
 class Checkout extends Component
@@ -148,7 +150,7 @@ class Checkout extends Component
                 'customer_address' => $this->customer_address,
                 'customer_city' => $this->customer_city,
                 'delivery_zone' => $this->delivery_zone,
-                'payment_method' => $this->payment_method, // ✅ wave, orange_money, card, etc.
+                'payment_method' => $this->payment_method,
                 'payment_status' => 'pending',
                 'status' => 'pending',
                 'subtotal' => $this->subtotal,
@@ -157,7 +159,7 @@ class Checkout extends Component
                 'notes' => $this->notes,
             ]);
 
-            // Créer les order items
+            // Ajouter items
             foreach ($this->cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -168,40 +170,16 @@ class Checkout extends Component
                     'total' => $item->quantity * $item->product->price,
                 ]);
 
-                // Décrémenter le stock
                 $item->product->decrement('stock', $item->quantity);
             }
 
             DB::commit();
 
-            // ✅ TRAITEMENT SELON MÉTHODE
+            // Traitement selon méthode de paiement
             if ($this->payment_method === 'cash') {
-                // CASH : Vider panier + emails + redirect
-                $this->clearCart();
-                $this->sendOrderEmails($order);
-                
-                session()->flash('success', 'Commande enregistrée ! Paiement à la livraison.');
-                return redirect()->route('order.confirmation', $order);
-                
+                return $this->handleCashPayment($order);
             } else {
-                // TOUS LES AUTRES : PayDunya (wave, orange_money, free_money, card)
-                // PayDunya affichera les options selon le choix de l'utilisateur
-                $paymentService = new PaymentService();
-                $paymentResult = $paymentService->processPayment($order, null);
-
-                if ($paymentResult['success'] && isset($paymentResult['checkout_url'])) {
-                    Log::info('Redirecting to PayDunya', [
-                        'order_id' => $order->id,
-                        'selected_method' => $this->payment_method,
-                        'url' => $paymentResult['checkout_url']
-                    ]);
-                    
-                    // ✅ Redirection vers PayDunya
-                    return redirect()->away($paymentResult['checkout_url']);
-                } else {
-                    session()->flash('error', $paymentResult['message'] ?? 'Erreur paiement');
-                    return redirect()->route('checkout');
-                }
+                return $this->handleOnlinePayment($order);
             }
 
         } catch (\Exception $e) {
@@ -212,8 +190,49 @@ class Checkout extends Component
         }
     }
 
+    /**
+     * Traiter paiement cash
+     */
+    private function handleCashPayment(Order $order)
+    {
+        // 1. Vider le panier immédiatement
+        $this->clearCart();
+        
+        // 2. Envoyer notifications (Email + WhatsApp)
+        $this->sendOrderNotifications($order);
+        
+        // 3. Rediriger vers page confirmation
+        session()->flash('success', 'Commande enregistrée ! Paiement à la livraison.');
+        return redirect()->route('order.confirmation', $order);
+    }
+
+    /**
+     * Traiter paiement en ligne
+     */
+    private function handleOnlinePayment(Order $order)
+    {
+        // 1. NE PAS vider le panier (sera vidé après paiement confirmé)
+        
+        // 2. Initier paiement PayDunya
+        $paymentService = new PaymentService();
+        $result = $paymentService->processPayment($order);
+
+        if ($result['success'] && isset($result['checkout_url'])) {
+            Log::info('Redirecting to PayDunya', [
+                'order_id' => $order->id,
+                'url' => $result['checkout_url']
+            ]);
+            
+            // 3. Rediriger vers PayDunya (client paie immédiatement)
+            return redirect()->away($result['checkout_url']);
+        } else {
+            session()->flash('error', $result['message'] ?? 'Erreur paiement');
+            return redirect()->route('checkout');
+        }
+    }
+
 /**
- * Vider le panier (appelé uniquement après confirmation)
+ * Vider le panier
  */
 private function clearCart()
 {
@@ -224,18 +243,32 @@ private function clearCart()
     }
 }
 
-/**
- * Envoyer les emails de confirmation (appelé uniquement après paiement)
- */
-private function sendOrderEmails(Order $order)
-{
-    try {
-        Mail::to($order->customer_email)->send(new OrderConfirmation($order));
-        Mail::to(config('mail.from.address'))->send(new NewOrderAdmin($order));
-    } catch (\Exception $e) {
-        \Log::error('Email error: ' . $e->getMessage());
+    /**
+     * Envoyer notifications (Email + WhatsApp)
+     */
+    private function sendOrderNotifications(Order $order)
+    {
+        try {
+            // Emails
+            Mail::to($order->customer_email)->send(new OrderConfirmation($order));
+            Mail::to(config('mail.from.address'))->send(new NewOrderAdmin($order));
+            
+            // WhatsApp (non-bloquant)
+            try {
+                $whatsapp = new WhatsAppService();
+                
+                if ($whatsapp->isEnabled()) {
+                    $whatsapp->sendOrderConfirmationToCustomer($order);
+                    $whatsapp->sendNewOrderToAdmin($order);
+                }
+            } catch (\Exception $e) {
+                Log::error('WhatsApp error: ' . $e->getMessage());
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Notification error: ' . $e->getMessage());
+        }
     }
-}
 
     public function render()
     {

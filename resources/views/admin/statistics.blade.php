@@ -79,6 +79,7 @@
 <!-- Scripts Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
+// @ts-nocheck
 document.addEventListener('DOMContentLoaded', function() {
     const commonOptions = {
         responsive: true,
@@ -90,24 +91,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 position: 'bottom',
                 labels: {
                     padding: 15,
-                    font: {
-                        size: 12
-                    }
+                    font: { size: 12 }
                 }
             }
         },
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    precision: 0
-                }
+                ticks: { precision: 0 }
             }
         }
     };
 
+    // Helper pour créer les charts en toute sécurité
+    function createChart(elementId, config) {
+        const canvas = document.getElementById(elementId);
+        if (!canvas) {
+            console.warn(`Canvas ${elementId} not found`);
+            return null;
+        }
+        return new Chart(canvas, config);
+    }
+
     // 1. Commandes par Mois
-    new Chart(document.getElementById('monthlyOrdersChart'), {
+    createChart('monthlyOrdersChart', {
         type: 'line',
         data: {
             labels: {!! json_encode($monthlyLabels) !!},
@@ -127,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 2. CA Mensuel
-    new Chart(document.getElementById('monthlyRevenueChart'), {
+    createChart('monthlyRevenueChart', {
         type: 'bar',
         data: {
             labels: {!! json_encode($monthlyLabels) !!},
@@ -157,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 3. Commandes par Statut
-    new Chart(document.getElementById('ordersByStatusChart'), {
+    createChart('ordersByStatusChart', {
         type: 'doughnut',
         data: {
             labels: {!! json_encode($statusLabels) !!},
@@ -178,9 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     position: 'bottom',
                     labels: {
                         padding: 15,
-                        font: {
-                            size: 12
-                        }
+                        font: { size: 12 }
                     }
                 }
             }
@@ -188,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 4. Top 5 Produits
-    new Chart(document.getElementById('topProductsChart'), {
+    createChart('topProductsChart', {
         type: 'bar',
         data: {
             labels: {!! json_encode($topProductsLabels) !!},
@@ -208,14 +213,10 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: {
                 x: {
                     beginAtZero: true,
-                    ticks: {
-                        precision: 0
-                    }
+                    ticks: { precision: 0 }
                 },
                 y: {
-                    ticks: {
-                        autoSkip: false
-                    }
+                    ticks: { autoSkip: false }
                 }
             }
         }

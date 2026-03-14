@@ -373,14 +373,6 @@
                                 @enderror
                             </div>
 
-                            <!-- indicateur de force du mot de passe -->
-                            <div class="mt-2">
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div id="password-strength-bar" class="h-2 rounded-full transition-all"></div>
-                                </div>
-                                <p id="password-strength-text" class="text-sm mt-1 text-gray-500"></p>
-                            </div>
-
                             <!-- Confirmation -->
                             <div class="mb-6">
                                 <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -424,6 +416,14 @@
                                     </button>
                                 </div>
                             </div>
+
+                            <!-- indicateur de force du mot de passe -->
+                            <div class="mt-2">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="password-strength-bar" class="h-2 rounded-full transition-all"></div>
+                                </div>
+                                <p id="password-strength-text" class="text-sm mt-1 text-gray-500"></p>
+                            </div><br>
 
                             <script>
                             function togglePassword() {

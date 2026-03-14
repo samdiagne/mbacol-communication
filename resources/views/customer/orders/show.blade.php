@@ -129,7 +129,7 @@
 </div>
 
 <!-- Infos -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<divt class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- Livraison -->
     <div class="bg-white rounded-lg shadow p-6">
         <h3 class="font-bold mb-4">Adresse de livraison</h3>
@@ -147,31 +147,32 @@
         <p class="text-gray-700 mb-2">
             <strong>Mode :</strong> 
             @if($order->payment_method === 'paydunya')
-                        <strong class="text-gray-900">
-                            @switch($order->payment_provider)
-                                @case('wave')
-                                    🌊 Wave
-                                    @break
-                                @case('orange_money')
-                                    🍊 Orange Money
-                                    @break
-                                @case('free_money')
-                                    💙 Free Money
-                                    @break
-                                @case('card')
-                                    💳 Carte Bancaire
-                                    @break
-                                @default
-                                    PayDunya
-                            @endswitch
-                        </strong>
-                    @elseif($order->payment_method === 'cash')
-                <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                    @switch($order->payment_provider)
+                        @case('wave')
+                            Wave
+                            @break
+                        @case('orange_money')
+                            Orange Money
+                            @break
+                        @case('free_money')
+                            Free Money
+                            @break
+                        @case('card')
+                            Carte Bancaire
+                            @break
+                        @default
+                            Paiement en ligne (PayDunya)
+                    @endswitch
+                @elseif($order->payment_method === 'cash')
+                    <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
                     💵 Espèces
-                </span>
-            @endif   
+                    </span>
+                @else
+                    {{ $order->payment_method_label }}
+                @endif
         </p>
-        <p>
+        <p class="text-gray-700 mb-2">
+            <strong>Statut :</strong> 
             @if($order->payment_status === 'paid')
                 <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
                     ✓ Payée
@@ -183,5 +184,5 @@
             @endif
         </p>
     </div>
-</div>
+</divt
 @endsection

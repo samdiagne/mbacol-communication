@@ -100,7 +100,7 @@
                         <div class="flex items-center">
                             <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
-                            class="h-12 w-auto transform scale-150">
+                            class="h-12 w-auto transform scale-150" loading="eager">
                         </div>
                     @endauth
                 </div>

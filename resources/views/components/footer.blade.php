@@ -5,7 +5,7 @@
             <div>
                 <img src="{{ asset('images/logo.webp') }}" 
                             alt="Mbacol Logo"
-                            class="h-16 w-auto transform scale-150">
+                            class="h-16 w-auto transform scale-150" loading="eager">
                 <p class="text-gray-400">Votre partenaire en électronique et matériel au Sénégal.</p>
             </div>
             
@@ -40,7 +40,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        <a href="https://maps.app.goo.gl/VwS9Lv4CRGyysLKR9?g_st=ic">Colobane rue 42x45, Dakar - Sénégal</a>
+                        <a href="https://maps.app.goo.gl/VwS9Lv4CRGyysLKR9?g_st=ic">Colobane rue 43×45, Dakar - Sénégal</a>
                     </li>
                 </ul>
             </div>

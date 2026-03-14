@@ -262,7 +262,7 @@
                         @elseif($order->payment_method === 'cash')
                             Espèces
                         @else
-                            {{ ucfirst($order->payment_method) }}
+                            {{ $order->payment_method_label }}
                         @endif
                     </div>
                     <div class="info-line">

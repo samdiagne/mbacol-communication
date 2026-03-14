@@ -4,57 +4,44 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 
 class Category extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory;
 
     protected $fillable = [
         'name',
         'slug',
         'description',
         'image',
-        'is_active',
-        'order',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'long_tail_keywords',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
-    }
-
-    /**
-     * Get the route key for the model.
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
-    /**
-     * Relation : Une catégorie a plusieurs produits
-     */
     public function products()
     {
         return $this->hasMany(Product::class);
     }
 
     /**
-     * Scope : Seulement les catégories actives
+     * Obtenir les keywords comme array
      */
-    public function scopeActive($query)
+    public function getMetaKeywordsArrayAttribute()
     {
-        return $query->where('is_active', true)->orderBy('order');
+        return $this->meta_keywords 
+            ? array_map('trim', explode(',', $this->meta_keywords)) 
+            : [];
+    }
+
+    /**
+     * Obtenir les long-tail keywords comme array
+     */
+    public function getLongTailKeywordsArrayAttribute()
+    {
+        return $this->long_tail_keywords 
+            ? array_map('trim', explode(',', $this->long_tail_keywords)) 
+            : [];
     }
 }

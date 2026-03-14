@@ -40,6 +40,10 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 Route::get('/cgv', fn() => view('terms'))->name('terms');
 Route::get('/faq', [FaqController::class, 'index'])->name('faq');
 
+// Sitemap
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])
+    ->name('sitemap');
+
 
 // Routes authentifiées (redirection)
 Route::middleware('auth')->group(function () {

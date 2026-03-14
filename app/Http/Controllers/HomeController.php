@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
-use Illuminate\Http\Request;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -15,50 +14,71 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // SEO Meta Tags
-        SEOMeta::setTitle('Accueil - Électronique & Informatique au Sénégal')
-            ->setDescription('Découvrez notre large gamme de smartphones, ordinateurs, tablettes et accessoires. Livraison rapide à Dakar. Paiement sécurisé Wave, Orange Money Free Money et carte bancaire.')
-            ->setKeywords(['électronique Sénégal', 'smartphone Dakar', 'ordinateur portable Sénégal', 'boutique informatique Dakar', 'Mbacol Communication'])
+        // ✅ SEO amélioré avec les vraies infos
+        SEOMeta::setTitle('Mbacol Communication - Khouma et Frères | Import/Export Électronique Sénégal')
+            ->setDescription('Import/Export matériel électronique professionnel : chargeurs GaN, stations soudage, microscopes, outils réparation smartphone. Livraison rapide Dakar, Sénégal.')
+            ->setKeywords([
+                'Mbacol Communication',
+                'Khouma et Frères',
+                'import export électronique Sénégal',
+                'matériel réparation téléphone Dakar',
+                'station soudage professionnel',
+                'microscope réparation smartphone',
+                'chargeur GaN USB-C Dakar',
+                'outils réparation électronique Sénégal',
+                'pièces détachées téléphone Dakar'
+            ])
             ->setCanonical(route('home'))
             ->addMeta('robots', 'index, follow')
             ->addMeta('revisit-after', '7 days')
-            ->addMeta('author', 'Mbacol Communication');
+            ->addMeta('author', 'Mbacol Communication - Khouma et Frères');
 
         // Open Graph
-        OpenGraph::setTitle('Mbacol Communication - Votre Boutique Tech au Sénégal')
-            ->setDescription('Smartphones, ordinateurs, accessoires. Prix compétitifs, livraison rapide à Dakar.')
+        OpenGraph::setTitle('Mbacol Communication - Khouma et Frères | Électronique Pro Sénégal')
+            ->setDescription('Import/Export matériel électronique professionnel. Chargeurs, stations soudage, microscopes. Livraison Dakar.')
             ->setUrl(route('home'))
             ->setType('website')
             ->addImage(asset('images/og-home.jpg'), ['height' => 630, 'width' => 1200]);
 
         // Twitter Card
-        TwitterCard::setTitle('Mbacol Communication - Tech au Sénégal')
-            ->setDescription('Smartphones, ordinateurs, accessoires. Livraison Dakar.')
+        TwitterCard::setTitle('Mbacol Communication - Électronique Pro Sénégal')
+            ->setDescription('Import/Export matériel professionnel. Livraison Dakar.')
             ->setType('summary_large_image')
-            ->setImage(asset('images/twitter-home.jpg'))
-            ->setSite('@MbacolComm');
+            ->setImage(asset('images/twitter-home.jpg'));
 
-        // JSON-LD Organization
-        JsonLd::setTitle('Mbacol Communication')
-            ->setDescription('Boutique d\'électronique et informatique au Sénégal')
-            ->setType('Store')
-            ->addValue('address', [
+        // ✅ JSON-LD Organization amélioré
+        JsonLd::addValues([
+            '@context' => 'https://schema.org',
+            '@type' => 'Store',
+            'name' => 'Mbacol Communication',
+            'alternateName' => 'Khouma et Frères',
+            'description' => 'Import/Export matériel électronique professionnel au Sénégal',
+            'url' => route('home'),
+            'logo' => asset('images/logo.png'),
+            'image' => asset('images/og-home.jpg'),
+            'address' => [
                 '@type' => 'PostalAddress',
-                'streetAddress' => 'Colobane rue 42x45',
+                'streetAddress' => 'Colobane rue 43×45',
                 'addressLocality' => 'Dakar',
                 'addressRegion' => 'Dakar',
                 'addressCountry' => 'SN'
-            ])
-            ->addValue('telephone', '+221784465192')
-            ->addValue('priceRange', '$$')
-            ->addValue('openingHours', 'Mo-Sa 08:00-20:00')
-            ->setUrl(route('home'));
+            ],
+            'contactPoint' => [
+                '@type' => 'ContactPoint',
+                'telephone' => '+221-78-446-51-92',
+                'contactType' => 'Service client',
+                'areaServed' => 'SN',
+                'availableLanguage' => ['fr']
+            ],
+            'priceRange' => '3000 FCFA - 250000 FCFA',
+            'openingHours' => 'Mo-Sa 08:00-20:00',
+            'paymentAccepted' => ['Wave', 'Orange Money', 'Free Money', 'Carte Bancaire', 'Espèces']
+        ]);
 
         $categories = Category::withCount('products')
             ->orderBy('name')
             ->get();
 
-        // Produits en vedette (12)
         $featuredProducts = Product::with(['category', 'images'])
             ->where('is_featured', true)
             ->where('stock', '>', 0)

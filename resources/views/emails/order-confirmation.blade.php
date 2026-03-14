@@ -349,7 +349,7 @@
                     @elseif($order->payment_method === 'cash')
                         Espèces à la livraison
                     @else
-                        {{ ucfirst($order->payment_method) }}
+                        {{ $order->payment_method_label }}
                     @endif
                     <br><br>
                     
@@ -406,7 +406,7 @@
         <!-- Footer -->
         <div class="footer">
             <p><strong>Mbacol Communication</strong></p>
-            <p>Colobane rue 43x46, Dakar, Sénégal</p>
+            <p>Colobane rue 43×45, Dakar, Sénégal</p>
             <p>📞 +221 78 446 51 92 • 📧 contact@mbacolcommunication.sn</p>
             <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
                 © {{ date('Y') }} Mbacol Communication. Tous droits réservés.
