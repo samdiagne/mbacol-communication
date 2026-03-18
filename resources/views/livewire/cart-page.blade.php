@@ -187,33 +187,38 @@
                         </div>
                     </div>
 
+                    @php
+                        $paymentsEnabled = filter_var(env('PAYMENTS_ENABLED', true), FILTER_VALIDATE_BOOLEAN);
+                    @endphp
+
                     <!-- Bouton principal avec compteur -->
-                    <a href="{{ route('checkout') }}" 
-                    class="relative block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-5 px-6 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 mb-3 group overflow-hidden">
-                        
-                        <!-- Pulse animation -->
-                        <div class="absolute inset-0 bg-white/10 rounded-xl animate-pulse"></div>
-                        
-                        <span class="relative flex items-center justify-center gap-3">
-                            <!-- Icône panier -->
-                            <div class="relative">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    @if($paymentsEnabled)
+                        <a href="{{ route('checkout') }}" 
+                        class="relative block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-5 px-6 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 mb-3 group overflow-hidden">
+                            <!-- Pulse animation -->
+                            <div class="absolute inset-0 bg-white/10 rounded-xl animate-pulse"></div>
+                            <span class="relative flex items-center justify-center gap-3">
+                                <div class="relative">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                    <span class="absolute -top-2 -right-2 w-5 h-5 bg-white text-green-700 text-xs font-bold rounded-full flex items-center justify-center">
+                                        {{ $cartItems->count() }}
+                                    </span>
+                                </div>
+                                <span class="text-lg">Passer la commande</span>
+                                <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                 </svg>
-                                <!-- Badge nombre articles -->
-                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-white text-green-700 text-xs font-bold rounded-full flex items-center justify-center">
-                                    {{ $cartItems->count() }}
-                                </span>
-                            </div>
-                            
-                            <span class="text-lg">Passer la commande</span>
-                            
-                            <!-- Flèche -->
-                            <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                            </svg>
-                        </span>
-                    </a>
+                            </span>
+                        </a>
+                    @else
+                        <!-- Message service indisponible -->
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl mb-3 text-yellow-800">
+                            ⚠️ Paiement en ligne temporairement indisponible. 
+                            Vous pouvez passer votre commande via WhatsApp ci-dessous.
+                        </div>
+                    @endif
 
                     <!-- Bouton secondaire minimal -->
                     <a href="{{ route('shop') }}" 
