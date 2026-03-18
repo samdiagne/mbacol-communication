@@ -34,12 +34,7 @@ class ProductController extends Controller
             
             Storage::disk('public')->put(
                 'products/' . $filename,
-<<<<<<< HEAD
-                $img->toWebp(80),
-                ['visibility' => 'public']
-=======
                 $img->toWebp(80)
->>>>>>> 8e9482df575dccf1e16bddeac29f0097672db3fc
             );
             
             return 'products/' . $filename;
