@@ -13,6 +13,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\Admin\TeamController;
 
 
 // Routes publiques
@@ -94,6 +95,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('clients/{user}', [\App\Http\Controllers\Admin\ClientController::class, 'show'])->name('clients.show');
     Route::patch('clients/{user}/toggle-status', [\App\Http\Controllers\Admin\ClientController::class, 'toggleStatus'])->name('clients.toggle-status');
     Route::delete('clients/{user}', [\App\Http\Controllers\Admin\ClientController::class, 'destroy'])->name('clients.destroy');
+
+    // ✅ NOUVEAU : Team
+    Route::get('team', [\App\Http\Controllers\Admin\TeamController::class, 'index'])->name('team.index');
+    Route::get('team/create', [\App\Http\Controllers\Admin\TeamController::class, 'create'])->name('team.create');
+    Route::post('team', [\App\Http\Controllers\Admin\TeamController::class, 'store'])->name('team.store');
+    Route::patch('team/{user}/toggle-status', [\App\Http\Controllers\Admin\TeamController::class, 'toggleStatus'])->name('team.toggle-status');
 });
 
 // Routes client (après auth)

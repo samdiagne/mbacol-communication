@@ -204,6 +204,16 @@
                                 <span class="font-medium">Mon profil</span>
                             </a>
 
+                            <a href="{{ route('admin.team.index') }}" 
+                            class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors group">
+                                <div class="p-1.5 bg-gray-50 rounded-lg group-hover:bg-primary-100 transition-colors mr-3">
+                                    <svg class="w-4 h-4 text-gray-500 group-hover:text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Équipe</span>
+                            </a>
+
                             <div class="border-t border-gray-100 my-1"></div>
 
                             <form method="POST" action="{{ route('logout') }}">
@@ -396,6 +406,14 @@
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
                         Mon profil
+                    </a>
+
+                    <a href="{{ route('admin.team.index') }}" 
+                    class="flex items-center px-3 py-2 rounded-lg hover:bg-primary-600/50 text-sm transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        Équipe
                     </a>
 
                     <!-- Déconnexion -->
