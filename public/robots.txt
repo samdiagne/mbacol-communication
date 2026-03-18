@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mbacol.com/sitemap.xml
+
+# Interdire l'indexation des pages admin et panier
+Disallow: /admin/
+Disallow: /panier
+Disallow: /checkout
+Disallow: /login
+Disallow: /register
+
+# Crawl delay
+Crawl-delay: 10
