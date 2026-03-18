@@ -18,11 +18,34 @@
 
 <!-- Recherche -->
 <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
-    <form method="GET" class="flex gap-2">
+    <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Recherche -->
+    <div>
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom ou email..."
                class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500">
-        <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700">Filtrer</button>
-    </form>
+    </div>
+
+    <!-- Filtre Statut -->
+    <div>
+        <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500">
+            <option value="">Tous les statuts</option>
+            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Actifs</option>
+            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactifs</option>
+        </select>
+    </div>
+
+    <!-- Boutons -->
+    <div class="flex gap-2">
+        <button type="submit" 
+                class="flex-1 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold px-4 py-2 rounded-xl hover:shadow-lg transition">
+            Filtrer
+        </button>
+        <a href="{{ route('admin.team.index') }}" 
+           class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition">
+            Réinitialiser
+        </a>
+    </div>
+</form>
 </div>
 
 <!-- Tableau -->
@@ -53,7 +76,8 @@
                         <form method="POST" action="{{ route('admin.team.toggle-status', $admin) }}">
                             @csrf
                             @method('PATCH')
-                            <button type="submit" class="px-3 py-1 rounded-xl text-sm font-semibold {{ $admin->trashed() ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700' }}">
+                            <button type="submit" 
+                                    class="px-3 py-1 rounded-xl text-sm font-semibold {{ $admin->trashed() ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700' }}">
                                 {{ $admin->trashed() ? 'Réactiver' : 'Désactiver' }}
                             </button>
                         </form>

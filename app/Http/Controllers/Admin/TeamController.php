@@ -11,20 +11,31 @@ class TeamController extends Controller
     // Liste des admins
     public function index(Request $request)
     {
-        $query = User::where('role', 'admin');
+        $query = User::where('role', 'admin')->withTrashed(); // Inclut les supprimés
 
-        if ($request->has('search')) {
+        // Filtre par recherche
+        if ($request->has('search') && $request->search) {
             $query->where(function($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%");
+                ->orWhere('email', 'like', "%{$request->search}%");
             });
+        }
+
+        // Filtre par statut
+        if ($request->has('status') && $request->status) {
+            if ($request->status === 'active') {
+                $query->whereNull('deleted_at');
+            } elseif ($request->status === 'inactive') {
+                $query->whereNotNull('deleted_at');
+            }
         }
 
         $admins = $query->orderBy('name')->paginate(10);
 
         $stats = [
             'total' => User::where('role', 'admin')->count(),
-            'active' => User::where('role', 'admin')->count(), // On n'utilise plus status
+            'active' => User::where('role', 'admin')->whereNull('deleted_at')->count(),
+            'inactive' => User::where('role', 'admin')->whereNotNull('deleted_at')->count(),
         ];
 
         return view('admin.team.index', compact('admins', 'stats'));
@@ -56,12 +67,15 @@ class TeamController extends Controller
     }
 
     // Activer/Désactiver admin
-    public function toggleStatus(User $user)
+    public function toggleStatus($id)
     {
+        // Inclut les soft-deleted
+        $user = User::withTrashed()->findOrFail($id);
+
         if ($user->trashed()) {
-            $user->restore(); // Réactive
+            $user->restore();
         } else {
-            $user->delete(); // Désactive
+            $user->delete();
         }
 
         return redirect()->back()->with('success', 'Statut mis à jour');
