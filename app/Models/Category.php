@@ -20,15 +20,12 @@ class Category extends Model
         'long_tail_keywords',
     ];
 
-<<<<<<< HEAD
     
     public function scopeActive($query)
     {
         return $query->where('is_active', 1);
     }
     
-=======
->>>>>>> 8e9482df575dccf1e16bddeac29f0097672db3fc
     public function products()
     {
         return $this->hasMany(Product::class);
