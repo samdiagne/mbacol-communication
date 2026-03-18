@@ -16,8 +16,6 @@ use App\Mail\NewOrderAdmin;
 use App\Services\Payment\PaymentService;
 use App\Services\WhatsAppService;
 
-
-
 class Checkout extends Component
 {
     // Informations client
@@ -231,7 +229,6 @@ class Checkout extends Component
         }
     }
 
-<<<<<<< HEAD
     /**
      * Vider le panier
      */
@@ -243,19 +240,6 @@ class Checkout extends Component
             CartItem::where('session_id', session()->getId())->delete();
         }
     }
-=======
-/**
- * Vider le panier
- */
-private function clearCart()
-{
-    if (Auth::check()) {
-        CartItem::where('user_id', Auth::id())->delete();
-    } else {
-        CartItem::where('session_id', session()->getId())->delete();
-    }
-}
->>>>>>> 8e9482df575dccf1e16bddeac29f0097672db3fc
 
     /**
      * Envoyer notifications (Email + WhatsApp)
@@ -266,7 +250,6 @@ private function clearCart()
             // Emails
             Mail::to($order->customer_email)->send(new OrderConfirmation($order));
             Mail::to(config('mail.from.address'))->send(new NewOrderAdmin($order));
-<<<<<<< HEAD
     
             // WhatsApp seulement si activé
             if (env('WHATSAPP_ENABLED', false)) {
@@ -283,21 +266,6 @@ private function clearCart()
     
             }
     
-=======
-            
-            // WhatsApp (non-bloquant)
-            try {
-                $whatsapp = new WhatsAppService();
-                
-                if ($whatsapp->isEnabled()) {
-                    $whatsapp->sendOrderConfirmationToCustomer($order);
-                    $whatsapp->sendNewOrderToAdmin($order);
-                }
-            } catch (\Exception $e) {
-                Log::error('WhatsApp error: ' . $e->getMessage());
-            }
-            
->>>>>>> 8e9482df575dccf1e16bddeac29f0097672db3fc
         } catch (\Exception $e) {
             Log::error('Notification error: ' . $e->getMessage());
         }
