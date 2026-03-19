@@ -7,6 +7,9 @@
 
     <!-- ✅ FORCER HTTPS pour assets -->
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    {{-- Google Search Console Verification --}}
+    <meta name="google-site-verification" content="yI3tio1cg57EOnGk3strR0JMxXVobLQdoR7dmOR6HeU" />
     
     {!! SEO::generate() !!}
     
