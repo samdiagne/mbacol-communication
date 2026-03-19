@@ -33,6 +33,18 @@
             scroll-padding-top: 80px;
         }
     </style>
+
+    {{-- Google Analytics 4 --}}
+    @if(config('app.env') === 'production')
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TQ27Z20TY"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-2TQ27Z20TY');
+    </script>
+    @endif
 </head>
 <body class="font-sans antialiased" x-data="{ mobileMenuOpen: false, searchOpen: false }"> 
     <!-- Page Loader -->
