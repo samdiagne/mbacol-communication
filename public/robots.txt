@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://mbacol.com/sitemap.xml
+Sitemap: https://mbacol313.com/sitemap.xml
 
 # Interdire l'indexation des pages admin et panier
 Disallow: /admin/
