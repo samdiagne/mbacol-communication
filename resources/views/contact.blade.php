@@ -183,8 +183,7 @@
                     <div>
                         <h3 class="text-xl font-bold mb-2">Horaires d'ouverture</h3>
                         <p class="text-gray-600">
-                            <strong>Lun - Ven :</strong> 9h00 - 18h00<br>
-                            <strong>Samedi :</strong> 9h00 - 13h00<br>
+                            <strong>Lun - Sam :</strong> 8h00 - 19h00<br>
                             <strong>Dimanche :</strong> Fermé
                         </p>
                     </div>

@@ -54,7 +54,7 @@
             <div class="relative bg-white shadow-xl rounded-3xl p-10 h-96 flex items-center justify-center border border-gray-100">
                 <div class="text-center">
                     <div class="text-7xl mb-4">🏪</div>
-                    <p class="text-3xl font-extrabold text-primary-600">Depuis 2020</p>
+                    <p class="text-3xl font-extrabold text-primary-600">Depuis 2000</p>
                     <p class="space-y-5 text-gray-600 text-lg leading-relaxed">À votre service au Sénégal</p>
                 </div>
             </div>
