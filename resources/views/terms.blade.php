@@ -92,7 +92,7 @@
                     Notre service client est à votre disposition pour toute question ou réclamation :
                 </p>
                 <ul class="list-disc pl-6 mb-4">
-                    <li>Email : djilymbc423@gmail.com</li>
+                    <li>Email : djilykhou423@gmail.com</li>
                     <li>Téléphone : +221 78 446 51 92</li>
                 </ul>
 
@@ -112,7 +112,7 @@
                 <h2 class="text-2xl font-bold mt-8 mb-4">12. Contact</h2>
                 <p class="font-semibold">
                     Mbacol Communication<br>
-                    Email : djilymbc423@gmail.com<br>
+                    Email : djilykhou423@gmail.com<br>
                     Téléphone : +221 78 446 51 92<br>
                     Adresse : Colobane - Dakar, Sénégal
                 </p>

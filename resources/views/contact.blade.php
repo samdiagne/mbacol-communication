@@ -165,7 +165,7 @@
                     <div>
                         <h3 class="text-xl font-bold mb-2">Email</h3>
                         <p class="text-gray-600">
-                            <a href="mailto:djilymbc423@gmail.com" class="hover:text-primary-600">djilymbc423@gmail.com</a><br>
+                            <a href="mailto:djilykhou423@gmail.com" class="hover:text-primary-600">djilykhou423@gmail.com</a><br>
                             <a href="mailto:djilymbc313@gmail.com" class="hover:text-primary-600">djilymbc313@gmail.com</a>
                         </p>
                     </div>

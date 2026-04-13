@@ -10,7 +10,7 @@ return [
     | (nouvelles commandes, messages contact, etc.)
     |
     */
-    'email' => env('ADMIN_EMAIL', 'svmdev05@gmail.com'),
+    'email' => env('ADMIN_EMAIL', 'djilykhou423@gmail.com'),
     
     /*
     |--------------------------------------------------------------------------

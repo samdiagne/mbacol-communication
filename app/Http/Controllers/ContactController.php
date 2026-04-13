@@ -27,7 +27,7 @@ class ContactController extends Controller
                 "Sujet: {$validated['subject']}\n\n" .
                 "Message:\n{$validated['message']}",
                 function ($message) use ($validated) {
-                    $message->to('svmdev05@gmail.com')
+                    $message->to('djilykhou423@gmail.com')
                             ->replyTo($validated['email'], $validated['name'])
                             ->subject('Contact : ' . $validated['subject']);
                 }
