@@ -102,164 +102,55 @@
                     </div>
                 </div>
 
-                <!-- Modes de paiement -->
+                <!-- Modes de paiement acceptés (informatif) -->
                 <div class="bg-white rounded-lg shadow p-6 mb-6">
-                    <h2 class="text-xl font-bold mb-4">💳 Mode de paiement</h2>
+                    <h2 class="text-xl font-bold mb-1">💳 Modes de paiement acceptés</h2>
+                    <p class="text-sm text-gray-500 mb-5">Vous choisirez votre mode de paiement sur la page sécurisée PayDunya après validation.</p>
 
-                    <div class="space-y-3">
-                        
+                    <div class="grid grid-cols-5 gap-3">
                         <!-- Wave -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'wave' ? 'border-cyan-500 bg-gradient-to-r from-cyan-50 to-blue-50 ring-2 ring-cyan-200' : 'border-gray-200 hover:border-cyan-300 hover:bg-gray-50' }}">
-                            <input type="radio" 
-                                wire:model.live="payment_method" 
-                                value="wave" 
-                                class="mt-1 h-5 w-5 text-cyan-600">
-                            <div class="ml-4 flex-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <!-- Logo Wave -->
-                                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center shadow-md">
-                                            <div class="text-center">
-                                                <div class="text-white font-black text-[10px] leading-none">WAVE</div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span class="font-bold text-gray-900 text-base">Wave</span>
-                                            <p class="text-xs text-gray-500">Paiement mobile instantané</p>
-                                        </div>
-                                    </div>
-                                    @if($payment_method === 'wave')
-                                        <svg class="w-6 h-6 text-cyan-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @endif
-                                </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center bg-white p-1 overflow-hidden">
+                                <img src="{{ asset('images/payment/wave.webp') }}" alt="Wave" class="max-w-full max-h-full object-contain">
                             </div>
-                        </label>
+                            <span class="text-xs text-gray-600 font-medium text-center">Wave</span>
+                        </div>
 
                         <!-- Orange Money -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'orange_money' ? 'border-orange-500 bg-gradient-to-r from-orange-50 to-red-50 ring-2 ring-orange-200' : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50' }}">
-                            <input type="radio" 
-                                wire:model.live="payment_method" 
-                                value="orange_money" 
-                                class="mt-1 h-5 w-5 text-orange-600">
-                            <div class="ml-4 flex-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <!-- Logo Orange Money -->
-                                        <div class="w-12 h-12 white rounded-full flex items-center justify-center shadow-md">
-                                            <div class="text-center">
-                                                <div class="text-orange-600 font-black text-[20px] leading-none">OM</div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span class="font-bold text-gray-900 text-base">Orange Money</span>
-                                            <p class="text-xs text-gray-500">Paiement via compte Orange</p>
-                                        </div>
-                                    </div>
-                                    @if($payment_method === 'orange_money')
-                                        <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @endif
-                                </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center bg-white p-1 overflow-hidden">
+                                <img src="{{ asset('images/payment/orange-money.webp') }}" alt="Orange Money" class="max-w-full max-h-full object-contain">
                             </div>
-                        </label>
+                            <span class="text-xs text-gray-600 font-medium text-center">Orange Money</span>
+                        </div>
 
-                        <!-- Free Money -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'free_money' ? 'border-blue-700 bg-gradient-to-r from-blue-50 to-indigo-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50' }}">
-                            <input type="radio" 
-                                wire:model.live="payment_method" 
-                                value="free_money" 
-                                class="mt-1 h-5 w-5 text-blue-700">
-                            <div class="ml-4 flex-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <!-- Logo Free Money -->
-                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-900 to-blue-700 rounded-full flex items-center justify-center shadow-md">
-                                            <div class="text-center">
-                                                <div class="text-yellow-400 font-black text-[10px] leading-none">mixx</div>
-                                                <div class="text-yellow-400 text-[6px] font-bold">by Free</div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span class="font-bold text-gray-900 text-base">Free Money (Mixx)</span>
-                                            <p class="text-xs text-gray-500">Paiement via compte Free</p>
-                                        </div>
-                                    </div>
-                                    @if($payment_method === 'free_money')
-                                        <svg class="w-6 h-6 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @endif
-                                </div>
+                        <!-- Mixx by Yass -->
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center bg-white p-1 overflow-hidden">
+                                <img src="{{ asset('images/payment/mixx-yass.webp') }}" alt="Mixx By Yass" class="max-w-full max-h-full object-contain">
                             </div>
-                        </label>
+                            <span class="text-xs text-gray-600 font-medium text-center">Mixx By Yass</span>
+                        </div>
 
-                        <!-- Carte Bancaire (Visa/Mastercard) -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'card' ? 'border-blue-600 bg-gradient-to-r from-blue-50 to-purple-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50' }}">
-                            <input type="radio" 
-                                wire:model.live="payment_method" 
-                                value="card" 
-                                class="mt-1 h-5 w-5 text-blue-600">
-                            <div class="ml-4 flex-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <!-- Logo Carte -->
-                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-                                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" fill="none"/>
-                                                <path d="M2 10h20M7 15h3" stroke-linecap="round"/>
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <span class="font-bold text-gray-900 text-base">Carte Bancaire</span>
-                                            <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="text-xs text-gray-500">Visa, Mastercard</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if($payment_method === 'card')
-                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @endif
-                                </div>
+                        <!-- Visa -->
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center bg-white p-1 overflow-hidden">
+                                <img src="{{ asset('images/payment/visa.webp') }}" alt="Visa" class="max-w-full max-h-full object-contain">
                             </div>
-                        </label>
+                            <span class="text-xs text-gray-600 font-medium text-center">Visa</span>
+                        </div>
 
-                        <!-- Cash à la livraison -->
-                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all {{ $payment_method === 'cash' ? 'border-green-600 bg-gradient-to-r from-green-50 to-emerald-50 ring-2 ring-green-200' : 'border-gray-200 hover:border-green-300 hover:bg-gray-50' }}">
-                            <input type="radio" 
-                                wire:model.live="payment_method" 
-                                value="cash" 
-                                class="mt-1 h-5 w-5 text-green-600">
-                            <div class="ml-4 flex-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <!-- Logo Cash -->
-                                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-md">
-                                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <span class="font-bold text-gray-900 text-base">Espèces à la livraison</span>
-                                            <p class="text-xs text-gray-500">Payez en cash lors de la réception</p>
-                                        </div>
-                                    </div>
-                                    @if($payment_method === 'cash')
-                                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
-                                    @endif
-                                </div>
+                        <!-- Mastercard -->
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center bg-white p-1 overflow-hidden">
+                                <img src="{{ asset('images/payment/mastercard.webp') }}" alt="Mastercard" class="max-w-full max-h-full object-contain">
                             </div>
-                        </label>
+                            <span class="text-xs text-gray-600 font-medium text-center">Mastercard</span>
+                        </div>
                     </div>
-                    
-                    <!-- Badge sécurité (en bas de tous les modes) -->
-                    <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+
+                    <!-- Badge sécurité -->
+                    <div class="mt-5 p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <div class="flex items-center gap-2 text-xs text-gray-600">
                             <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
@@ -269,10 +160,6 @@
                             <span class="text-gray-500">Powered by PayDunya</span>
                         </div>
                     </div>
-                    
-                    @error('payment_method')
-                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                    @enderror
                 </div>
                 
                 <!-- Notes -->

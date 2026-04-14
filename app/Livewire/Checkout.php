@@ -28,8 +28,8 @@ class Checkout extends Component
     // Livraison - AJOUT
     public ?string $delivery_zone = null;
     
-    // Paiement
-    public string $payment_method = 'wave';
+    // Paiement (toujours via PayDunya — choix fait sur leur page)
+    public string $payment_method = 'paydunya';
     public string $notes = '';
     public $payment_phone;
 
@@ -56,7 +56,7 @@ class Checkout extends Component
             'customer_address' => 'required|string',
             'customer_city' => 'required|string|max:100',
             'delivery_zone' => 'required|in:dakar_centre,dakar_nord_ouest,banlieue_proche,rufisque', // AJOUT
-            'payment_method' => 'required|in:wave,orange_money,free_money,card,cash',
+            'payment_method' => 'nullable|string',
             'notes' => 'nullable|string|max:500',
         ];
 
