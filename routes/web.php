@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\CategoryController;
 
 
 // Routes publiques
@@ -65,6 +66,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     
+    // Catégories
+    Route::resource('categories', CategoryController::class);
+
     // Produits
     Route::resource('products', AdminProductController::class);
     Route::delete('products/{image}/delete-image', [AdminProductController::class, 'deleteImage'])->name('products.delete-image');
