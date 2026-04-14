@@ -28,7 +28,7 @@ return [
             'url' => env('APP_URL', 'https://mbacolcommunication.sn'),
             'type' => 'website',
             'site_name' => 'Mbacol Communication',
-            'images' => [env('APP_URL').'/images/og-default.jpg'],
+            'images' => [env('APP_URL').'/images/logo.webp'],
         ],
     ],
     'twitter' => [

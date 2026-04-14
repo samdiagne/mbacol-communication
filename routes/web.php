@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\TermsController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\FaqController;
@@ -36,10 +38,10 @@ Route::get('/commande/{order}/confirmation', function (\App\Models\Order $order)
     return view('order-confirmation', compact('order'));
 })->name('order.confirmation');
 
-Route::get('/a-propos', fn() => view('about'))->name('about');
-Route::get('/contact', fn() => view('contact'))->name('contact');
+Route::get('/a-propos', [AboutController::class, 'index'])->name('about');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
-Route::get('/cgv', fn() => view('terms'))->name('terms');
+Route::get('/cgv', [TermsController::class, 'index'])->name('terms');
 Route::get('/faq', [FaqController::class, 'index'])->name('faq');
 
 // Sitemap

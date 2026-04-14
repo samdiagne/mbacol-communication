@@ -4,9 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\TwitterCard;
 
 class ContactController extends Controller
 {
+    public function index()
+    {
+        SEOMeta::setTitle('Contactez-nous - Mbacol Communication')
+            ->setDescription('Contactez Mbacol Communication pour toute question sur nos produits électroniques. WhatsApp, email, téléphone. Dakar, Sénégal. Réponse rapide garantie.')
+            ->setKeywords(['contact Mbacol Communication', 'service client Dakar', 'WhatsApp boutique électronique Sénégal'])
+            ->setCanonical(route('contact'))
+            ->addMeta('robots', 'index, follow');
+
+        OpenGraph::setTitle('Contactez Mbacol Communication')
+            ->setDescription('Contactez notre équipe par WhatsApp, email ou téléphone. Dakar, Sénégal.')
+            ->setUrl(route('contact'))
+            ->setType('website')
+            ->addImage(asset('images/logo.webp'));
+
+        TwitterCard::setTitle('Contact - Mbacol Communication')
+            ->setDescription('Contactez-nous par WhatsApp au +221 78 446 51 92');
+
+        return view('contact');
+    }
+
     public function send(Request $request)
     {
         $validated = $request->validate([

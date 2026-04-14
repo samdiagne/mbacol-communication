@@ -38,13 +38,14 @@ class HomeController extends Controller
             ->setDescription('Import/Export matériel électronique professionnel. Chargeurs, stations soudage, microscopes. Livraison Dakar.')
             ->setUrl(route('home'))
             ->setType('website')
-            ->addImage(asset('images/og-home.jpg'), ['height' => 630, 'width' => 1200]);
+            ->addImage(asset('images/og-home.jpg'), ['height' => 630, 'width' => 1200])
+            ->addImage(asset('images/logo.webp')); // Fallback si og-home.jpg absent
 
         // Twitter Card
         TwitterCard::setTitle('Mbacol Communication - Électronique Pro Sénégal')
             ->setDescription('Import/Export matériel professionnel. Livraison Dakar.')
             ->setType('summary_large_image')
-            ->setImage(asset('images/twitter-home.jpg'));
+            ->setImage(asset('images/twitter-home.jpg') ?: asset('images/logo.webp'));
 
         // ✅ JSON-LD Organization amélioré
         JsonLd::addValues([
