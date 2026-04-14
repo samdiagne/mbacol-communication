@@ -262,23 +262,30 @@
             @php
                 $cartMessage = "Bonjour, je souhaite commander ces articles 🛒\n\n";
                 $totalCart = 0;
-                
+
                 foreach($cartItems as $item) {
                     $productName = $item->product ? $item->product->name : ($item->product_name ?? 'Produit');
                     $quantity = $item->quantity;
                     $price = $item->price;
                     $subtotal = $price * $quantity;
                     $totalCart += $subtotal;
-                    
+
                     $cartMessage .= "• " . $productName . " (x" . $quantity . ")\n";
-                    $cartMessage .= "  → " . number_format($price, 0, ',', ' ') . " FCFA × " . $quantity . " = " . number_format($subtotal, 0, ',', ' ') . " FCFA\n\n";
+                    $cartMessage .= "  → " . number_format($price, 0, ',', ' ') . " FCFA × " . $quantity . " = " . number_format($subtotal, 0, ',', ' ') . " FCFA\n";
+                    if ($item->product) {
+                        $cartMessage .= route('product.show', $item->product) . "\n";
+                    }
+                    $cartMessage .= "\n";
                 }
-                
+
                 $cartMessage .= "━━━━━━━━━━━━━━\n";
                 $cartMessage .= "💰 TOTAL : " . number_format($totalCart, 0, ',', ' ') . " FCFA\n\n";
                 $cartMessage .= "📍 Je souhaite passer commande.\n";
                 $cartMessage .= "Pouvez-vous me confirmer la disponibilité et les modalités de livraison ?\n\n";
-                $cartMessage .= "Merci ! 🙏";
+                $cartMessage .= "Merci ! 🙏\n\n";
+                $cartMessage .= "━━━━━━━━━━━━━━\n";
+                $cartMessage .= "Enregistrer la commande (admin) :\n";
+                $cartMessage .= route('admin.orders.index');
             @endphp
             
             <!-- Bannière WhatsApp Commander -->
@@ -327,7 +334,7 @@
                             </div>
                             
                             <!-- Bouton WhatsApp -->
-                            <a href="https://wa.me/221784465192?text={{ urlencode($cartMessage) }}" 
+                            <a href="https://wa.me/221784465192?text={{ rawurlencode($cartMessage) }}" 
                                target="_blank"
                                class="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 group">
                                 <span class="text-lg">Commander sur WhatsApp</span>
