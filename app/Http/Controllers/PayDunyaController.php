@@ -281,18 +281,37 @@ class PayDunyaController extends Controller
                 return response()->json(['message' => 'Already processed'], 200);
             }
 
-            // Log 6 : Verification
+            // Log 6 : Verification — statut du payload webhook en source primaire
             Log::info('PayDunya Webhook: Starting verification...');
-            
-            Log::info('PayDunya Webhook: Calling API to verify status...', [
-                'mode' => $this->gateway->isTestMode() ? 'test' : 'live',
-            ]);
-            $verification = $this->gateway->checkStatus($token);
-            Log::info('PayDunya Webhook: API response', $verification);
 
-            if (!$verification['success'] || $verification['status'] !== 'completed') {
-                Log::warning('PayDunya Webhook: Verification FAILED - STOP', [
-                    'verification' => $verification,
+            // PayDunya inclut le statut directement dans le payload
+            $webhookStatus = strtolower($data['status'] ?? $data['invoice']['status'] ?? '');
+            $isCompletedByPayload = in_array($webhookStatus, ['completed', 'paid', 'successful']);
+
+            Log::info('PayDunya Webhook: Payload status', [
+                'webhook_status' => $webhookStatus,
+                'is_completed' => $isCompletedByPayload,
+            ]);
+
+            $receiptUrl = $data['receipt_url'] ?? null;
+
+            // Vérification secondaire via API (évite la race condition en cas de doute)
+            if (!$isCompletedByPayload) {
+                Log::info('PayDunya Webhook: Payload status inconclusive, calling API...', [
+                    'mode' => $this->gateway->isTestMode() ? 'test' : 'live',
+                ]);
+                $verification = $this->gateway->checkStatus($token);
+                Log::info('PayDunya Webhook: API response', $verification);
+
+                $isCompletedByPayload = $verification['success']
+                    && in_array($verification['status'], ['completed', 'paid']);
+
+                $receiptUrl = $verification['data']['receipt_url'] ?? $receiptUrl;
+            }
+
+            if (!$isCompletedByPayload) {
+                Log::warning('PayDunya Webhook: Payment not completed - STOP', [
+                    'webhook_status' => $webhookStatus,
                 ]);
                 return response()->json(['error' => 'Payment not completed'], 400);
             }
@@ -319,8 +338,8 @@ class PayDunyaController extends Controller
                 $payment->update([
                     'payment_status' => 'completed',
                     'paid_at' => now(),
-                    'payment_provider' => $paymentProvider, // ✅ AJOUTER
-                    'receipt_url' => $verification['data']['receipt_url'] ?? null,
+                    'payment_provider' => $paymentProvider,
+                    'receipt_url' => $receiptUrl,
                     'notes' => 'Paiement confirmé via webhook PayDunya',
                 ]);
 
