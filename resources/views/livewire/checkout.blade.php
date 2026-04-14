@@ -61,8 +61,40 @@
                     </div>
                 </div>
 
-                <!-- Adresse de livraison -->
+                <!-- Mode de livraison -->
                 <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-bold mb-4">🚚 Mode de réception</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all
+                            {{ $delivery_type === 'delivery' ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200' : 'border-gray-200 hover:border-primary-300' }}">
+                            <input type="radio" wire:model.live="delivery_type" value="delivery" class="mt-1 h-5 w-5 text-primary-600">
+                            <div class="ml-3">
+                                <p class="font-bold text-gray-900">Livraison à domicile</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Nous livrons à votre adresse</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start p-4 border-2 rounded-xl cursor-pointer transition-all
+                            {{ $delivery_type === 'pickup' ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200' : 'border-gray-200 hover:border-primary-300' }}">
+                            <input type="radio" wire:model.live="delivery_type" value="pickup" class="mt-1 h-5 w-5 text-primary-600">
+                            <div class="ml-3">
+                                <p class="font-bold text-gray-900">Retrait / Mon livreur</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Je récupère ou j'envoie mon livreur</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    @if($delivery_type === 'pickup')
+                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+                            📍 Notre adresse : <strong>Dakar, Sénégal</strong> — Contactez-nous au <a href="tel:+221784465192" class="font-bold underline">+221 78 446 51 92</a> pour convenir d'un rendez-vous.
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Adresse de livraison -->
+                <div class="bg-white rounded-lg shadow p-6" @if($delivery_type === 'pickup') wire:ignore @endif
+                     @class(['hidden' => $delivery_type === 'pickup'])>
                     <h2 class="text-xl font-bold mb-4">📍 Adresse de livraison</h2>
                     
                     <div class="space-y-6">

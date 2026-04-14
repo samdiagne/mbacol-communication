@@ -25,7 +25,8 @@ class Checkout extends Component
     public string $customer_address = '';
     public string $customer_city = 'Dakar';
     
-    // Livraison - AJOUT
+    // Livraison
+    public string $delivery_type = 'delivery'; // 'delivery' ou 'pickup'
     public ?string $delivery_zone = null;
     
     // Paiement (toujours via PayDunya — choix fait sur leur page)
@@ -53,9 +54,10 @@ class Checkout extends Component
             'customer_name' => 'required|string|max:255',
             'customer_email' => 'required|email',
             'customer_phone' => 'required|string|max:20',
-            'customer_address' => 'required|string',
+            'customer_address' => $this->delivery_type === 'delivery' ? 'required|string' : 'nullable|string',
             'customer_city' => 'required|string|max:100',
-            'delivery_zone' => 'required|in:dakar_centre,dakar_nord_ouest,banlieue_proche,rufisque', // AJOUT
+            'delivery_type'  => 'required|in:delivery,pickup',
+            'delivery_zone'  => $this->delivery_type === 'delivery' ? 'required|in:dakar_centre,dakar_nord_ouest,banlieue_proche,rufisque' : 'nullable',
             'payment_method' => 'nullable|string',
             'notes' => 'nullable|string|max:500',
         ];
@@ -115,7 +117,15 @@ class Checkout extends Component
         $this->calculateTotals();
     }
 
-    // AJOUT : Calculer le coût de livraison selon la zone
+    public function updatedDeliveryType($value)
+    {
+        if ($value === 'pickup') {
+            $this->delivery_zone = null;
+            $this->shippingCost = 0;
+            $this->calculateTotals();
+        }
+    }
+
     public function updatedDeliveryZone($value)
     {
         $this->shippingCost = $this->deliveryZones[$value] ?? 0;
@@ -147,6 +157,7 @@ class Checkout extends Component
                 'customer_phone' => $this->customer_phone,
                 'customer_address' => $this->customer_address,
                 'customer_city' => $this->customer_city,
+                'delivery_type' => $this->delivery_type,
                 'delivery_zone' => $this->delivery_zone,
                 'payment_method' => $this->payment_method,
                 'payment_status' => 'pending',

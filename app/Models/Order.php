@@ -18,6 +18,7 @@ class Order extends Model
         'customer_address',
         'customer_city',
         'delivery_zone',
+        'delivery_type',
         'subtotal',
         'shipping_cost',
         'total',
