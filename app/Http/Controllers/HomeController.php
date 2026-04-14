@@ -34,18 +34,22 @@ class HomeController extends Controller
             ->addMeta('author', 'Mbacol Communication - Khouma et Frères');
 
         // Open Graph
-        OpenGraph::setTitle('Mbacol Communication - Khouma et Frères | Électronique Pro Sénégal')
-            ->setDescription('Import/Export matériel électronique professionnel. Chargeurs, stations soudage, microscopes. Livraison Dakar.')
+        OpenGraph::setTitle('Mbacol Communication | Électronique Pro – Dakar')
+            ->setDescription('Chargeurs GaN, stations de soudage, microscopes & outils de réparation. Livraison rapide à Dakar.')
             ->setUrl(route('home'))
             ->setType('website')
-            ->addImage(asset('images/og-home.jpg'), ['height' => 630, 'width' => 1200])
-            ->addImage(asset('images/logo.webp')); // Fallback si og-home.jpg absent
+            ->addImage(asset('images/logo.webp'), [
+                'height' => 1024,
+                'width'  => 1536,
+                'type'   => 'image/webp',
+                'alt'    => 'Mbacol Communication - Électronique Pro Sénégal',
+            ]);
 
         // Twitter Card
-        TwitterCard::setTitle('Mbacol Communication - Électronique Pro Sénégal')
-            ->setDescription('Import/Export matériel professionnel. Livraison Dakar.')
+        TwitterCard::setTitle('Mbacol Communication | Électronique Pro – Dakar')
+            ->setDescription('Chargeurs GaN, stations de soudage, microscopes & outils de réparation. Livraison Dakar.')
             ->setType('summary_large_image')
-            ->setImage(asset('images/twitter-home.jpg') ?: asset('images/logo.webp'));
+            ->setImage(asset('images/logo.webp'));
 
         // ✅ JSON-LD Organization amélioré
         JsonLd::addValues([

@@ -394,7 +394,7 @@
             <div class="contact-box">
                 <strong>💬 Besoin d'aide ?</strong>
                 <div class="contact-item">📞 WhatsApp : <a href="https://wa.me/221784465192" style="color: #0c4a6e;">+221 78 446 51 92</a></div>
-                <div class="contact-item">📧 Email : contact@mbacolcommunication.sn</div>
+                <div class="contact-item">📧 Email : contact@mbacol313.com</div>
                 <div class="contact-item">⏰ Lun-Sam : 8h00 - 20h00</div>
             </div>
             
@@ -407,7 +407,7 @@
         <div class="footer">
             <p><strong>Mbacol Communication</strong></p>
             <p>Colobane rue 43×45, Dakar, Sénégal</p>
-            <p>📞 +221 78 446 51 92 • 📧 contact@mbacolcommunication.sn</p>
+            <p>📞 +221 78 446 51 92 • 📧 contact@mbacol313.com</p>
             <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
                 © {{ date('Y') }} Mbacol Communication. Tous droits réservés.
             </p>

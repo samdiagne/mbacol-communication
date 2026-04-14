@@ -157,7 +157,7 @@ class FaqController extends Controller
                 'questions' => [
                     [
                         'question' => 'Comment vous contacter ?',
-                        'answer' => 'WhatsApp : +221 78 446 51 92 | Email : contact@mbacolcommunication.sn | Téléphone : +221 33 123 45 67 | Lun-Sam : 8h-20h'
+                        'answer' => 'WhatsApp : +221 78 446 51 92 | Email : contact@mbacol313.com | Téléphone : +221 33 123 45 67 | Lun-Sam : 8h-20h'
                     ],
                     [
                         'question' => 'Proposez-vous une assistance technique ?',

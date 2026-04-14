@@ -26,7 +26,7 @@
         [
             'category' => '📞 Support Client',
             'questions' => [
-                ['question' => 'Comment vous contacter ?', 'answer' => 'WhatsApp : +221 78 446 51 92 | Email : contact@mbacolcommunication.sn | Lun-Sam : 8h-20h'],
+                ['question' => 'Comment vous contacter ?', 'answer' => 'WhatsApp : +221 78 446 51 92 | Email : contact@mbacol313.com | Lun-Sam : 8h-20h'],
                 ['question' => 'Avez-vous une boutique physique ?', 'answer' => 'Oui, visitez-nous : Colobane rue 42x45, Dakar. Horaires : Lun-Sam 8h-20h.'],
             ]
         ],

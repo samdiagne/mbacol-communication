@@ -25,10 +25,10 @@ return [
         'defaults' => [
             'title' => 'Mbacol Communication - Électronique au Sénégal',
             'description' => 'Smartphones, ordinateurs, accessoires. Livraison Dakar.',
-            'url' => env('APP_URL', 'https://mbacolcommunication.sn'),
+            'url' => env('APP_URL', 'https://mbacol313.com'),
             'type' => 'website',
             'site_name' => 'Mbacol Communication',
-            'images' => [env('APP_URL').'/images/logo.webp'],
+            'images' => [env('APP_URL', 'https://mbacol313.com').'/images/logo.webp'],
         ],
     ],
     'twitter' => [
