@@ -105,7 +105,9 @@
     </div>
 
     <!-- Floating Buttons Component -->
-    <x-floating-buttons />
+    @unless(request()->routeIs('cart'))
+        <x-floating-buttons />
+    @endunless
 
     <!-- Toast Notification Component -->
     <x-toast-notification />
