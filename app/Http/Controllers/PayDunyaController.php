@@ -284,18 +284,11 @@ class PayDunyaController extends Controller
             // Log 6 : Verification
             Log::info('PayDunya Webhook: Starting verification...');
             
-            if ($this->gateway->isTestMode()) {
-                Log::info('PayDunya Webhook: TEST MODE - forcing status to completed');
-                $verification = [
-                    'success' => true,
-                    'status' => 'completed',
-                    'data' => ['receipt_url' => null, 'amount' => $payment->amount],
-                ];
-            } else {
-                Log::info('PayDunya Webhook: Calling API to verify status...');
-                $verification = $this->gateway->checkStatus($token);
-                Log::info('PayDunya Webhook: API response', $verification);
-            }
+            Log::info('PayDunya Webhook: Calling API to verify status...', [
+                'mode' => $this->gateway->isTestMode() ? 'test' : 'live',
+            ]);
+            $verification = $this->gateway->checkStatus($token);
+            Log::info('PayDunya Webhook: API response', $verification);
 
             if (!$verification['success'] || $verification['status'] !== 'completed') {
                 Log::warning('PayDunya Webhook: Verification FAILED - STOP', [

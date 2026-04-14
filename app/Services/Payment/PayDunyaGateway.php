@@ -91,39 +91,10 @@ class PayDunyaGateway implements PaymentGatewayInterface
                 ]);
             }
 
-            $maxRetries = 3;
-            $retryDelay = 1; // secondes
-            
-            for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
-                try {
-                    $response = Http::withHeaders($headers)
-                        ->timeout(30)
-                        ->retry(3, 1000) // ✅ Retry Laravel natif
-                        ->post($this->baseUrl . '/checkout-invoice/create', $payload);
-
-                    if ($response->successful()) {
-                        break; // Succès, sortir de la boucle
-                    }
-                    
-                    if ($attempt < $maxRetries) {
-                        Log::warning("PayDunya: Attempt {$attempt} failed, retrying...");
-                        sleep($retryDelay);
-                        $retryDelay *= 2; // Exponential backoff
-                    }
-                    
-                } catch (\Illuminate\Http\Client\ConnectionException $e) {
-                    if ($attempt === $maxRetries) {
-                        throw $e; // Dernière tentative, lever l'exception
-                    }
-                    Log::warning("PayDunya: Connection failed on attempt {$attempt}");
-                    sleep($retryDelay);
-                    $retryDelay *= 2;
-                }
-            }
-
-            // Appel API PayDunya
+            // Appel API PayDunya (retry natif Laravel)
             $response = Http::withHeaders($headers)
                 ->timeout(30)
+                ->retry(3, 1000)
                 ->post($this->baseUrl . '/checkout-invoice/create', $payload);
 
             if (!$response->successful()) {
