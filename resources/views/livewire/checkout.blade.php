@@ -93,8 +93,7 @@
                 </div>
 
                 <!-- Adresse de livraison -->
-                <div class="bg-white rounded-lg shadow p-6" @if($delivery_type === 'pickup') wire:ignore @endif
-                     @class(['hidden' => $delivery_type === 'pickup'])>
+                <div @class(['bg-white rounded-lg shadow p-6', 'hidden' => $delivery_type === 'pickup'])>
                     <h2 class="text-xl font-bold mb-4">📍 Adresse de livraison</h2>
                     
                     <div class="space-y-6">
@@ -199,7 +198,7 @@
                     <h2 class="text-xl font-bold mb-4">Notes (optionnel)</h2>
                     <textarea wire:model="notes"
                               rows="3"
-                              placeholder="Instructions spéciales pour la livraison..."
+                              placeholder="{{ $delivery_type === 'pickup' ? 'Heure de passage souhaitée, instructions particulières...' : 'Instructions spéciales pour la livraison...' }}"
                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"></textarea>
                 </div>
             </div>
@@ -235,6 +234,7 @@
                             <span class="text-gray-600">Sous-total</span>
                             <span class="font-semibold">{{ number_format($subtotal, 0, ',', ' ') }} FCFA</span>
                         </div>
+                        @if($delivery_type === 'delivery')
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600">Livraison</span>
                             <span class="font-semibold">
@@ -245,6 +245,12 @@
                                 @endif
                             </span>
                         </div>
+                        @else
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Livraison</span>
+                            <span class="font-semibold text-green-600">Retrait gratuit</span>
+                        </div>
+                        @endif
                         <div class="border-t border-gray-200 pt-3">
                             <div class="flex justify-between">
                                 <span class="text-lg font-bold">Total</span>
