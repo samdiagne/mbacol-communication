@@ -143,6 +143,70 @@
                 </div>
             </div>
 
+            {{-- Section SEO --}}
+            <div class="bg-white rounded-2xl shadow p-6 mt-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">
+                    🔍 Optimisation SEO
+                </h3>
+                
+                {{-- Meta Title --}}
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Titre SEO 
+                        <span class="text-gray-400 font-normal">(max 60 caractères)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        name="meta_title" 
+                        value="{{ old('meta_title', $product->meta_title ?? '') }}"
+                        maxlength="60"
+                        placeholder="Ex: RF4 Microscope Trinoculaire 4K HDMI - Dakar"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 
+                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                    <p class="text-xs text-gray-400 mt-1">
+                        Laissez vide pour utiliser le nom du produit
+                    </p>
+                </div>
+
+                {{-- Meta Description --}}
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Meta Description 
+                        <span class="text-gray-400 font-normal">(max 155 caractères)</span>
+                    </label>
+                    <textarea 
+                        name="meta_description" 
+                        maxlength="155"
+                        rows="3"
+                        placeholder="Ex: Microscope professionnel 4K pour réparation smartphones. Disponible chez Mbacol Communication, Dakar 🇸🇳"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 
+                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >{{ old('meta_description', $product->meta_description ?? '') }}</textarea>
+                    <p class="text-xs text-gray-400 mt-1">
+                        Affiché dans les résultats Google
+                    </p>
+                </div>
+
+                {{-- Meta Keywords --}}
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Mots-clés SEO
+                    </label>
+                    <input 
+                        type="text" 
+                        name="meta_keywords" 
+                        value="{{ old('meta_keywords', $product->meta_keywords ?? '') }}"
+                        placeholder="Ex: microscope réparation, microscope dakar, RF4 sénégal"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 
+                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                    <p class="text-xs text-gray-400 mt-1">
+                        Séparer les mots-clés par des virgules
+                    </p>
+                </div>
+            </div>
+
             <!-- Images -->
             <div class="bg-white rounded-lg shadow p-6">
                 <h2 class="text-lg font-semibold mb-4">Images</h2>
