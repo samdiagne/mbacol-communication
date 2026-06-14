@@ -11,6 +11,27 @@ class Product extends Model
 {
     use HasFactory, HasSlug;
 
+    protected static function booted(): void
+    {
+        static::creating(function (Product $product) {
+            if (empty($product->sku)) {
+                $product->sku = self::generateSku();
+            }
+        });
+    }
+
+    public static function generateSku(): string
+    {
+        $last = static::withoutGlobalScopes()
+            ->where('sku', 'like', 'MBCL-%')
+            ->orderByRaw("CAST(SUBSTR(sku, 6) AS INTEGER) DESC")
+            ->value('sku');
+
+        $next = $last ? ((int) substr($last, 5)) + 1 : 1;
+
+        return 'MBCL-' . str_pad($next, 6, '0', STR_PAD_LEFT);
+    }
+
     protected $fillable = [
         'category_id',
         'name',
