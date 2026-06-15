@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HasSEO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -10,6 +11,8 @@ use Artesaos\SEOTools\Facades\TwitterCard;
 
 class ContactController extends Controller
 {
+    use HasSEO;
+
     public function index()
     {
         SEOMeta::setTitle('Contactez-nous - Mbacol Communication')
@@ -18,14 +21,11 @@ class ContactController extends Controller
             ->setCanonical(route('contact'))
             ->addMeta('robots', 'index, follow');
 
-        OpenGraph::setTitle('Contactez Mbacol Communication')
-            ->setDescription('Contactez notre équipe par WhatsApp, email ou téléphone. Dakar, Sénégal.')
-            ->setUrl(route('contact'))
-            ->setType('website')
-            ->addImage(asset('images/logo.webp'));
-
-        TwitterCard::setTitle('Contact - Mbacol Communication')
-            ->setDescription('Contactez-nous par WhatsApp au +221 78 446 51 92');
+        $this->setDefaultSocialTags(
+            'Contactez Mbacol Communication',
+            'Contactez notre équipe par WhatsApp, email ou téléphone. Dakar, Sénégal.',
+            route('contact')
+        );
 
         return view('contact');
     }

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HasSEO;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
 
 class TermsController extends Controller
 {
+    use HasSEO;
+
     public function index()
     {
         SEOMeta::setTitle('Conditions Générales de Vente - Mbacol Communication')
@@ -16,14 +19,11 @@ class TermsController extends Controller
             ->setCanonical(route('terms'))
             ->addMeta('robots', 'index, follow');
 
-        OpenGraph::setTitle('CGV - Mbacol Communication')
-            ->setDescription('Conditions générales de vente Mbacol Communication : commande, paiement, livraison et garanties.')
-            ->setUrl(route('terms'))
-            ->setType('website')
-            ->addImage(asset('images/logo.webp'));
-
-        TwitterCard::setTitle('CGV - Mbacol Communication')
-            ->setDescription('Conditions générales de vente Mbacol Communication.');
+        $this->setDefaultSocialTags(
+            'CGV - Mbacol Communication',
+            'Conditions générales de vente : commande, paiement, livraison et garanties.',
+            route('terms')
+        );
 
         return view('terms');
     }

@@ -28,13 +28,14 @@ return [
             'url' => env('APP_URL', 'https://mbacol313.com'),
             'type' => 'website',
             'site_name' => 'Mbacol Communication',
-            'images' => [env('APP_URL', 'https://mbacol313.com').'/images/logo.webp'],
+            'images' => [],
+            'locale' => 'fr_FR',
         ],
     ],
     'twitter' => [
         'defaults' => [
             'card' => 'summary_large_image',
-            'site' => '@MbacolComm', // Remplace si compte Twitter existe
+            'site' => '@MbacolComm',
         ],
     ],
     'json-ld' => [

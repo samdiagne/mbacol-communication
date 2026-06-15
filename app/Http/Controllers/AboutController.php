@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HasSEO;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -9,6 +10,8 @@ use Artesaos\SEOTools\Facades\JsonLd;
 
 class AboutController extends Controller
 {
+    use HasSEO;
+
     public function index()
     {
         SEOMeta::setTitle('À propos - Mbacol Communication | Khouma et Frères')
@@ -17,14 +20,11 @@ class AboutController extends Controller
             ->setCanonical(route('about'))
             ->addMeta('robots', 'index, follow');
 
-        OpenGraph::setTitle('À propos de Mbacol Communication - Khouma et Frères')
-            ->setDescription('Spécialiste import/export de matériel électronique professionnel à Dakar, Sénégal depuis plusieurs années.')
-            ->setUrl(route('about'))
-            ->setType('website')
-            ->addImage(asset('images/logo.webp'));
-
-        TwitterCard::setTitle('À propos - Mbacol Communication')
-            ->setDescription('Spécialiste import/export matériel électronique pro à Dakar, Sénégal.');
+        $this->setDefaultSocialTags(
+            'À propos de Mbacol Communication - Khouma et Frères',
+            'Spécialiste import/export de matériel électronique professionnel à Dakar, Sénégal.',
+            route('about')
+        );
 
         JsonLd::addValues([
             '@context' => 'https://schema.org',

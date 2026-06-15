@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
@@ -169,7 +170,14 @@ class ProductController extends Controller
         }
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Produit créé avec succès !');
+            ->with('success', 'Produit créé avec succès !')
+            ->with('share_product', [
+                'name' => $product->name,
+                'price' => $product->formatted_price,
+                'description' => $product->short_description ?: Str::limit(strip_tags($product->description), 120),
+                'url' => route('product.show', $product),
+                'image' => $product->main_image ? asset('storage/' . $product->main_image) : null,
+            ]);
     }
 
     public function edit(Product $product)

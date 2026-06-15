@@ -9,6 +9,41 @@ use Artesaos\SEOTools\Facades\JsonLd;
 
 trait HasSEO
 {
+    private function defaultOgImage(): string
+    {
+        return asset('images/og-default.jpg');
+    }
+
+    private function addOgImage(string $imageUrl): void
+    {
+        OpenGraph::addImage($imageUrl, [
+            'width' => 1200,
+            'height' => 630,
+            'type' => str_ends_with($imageUrl, '.webp') ? 'image/webp' : 'image/jpeg',
+            'alt' => 'Mbacol Communication - Électronique Pro Sénégal',
+        ]);
+
+        TwitterCard::setImage($imageUrl);
+    }
+
+    public function setDefaultSocialTags(string $title, string $description, string $url, ?string $image = null): void
+    {
+        $ogImage = $image ?: $this->defaultOgImage();
+
+        OpenGraph::setTitle($title)
+            ->setDescription($description)
+            ->setUrl($url)
+            ->setType('website')
+            ->setSiteName('Mbacol Communication');
+
+        $this->addOgImage($ogImage);
+
+        TwitterCard::setTitle($title)
+            ->setDescription($description)
+            ->setType('summary_large_image')
+            ->setImage($ogImage);
+    }
+
     /**
      * Configurer le SEO pour une catégorie
      */
@@ -21,27 +56,14 @@ trait HasSEO
             ->setCanonical(route('shop', ['category' => $category->slug]))
             ->addMeta('robots', 'index, follow');
 
-        // Open Graph
-        OpenGraph::setTitle($category->meta_title ?: $category->name)
-            ->setDescription($category->meta_description ?: $category->description)
-            ->setUrl(route('shop', ['category' => $category->slug]))
-            ->setType('website');
-
-        if ($category->image) {
-            OpenGraph::addImage(asset('storage/' . $category->image), [
-                'height' => 630,
-                'width' => 1200
-            ]);
-        }
-
-        // Twitter Card
-        TwitterCard::setTitle($category->meta_title ?: $category->name)
-            ->setDescription($category->meta_description ?: $category->description)
-            ->setType('summary_large_image');
-
-        if ($category->image) {
-            TwitterCard::setImage(asset('storage/' . $category->image));
-        }
+        // Open Graph + Twitter Card
+        $ogImage = $category->image ? asset('storage/' . $category->image) : null;
+        $this->setDefaultSocialTags(
+            $category->meta_title ?: $category->name,
+            $category->meta_description ?: $category->description,
+            route('shop', ['category' => $category->slug]),
+            $ogImage
+        );
 
         // JSON-LD Category Page
         JsonLd::addValues([
@@ -84,32 +106,26 @@ trait HasSEO
             ->addMeta('product:price:currency', 'XOF');
 
         // Open Graph Product
-        OpenGraph::setTitle($product->name)
+        $ogImage = $product->main_image ? asset('storage/' . $product->main_image) : $this->defaultOgImage();
+
+        OpenGraph::setTitle($product->name . ' | ' . $product->formatted_price)
             ->setDescription($shortDesc)
             ->setUrl(route('product.show', $product))
             ->setType('product')
+            ->setSiteName('Mbacol Communication')
             ->addProperty('product:price:amount', $product->price)
             ->addProperty('product:price:currency', 'XOF')
             ->addProperty('product:availability', $product->stock > 0 ? 'in stock' : 'out of stock')
             ->addProperty('product:condition', 'new')
             ->addProperty('product:retailer_item_id', $product->id);
 
-        if ($product->main_image) {
-            OpenGraph::addImage(asset('storage/' . $product->main_image), [
-                'height' => 630,
-                'width' => 1200,
-                'alt' => $product->name
-            ]);
-        }
+        $this->addOgImage($ogImage);
 
         // Twitter Card
-        TwitterCard::setTitle($product->name)
+        TwitterCard::setTitle($product->name . ' | ' . $product->formatted_price)
             ->setDescription($shortDesc)
-            ->setType('summary_large_image');
-
-        if ($product->main_image) {
-            TwitterCard::setImage(asset('storage/' . $product->main_image));
-        }
+            ->setType('summary_large_image')
+            ->setImage($ogImage);
 
         // JSON-LD Product Schema
         $jsonLd = [

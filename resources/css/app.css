@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] { display: none !important; }
+
 /* Highlighting des résultats de recherche */
 mark {
     background-color: #fef3c7; /* yellow-100 */

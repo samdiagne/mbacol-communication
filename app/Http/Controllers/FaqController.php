@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HasSEO;
 use Illuminate\Http\Request;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
@@ -10,6 +11,8 @@ use Artesaos\SEOTools\Facades\JsonLd;
 
 class FaqController extends Controller
 {
+    use HasSEO;
+
     public function index()
     {
         // SEO Meta Tags
@@ -26,15 +29,11 @@ class FaqController extends Controller
             ->setCanonical(route('faq'))
             ->addMeta('robots', 'index, follow');
 
-        // Open Graph
-        OpenGraph::setTitle('FAQ - Mbacol Communication')
-            ->setDescription('Réponses à vos questions sur la livraison, le paiement, les garanties.')
-            ->setUrl(route('faq'))
-            ->setType('website');
-
-        // Twitter Card
-        TwitterCard::setTitle('FAQ - Mbacol Communication')
-            ->setDescription('Questions fréquentes - Support client');
+        $this->setDefaultSocialTags(
+            'FAQ - Mbacol Communication',
+            'Réponses à vos questions sur la livraison, le paiement, les garanties.',
+            route('faq')
+        );
 
         // JSON-LD FAQPage Schema
         $faqSchema = [

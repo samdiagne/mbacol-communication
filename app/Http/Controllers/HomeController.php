@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
+use App\Traits\HasSEO;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
@@ -12,6 +13,8 @@ use Artesaos\SEOTools\Facades\JsonLd;
 
 class HomeController extends Controller
 {
+    use HasSEO;
+
     public function index()
     {
         // ✅ SEO amélioré avec les vraies infos
@@ -33,23 +36,12 @@ class HomeController extends Controller
             ->addMeta('revisit-after', '7 days')
             ->addMeta('author', 'Mbacol Communication - Khouma et Frères');
 
-        // Open Graph
-        OpenGraph::setTitle('Mbacol Communication | Électronique Pro – Dakar')
-            ->setDescription('Chargeurs GaN, stations de soudage, microscopes & outils de réparation. Livraison rapide à Dakar.')
-            ->setUrl(route('home'))
-            ->setType('website')
-            ->addImage(asset('images/logo.webp'), [
-                'height' => 1024,
-                'width'  => 1536,
-                'type'   => 'image/webp',
-                'alt'    => 'Mbacol Communication - Électronique Pro Sénégal',
-            ]);
-
-        // Twitter Card
-        TwitterCard::setTitle('Mbacol Communication | Électronique Pro – Dakar')
-            ->setDescription('Chargeurs GaN, stations de soudage, microscopes & outils de réparation. Livraison Dakar.')
-            ->setType('summary_large_image')
-            ->setImage(asset('images/logo.webp'));
+        // Open Graph + Twitter Card
+        $this->setDefaultSocialTags(
+            'Mbacol Communication | Électronique Pro – Dakar',
+            'Chargeurs GaN, stations de soudage, microscopes & outils de réparation. Livraison rapide à Dakar.',
+            route('home')
+        );
 
         // ✅ JSON-LD Organization amélioré
         JsonLd::addValues([

@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Traits\HasSEO;
 use Illuminate\Http\Request;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\TwitterCard;
 
 class ShopController extends Controller
 {
@@ -36,6 +38,12 @@ class ShopController extends Controller
             SEOMeta::setTitle('Recherche : ' . $searchTerm . ' - Mbacol Communication')
                 ->setDescription('Résultats de recherche pour "' . $searchTerm . '" sur Mbacol Communication.')
                 ->addMeta('robots', 'noindex, follow');
+
+            $this->setDefaultSocialTags(
+                'Recherche : ' . $searchTerm,
+                'Résultats de recherche pour "' . $searchTerm . '" sur Mbacol Communication.',
+                url()->current()
+            );
         } else {
             // SEO page boutique générale
             SEOMeta::setTitle('Boutique Électronique Professionnelle - Mbacol | Khouma et Frères')
@@ -50,6 +58,12 @@ class ShopController extends Controller
                     'Mbacol Communication'
                 ])
                 ->setCanonical(route('shop'));
+
+            $this->setDefaultSocialTags(
+                'Boutique Électronique Pro - Mbacol Communication',
+                'Chargeurs, stations soudage, microscopes, outils réparation. Livraison rapide Dakar, Sénégal.',
+                route('shop')
+            );
         }
 
         if ($request->filled('min_price')) {
