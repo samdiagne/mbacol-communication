@@ -30,19 +30,18 @@ trait HasSEO
 
     private function resolveOgImageUrl(string $imageUrl): string
     {
-        if (str_ends_with($imageUrl, '.webp')) {
-            $ogUrl = str_replace('.webp', '_og.jpg', $imageUrl);
-            $ogPath = str_replace(asset('storage') . '/', '', $ogUrl);
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($ogPath)) {
-                return $ogUrl;
-            }
+        if (!str_ends_with($imageUrl, '.webp')) {
+            return $imageUrl;
         }
 
-        if (str_ends_with($imageUrl, '.webp')) {
-            return $this->defaultOgImage();
+        $ogPath = str_replace('.webp', '_og.jpg', $imageUrl);
+        $relativePath = preg_replace('#^.*/storage/#', '', $ogPath);
+
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
+            return asset('storage/' . $relativePath);
         }
 
-        return $imageUrl;
+        return $this->defaultOgImage();
     }
 
     public function setDefaultSocialTags(string $title, string $description, string $url, ?string $image = null): void
@@ -162,7 +161,7 @@ trait HasSEO
             '@context' => 'https://schema.org/',
             '@type' => 'Product',
             'name' => $product->name,
-            'description' => $shortDesc,
+            'description' => $metaDesc,
             'image' => $product->main_image ? asset('storage/' . $product->main_image) : null,
             'sku' => $product->sku ?? 'PROD-' . $product->id,
             'brand' => [
