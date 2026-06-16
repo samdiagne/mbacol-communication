@@ -16,14 +16,33 @@ trait HasSEO
 
     private function addOgImage(string $imageUrl): void
     {
-        OpenGraph::addImage($imageUrl, [
+        $ogUrl = $this->resolveOgImageUrl($imageUrl);
+
+        OpenGraph::addImage($ogUrl, [
             'width' => 1200,
             'height' => 630,
-            'type' => str_ends_with($imageUrl, '.webp') ? 'image/webp' : 'image/jpeg',
+            'type' => 'image/jpeg',
             'alt' => 'Mbacol Communication - Électronique Pro Sénégal',
         ]);
 
-        TwitterCard::setImage($imageUrl);
+        TwitterCard::setImage($ogUrl);
+    }
+
+    private function resolveOgImageUrl(string $imageUrl): string
+    {
+        if (str_ends_with($imageUrl, '.webp')) {
+            $ogUrl = str_replace('.webp', '_og.jpg', $imageUrl);
+            $ogPath = str_replace(asset('storage') . '/', '', $ogUrl);
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($ogPath)) {
+                return $ogUrl;
+            }
+        }
+
+        if (str_ends_with($imageUrl, '.webp')) {
+            return $this->defaultOgImage();
+        }
+
+        return $imageUrl;
     }
 
     public function setDefaultSocialTags(string $title, string $description, string $url, ?string $image = null): void
@@ -87,20 +106,28 @@ trait HasSEO
      */
     public function setSEOForProduct($product)
     {
-        $shortDesc = $product->short_description ?: substr(strip_tags($product->description), 0, 160);
+        $metaDesc = $product->meta_description
+            ?: ($product->short_description ?: substr(strip_tags($product->description), 0, 160));
 
-        // Meta Tags
-        SEOMeta::setTitle($product->name . ' - ' . $product->category->name . ' | Mbacol')
-            ->setDescription($shortDesc)
-            ->setKeywords([
+        $metaTitle = $product->meta_title
+            ?: ($product->name . ' - ' . $product->category->name . ' | Mbacol');
+
+        $keywords = $product->meta_keywords
+            ? array_map('trim', explode(',', $product->meta_keywords))
+            : [
                 $product->name,
                 $product->category->name,
                 'acheter ' . $product->name . ' Sénégal',
                 $product->name . ' Dakar',
                 $product->category->name . ' Sénégal',
                 'Khouma et Frères',
-                'Mbacol Communication'
-            ])
+                'Mbacol Communication',
+            ];
+
+        // Meta Tags
+        SEOMeta::setTitle($metaTitle)
+            ->setDescription($metaDesc)
+            ->setKeywords($keywords)
             ->setCanonical(route('product.show', $product))
             ->addMeta('product:price:amount', $product->price)
             ->addMeta('product:price:currency', 'XOF');
@@ -108,8 +135,12 @@ trait HasSEO
         // Open Graph Product
         $ogImage = $product->main_image ? asset('storage/' . $product->main_image) : $this->defaultOgImage();
 
-        OpenGraph::setTitle($product->name . ' | ' . $product->formatted_price)
-            ->setDescription($shortDesc)
+        $ogTitle = $product->meta_title
+            ? ($product->meta_title . ' | ' . $product->formatted_price)
+            : ($product->name . ' | ' . $product->formatted_price);
+
+        OpenGraph::setTitle($ogTitle)
+            ->setDescription($metaDesc)
             ->setUrl(route('product.show', $product))
             ->setType('product')
             ->setSiteName('Mbacol Communication')
@@ -122,10 +153,9 @@ trait HasSEO
         $this->addOgImage($ogImage);
 
         // Twitter Card
-        TwitterCard::setTitle($product->name . ' | ' . $product->formatted_price)
-            ->setDescription($shortDesc)
-            ->setType('summary_large_image')
-            ->setImage($ogImage);
+        TwitterCard::setTitle($ogTitle)
+            ->setDescription($metaDesc)
+            ->setType('summary_large_image');
 
         // JSON-LD Product Schema
         $jsonLd = [

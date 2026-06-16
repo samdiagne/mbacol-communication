@@ -29,19 +29,40 @@ class ProductController extends Controller
     {
         try {
             $filename = time() . $prefix . uniqid() . '.webp';
-            
+
             $img = $this->imageManager->read($imageFile->getPathname());
             $img->scale(width: 800);
-            
+
             Storage::disk('public')->put(
                 'products/' . $filename,
                 $img->toWebp(80)
             );
-            
+
+            if (str_contains($prefix, '_main_')) {
+                $this->generateOgImage($imageFile, $filename);
+            }
+
             return 'products/' . $filename;
         } catch (\Exception $e) {
             \Log::error('Image upload failed: ' . $e->getMessage());
             throw new \Exception('Erreur lors de l\'upload de l\'image');
+        }
+    }
+
+    private function generateOgImage($imageFile, string $webpFilename): void
+    {
+        try {
+            $ogFilename = str_replace('.webp', '_og.jpg', $webpFilename);
+
+            $img = $this->imageManager->read($imageFile->getPathname());
+            $img->cover(1200, 630);
+
+            Storage::disk('public')->put(
+                'products/' . $ogFilename,
+                $img->toJpeg(85)
+            );
+        } catch (\Exception $e) {
+            \Log::error('OG image generation failed: ' . $e->getMessage());
         }
     }
 
