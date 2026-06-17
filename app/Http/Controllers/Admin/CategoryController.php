@@ -85,14 +85,30 @@ class CategoryController extends Controller
             return back()->with('error', 'Impossible de supprimer une catégorie qui contient des produits.');
         }
 
+        $category->delete();
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Catégorie déplacée dans la corbeille.');
+    }
+
+    public function restore(int $id)
+    {
+        Category::onlyTrashed()->findOrFail($id)->restore();
+
+        return back()->with('success', 'Catégorie restaurée avec succès !');
+    }
+
+    public function forceDelete(int $id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+
         if ($category->image) {
             Storage::disk('public')->delete($category->image);
         }
 
-        $category->delete();
+        $category->forceDelete();
 
-        return redirect()->route('admin.categories.index')
-            ->with('success', 'Catégorie supprimée.');
+        return back()->with('success', 'Catégorie supprimée définitivement.');
     }
 
     private function uploadImage($imageFile): string

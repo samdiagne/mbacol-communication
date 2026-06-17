@@ -17,6 +17,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\TrashController;
 
 
 // Routes publiques
@@ -73,8 +74,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Produits
     Route::resource('products', AdminProductController::class);
-    Route::delete('products/{image}/delete-image', [AdminProductController::class, 'deleteImage'])->name('products.delete-image');
+Route::delete('products/{image}/delete-image', [AdminProductController::class, 'deleteImage'])->name('products.delete-image');
     
+    // Corbeille
+    Route::get('trash', [TrashController::class, 'index'])->name('trash.index');
+    Route::post('products/{id}/restore', [AdminProductController::class, 'restore'])->name('products.restore');
+    Route::delete('products/{id}/force-delete', [AdminProductController::class, 'forceDelete'])->name('products.force-delete');
+    Route::post('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
+    Route::delete('categories/{id}/force-delete', [CategoryController::class, 'forceDelete'])->name('categories.force-delete');
+
     // Commandes
     Route::get('orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
@@ -93,6 +101,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
     Route::patch('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
     Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::post('reviews/{id}/restore', [AdminReviewController::class, 'restore'])->name('reviews.restore');
+    Route::delete('reviews/{id}/force-delete', [AdminReviewController::class, 'forceDelete'])->name('reviews.force-delete');
 
     Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 

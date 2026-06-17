@@ -58,6 +58,20 @@ class ReviewController extends Controller
     public function destroy(Review $review)
     {
         $review->delete();
-        return back()->with('success', 'Avis supprimé avec succès.');
+        return back()->with('success', 'Avis déplacé dans la corbeille.');
+    }
+
+    public function restore(int $id)
+    {
+        Review::onlyTrashed()->findOrFail($id)->restore();
+
+        return back()->with('success', 'Avis restauré avec succès !');
+    }
+
+    public function forceDelete(int $id)
+    {
+        Review::onlyTrashed()->findOrFail($id)->forceDelete();
+
+        return back()->with('success', 'Avis supprimé définitivement.');
     }
 }

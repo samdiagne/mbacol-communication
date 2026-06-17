@@ -259,19 +259,35 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Supprimer images
+        $product->delete();
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Produit déplacé dans la corbeille.');
+    }
+
+    public function restore(int $id)
+    {
+        Product::onlyTrashed()->findOrFail($id)->restore();
+
+        return back()->with('success', 'Produit restauré avec succès !');
+    }
+
+    public function forceDelete(int $id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+
         if ($product->main_image) {
             Storage::disk('public')->delete($product->main_image);
         }
 
         foreach ($product->images as $image) {
             Storage::disk('public')->delete($image->image_path);
+            $image->forceDelete();
         }
 
-        $product->delete();
+        $product->forceDelete();
 
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Produit supprimé avec succès !');
+        return back()->with('success', 'Produit supprimé définitivement.');
     }
 
     public function deleteImage(ProductImage $image)

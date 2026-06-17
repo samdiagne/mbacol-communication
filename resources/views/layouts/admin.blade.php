@@ -145,13 +145,32 @@
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen">Rapports</span>
                 </a>
 
-                <!-- ✅ NOUVEAU : Clients -->
-                <a href="{{ route('admin.clients.index') }}" 
+                <!-- Clients -->
+                <a href="{{ route('admin.clients.index') }}"
                 class="flex items-center px-3 py-3 rounded-lg transition-colors group {{ request()->routeIs('admin.clients.*') ? 'bg-primary-600 text-white shadow-lg' : 'text-primary-100 hover:bg-primary-600/50' }}">
                     <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                     <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen">Clients</span>
+                </a>
+
+                <!-- Corbeille -->
+                @php
+                    $trashCount = \App\Models\Product::onlyTrashed()->count()
+                                + \App\Models\Category::onlyTrashed()->count()
+                                + \App\Models\Review::onlyTrashed()->count();
+                @endphp
+                <a href="{{ route('admin.trash.index') }}"
+                class="flex items-center px-3 py-3 rounded-lg transition-colors group {{ request()->routeIs('admin.trash.*') ? 'bg-primary-600 text-white shadow-lg' : 'text-primary-100 hover:bg-primary-600/50' }}">
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    <span class="ml-3 font-medium whitespace-nowrap" x-show="sidebarOpen">Corbeille</span>
+                    @if($trashCount > 0)
+                        <span class="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0" x-show="sidebarOpen">
+                            {{ $trashCount }}
+                        </span>
+                    @endif
                 </a>
                 </nav>
 
@@ -364,6 +383,20 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                     <span class="font-medium">Rapports</span>
+                </a>
+
+                <!-- Corbeille (mobile) -->
+                <a href="{{ route('admin.trash.index') }}"
+                class="flex items-center px-3 py-3 rounded-lg {{ request()->routeIs('admin.trash.*') ? 'bg-primary-600' : 'hover:bg-primary-600/50' }}">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    <span class="ml-3 font-medium">Corbeille</span>
+                    @if($trashCount > 0)
+                        <span class="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">
+                            {{ $trashCount }}
+                        </span>
+                    @endif
                 </a>
             </nav>
 
