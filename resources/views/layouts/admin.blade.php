@@ -501,6 +501,68 @@
             type="module" 
             defer></script>
             
+    <!-- Modal de confirmation de suppression -->
+    <div x-data="{
+            open: false,
+            action: '',
+            message: '',
+            confirm(action, message) {
+                this.action = action;
+                this.message = message;
+                this.open = true;
+            }
+         }"
+         x-on:confirm-delete.window="confirm($event.detail.action, $event.detail.message)"
+         x-on:keydown.escape.window="open = false"
+         x-cloak>
+
+        <template x-if="open">
+            <div class="fixed inset-0 z-[60] flex items-center justify-center px-4">
+                <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"
+                     x-on:click="open = false"
+                     x-transition:enter="ease-out duration-200"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="ease-in duration-150"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"></div>
+
+                <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 z-10"
+                     x-transition:enter="ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="ease-in duration-150"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95">
+
+                    <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Confirmer la suppression</h3>
+                    <p class="text-sm text-gray-600 text-center mb-6" x-text="message"></p>
+
+                    <div class="flex gap-3">
+                        <button x-on:click="open = false"
+                                class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                            Annuler
+                        </button>
+                        <form x-bind:action="action" method="POST" class="flex-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="w-full px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors">
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+
     @livewireScripts
 
     <script>

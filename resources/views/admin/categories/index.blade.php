@@ -101,13 +101,11 @@
                                 Modifier
                             </a>
                             @if($category->products_count === 0)
-                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
-                                  onsubmit="return confirm('Supprimer cette catégorie ?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-sm font-semibold text-red-500 hover:text-red-700">
-                                    Supprimer
-                                </button>
-                            </form>
+                            <button type="button"
+                                    x-on:click="$dispatch('confirm-delete', { action: '{{ route('admin.categories.destroy', $category) }}', message: 'Êtes-vous sûr de vouloir supprimer la catégorie « {{ addslashes($category->name) }} » ? Cette action est irréversible.' })"
+                                    class="text-sm font-semibold text-red-500 hover:text-red-700">
+                                Supprimer
+                            </button>
                             @endif
                         </div>
                     </td>

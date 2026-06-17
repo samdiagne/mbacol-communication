@@ -142,24 +142,24 @@
                 </div>
             </div>
 
-                        <div class="bg-white rounded-2xl shadow p-6 mt-6">
+            <div class="bg-white rounded-2xl shadow p-6 mt-6">
                 <h3 class="text-lg font-bold text-gray-900 mb-4">
-                    🔍 Optimisation SEO
+                    Optimisation SEO
                 </h3>
-                
+
                 {{-- Meta Title --}}
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Titre SEO 
+                        Titre SEO
                         <span class="text-gray-400 font-normal">(max 60 caractères)</span>
                     </label>
-                    <input 
-                        type="text" 
-                        name="meta_title" 
+                    <input
+                        type="text"
+                        name="meta_title"
                         value="{{ old('meta_title', $product->meta_title ?? '') }}"
                         maxlength="60"
                         placeholder="Ex: RF4 Microscope Trinoculaire 4K HDMI - Dakar"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2
                             focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                     <p class="text-xs text-gray-400 mt-1">
@@ -170,15 +170,15 @@
                 {{-- Meta Description --}}
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Meta Description 
+                        Meta Description
                         <span class="text-gray-400 font-normal">(max 155 caractères)</span>
                     </label>
-                    <textarea 
-                        name="meta_description" 
+                    <textarea
+                        name="meta_description"
                         maxlength="155"
                         rows="3"
-                        placeholder="Ex: Microscope professionnel 4K pour réparation smartphones. Disponible chez Mbacol Communication, Dakar 🇸🇳"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 
+                        placeholder="Ex: Microscope professionnel 4K pour réparation smartphones. Disponible chez Mbacol Communication, Dakar"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2
                             focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >{{ old('meta_description', $product->meta_description ?? '') }}</textarea>
                     <p class="text-xs text-gray-400 mt-1">
@@ -191,12 +191,12 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">
                         Mots-clés SEO
                     </label>
-                    <input 
-                        type="text" 
-                        name="meta_keywords" 
+                    <input
+                        type="text"
+                        name="meta_keywords"
                         value="{{ old('meta_keywords', $product->meta_keywords ?? '') }}"
                         placeholder="Ex: microscope réparation, microscope dakar, RF4 sénégal"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2
                             focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                     <p class="text-xs text-gray-400 mt-1">
@@ -243,15 +243,13 @@
                         @foreach($product->images as $image)
                         <div class="relative group">
                             <img src="{{ asset('storage/' . $image->image_path) }}" alt="Image {{ $loop->iteration }}" class="h-24 w-24 object-cover rounded-lg">
-                            <form action="{{ route('admin.products.delete-image', $image) }}" method="POST" class="absolute top-0 right-0">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Supprimer cette image ?')" class="bg-red-600 hover:bg-red-700 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                </button>
-                            </form>
+                            <button type="button"
+                                    x-on:click="$dispatch('confirm-delete', { action: '{{ route('admin.products.delete-image', $image) }}', message: 'Êtes-vous sûr de vouloir supprimer cette image ?' })"
+                                    class="absolute top-0 right-0 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
                         </div>
                         @endforeach
                     </div>
@@ -323,7 +321,7 @@
 function previewMainImage(event) {
     const preview = document.getElementById('main-image-preview');
     const file = event.target.files[0];
-    
+
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -337,7 +335,7 @@ function previewMainImage(event) {
 function previewImages(event) {
     const container = document.getElementById('images-preview');
     container.innerHTML = '';
-    
+
     Array.from(event.target.files).forEach(file => {
         const reader = new FileReader();
         reader.onload = function(e) {
